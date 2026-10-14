@@ -28,12 +28,12 @@
   ],
   "shortcuts": [
     {
-      "name": "Pre-commissioning",
-      "url": "pre.html"
-    },
-    {
       "name": "Lifting Day",
       "url": "lift.html"
+    },
+    {
+      "name": "Pre-commissioning",
+      "url": "pre.html"
     },
     {
       "name": "Cold Commissioning",
