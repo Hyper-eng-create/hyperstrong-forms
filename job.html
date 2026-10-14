@@ -255,6 +255,15 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
 .langbtn{border:1.5px solid color-mix(in srgb,currentColor 55%,transparent);background:transparent;color:inherit;border-radius:6px;padding:3px 10px;font-weight:600;font-size:14px;font-family:var(--f-body);min-width:44px}
 .langbtn:hover{background:rgba(255,255,255,.12)}
 
+.rrow{display:flex;align-items:stretch;border-top:1px solid var(--line)}
+.rlist .rrow:first-child{border-top:0}
+.rrow .ritem{border-top:0;flex:1;min-width:0}
+.rdel{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:64px;border:0;border-inline-start:1px solid var(--line);background:transparent;color:var(--fg-3);font-size:11.5px}
+.rdel:hover{color:var(--fail);background:var(--fail-soft)}
+.rdel.arm{color:#fff;background:var(--fail)}
+#clearWrap,#histClear{margin-inline-start:auto}
+#clearWrap .confirm{font-size:13px}
+
 
 html,body{margin:0}
 body{-webkit-text-size-adjust:100%}
@@ -350,6 +359,11 @@ Object.assign(window.CFG, {"submitLabel": "Mark as final", "submitHint": "Fill i
 document.getElementById("topTitle").textContent = window.CFG.topTitle;
 </script>
 <script>window.HE = {
+"Untitled report":"דוח ללא שם","Report history":"היסטוריית דוחות","Your report history":"היסטוריית הדוחות שלך","Delete all history":"מחק את כל ההיסטוריה","Delete report":"מחק דוח","Delete?":"למחוק?",
+"Delete all {n} reports and their photos from this device? This can't be undone.":"למחוק את כל {n} הדוחות והתמונות שלהם מהמכשיר? לא ניתן לבטל.","Keep them":"השאר","Delete all":"מחק הכל","History deleted":"ההיסטוריה נמחקה",
+"Report history (all forms)":"היסטוריית דוחות (כל הטפסים)","Every report saved on this phone. Open one to continue or create its PDF again.":"כל הדוחות השמורים בטלפון. פתח דוח כדי להמשיך למלא או להפיק שוב PDF.",
+"No reports saved on this phone yet.":"עדיין אין דוחות שמורים בטלפון.","Delete all {n} reports from all forms on this phone? Photos are deleted too. This can't be undone.":"למחוק את כל {n} הדוחות מכל הטפסים בטלפון? גם התמונות יימחקו. לא ניתן לבטל.",
+"View history":"היסטוריית דוחות",
 /* ---------- App / engine ---------- */
 "Saving…":"שומר…","Saved":"נשמר","Saved on this phone":"נשמר בטלפון","Saved in this browser":"נשמר בדפדפן","Connected":"מחובר","Offline":"לא מחובר","View only":"צפייה בלבד","Storage full":"האחסון מלא","Not saved":"לא נשמר",
 "You can view this page but not change it.":"אפשר לצפות בדף אבל לא לשנות אותו.",
@@ -774,6 +788,7 @@ function shrink(file, maxDim, maxBytes){ return new Promise((res, rej) => { cons
 const toDataURL = b => new Promise(r => { const f = new FileReader(); f.onload = () => r(f.result); f.onerror = () => r(null); f.readAsDataURL(b); });
 
 /* ---------- backends ---------- */
+function localPhotoRefs(r){ const out = []; const walk = v => { if (typeof v === "string"){ if (/^l:p/.test(v)) out.push(v); } else if (Array.isArray(v)) v.forEach(walk); else if (v && typeof v === "object") Object.values(v).forEach(walk); }; walk(r); return out; }
 // Browser-only: reports live in this browser; used when the page can't save online.
 function LocalBackend(){
   const reports = new Map(); let listCb = null;
@@ -785,7 +800,8 @@ function LocalBackend(){
     subscribeReport(ref, cb){ cb(clone(reports.get(ref.id)) || null); return () => {}; },
     async create(r){ reports.set(r.id, r); await idb.set("r:" + r.id, r); emit(); return {id:r.id, uid:null}; },
     async write(path, patch){ const id = path.slice(2); const r = reports.get(id); if (!r) return; deepMerge(r, clone(patch)); await idb.set(path, r); emit(); },
-    async remove(ref){ reports.delete(ref.id); await idb.del("r:" + ref.id); emit(); },
+    async remove(ref){ const r = reports.get(ref.id); reports.delete(ref.id); await idb.del("r:" + ref.id); for (const p of localPhotoRefs(r)) await idb.del("p:" + p.slice(2)); emit(); },
+    async clearAll(){ for (const r of [...reports.values()]){ reports.delete(r.id); await idb.del("r:" + r.id); for (const p of localPhotoRefs(r)) await idb.del("p:" + p.slice(2)); } emit(); },
     async putPhoto(ref, file){ const b = await shrink(file, 1600, 900000); const pid = uid("p"); await idb.set("p:" + pid, await toDataURL(b)); return "l:" + pid; },
     async photoSrc(ref, p){ if (p.startsWith("l:")) return (await idb.get("p:" + p.slice(2))) || ""; return ""; },
     async delPhoto(ref, p){ if (p.startsWith("l:")) await idb.del("p:" + p.slice(2)); }
@@ -910,6 +926,7 @@ function openReport(ref, initial){
 function goHome(){ if (S.unsub) S.unsub(); S.unsub = null; S.ref = null; S.r = null; render(); window.scrollTo(0,0); }
 
 /* ---------- icons ---------- */
+const TRASH = '<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5M7 7v4M9 7v4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const CAM = '<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5.5h2.5L6 3.5h4l1.5 2H14v7H2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="9" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
 
 /* ---------- render ---------- */
@@ -942,22 +959,29 @@ function homeHTML(){
   </section>
   ${C.homeNote ? `<div class="note">${T(C.homeNote)}</div>` : ""}
   <section class="panel" aria-labelledby="lh">
-    <div class="panel-h"><h2 id="lh">${owner ? "All submissions" : C.mode === "private" && B.kind === "private" ? "Your reports" : "Reports"}</h2><span class="muted mono">${(S.list || []).length}</span></div>
+    <div class="panel-h"><h2 id="lh">${owner ? "All submissions" : C.mode === "private" && B.kind === "private" ? "Your report history" : "Report history"}</h2><span class="muted mono">${(S.list || []).length}</span>
+      ${B.kind === "local" && (S.list || []).length ? `<span id="clearWrap"><button class="btn btn-danger btn-sm" id="clearAll">Delete all history</button></span>` : ""}</div>
     ${filters ? `<div class="filters" role="group" aria-label="Filter by status">${filters.map(([k,l]) => `<button data-filter="${k}" aria-pressed="${S.filter === k}">${l}${k !== "all" && counts[k] ? ` · ${counts[k]}` : ""}</button>`).join("")}</div>` : ""}
     <div class="rlist">
       ${S.list === null ? `<div class="loading">Loading reports…</div>` : list.length ? list.map(x => `
-        <button class="ritem" data-open="${esc(x.id)}" data-uid="${esc(x.uid || "")}">
-          <span class="t">${esc(x.title || C.untitled)}${x.sub ? ` <span>· ${esc(x.sub)}</span>` : ""}</span>
+        <div class="rrow"><button class="ritem" data-open="${esc(x.id)}" data-uid="${esc(x.uid || "")}">
+          <span class="t">${esc(x.title || T(C.appName))}${x.sub ? ` <span>· ${esc(x.sub)}</span>` : ""}</span>
           <span class="d">${fmtDate(x.updatedAt)}</span>
           <span class="s">${statusChip(x.status, x)}
             ${x.progress ? `<span class="minibar" aria-hidden="true"><i style="width:${x.progress.total ? x.progress.done / x.progress.total * 100 : 0}%"></i></span><span class="mono">${x.progress.done}/${x.progress.total}</span>${x.progress.fail ? `<span style="color:var(--fail)">${T("{n} fail", {n:x.progress.fail})}</span>` : ""}` : ""}
             ${x.ref ? `<span class="mono">${esc(x.ref)}</span>` : ""}
             ${owner && x.uid && x.uid !== S.me ? `<span data-name="${esc(x.uid)}">by …</span>` : ""}</span>
-        </button>`).join("") : `<div class="empty"><strong>${filters && S.filter !== "all" ? "Nothing here" : "No reports yet"}</strong>${filters && S.filter !== "all" ? "No reports with this status." : esc(C.emptyText)}</div>`}
+        </button>${canDeleteRow(x) ? `<button class="rdel" data-del="${esc(x.id)}" data-uid="${esc(x.uid || "")}" title="Delete report" aria-label="Delete report">${TRASH}<span>Delete</span></button>` : ""}</div>`).join("") : `<div class="empty"><strong>${filters && S.filter !== "all" ? "Nothing here" : "No reports yet"}</strong>${filters && S.filter !== "all" ? "No reports with this status." : esc(C.emptyText)}</div>`}
     </div>
   </section>`;
 }
+function canDeleteRow(x){ if (S.readOnly) return false; if (B.kind === "local" || B.kind === "shared") return true; return x.uid === S.me && !["submitted","accepted"].includes(x.status); }
 function bindHome(){
+  $$("[data-del]").forEach(b => b.onclick = async e => { e.stopPropagation();
+    if (!b.classList.contains("arm")){ b.classList.add("arm"); const sp = b.querySelector("span"); sp.textContent = T("Delete?"); setTimeout(() => { if (b.isConnected){ b.classList.remove("arm"); sp.textContent = T("Delete"); } }, 3500); return; }
+    try { await B.remove({id:b.dataset.del, uid:b.dataset.uid || null}); toast(T("Report deleted")); } catch(err){ writeErr(err); } });
+  const ca = $("#clearAll"); if (ca) ca.onclick = () => { $("#clearWrap").innerHTML = `<span class="confirm"><span>${T("Delete all {n} reports and their photos from this device? This can't be undone.", {n:(S.list || []).length})}</span><button class="btn btn-sm" id="clearNo">Keep them</button><button class="btn btn-danger btn-sm" id="clearYes">Delete all</button></span>`;
+    $("#clearNo").onclick = () => { S.keepScroll = true; render(); }; $("#clearYes").onclick = async () => { try { await B.clearAll(); toast(T("History deleted")); } catch(err){ writeErr(err); } }; };
   $("#newBtn")?.addEventListener("click", createReport);
   $$("[data-filter]").forEach(b => b.onclick = () => { S.filter = b.dataset.filter; render(); });
   $$("[data-open]").forEach(b => b.onclick = () => { const x = (S.list || []).find(r => r.id === b.dataset.open && (r.uid || "") === b.dataset.uid); openReport({id:b.dataset.open, uid:b.dataset.uid || null}); });
@@ -978,7 +1002,7 @@ function reportHTML(){
   ${S.readOnly ? `<div class="note warn">View only. Ask the page owner for access to fill in reports.</div>` : ""}
   <div class="rhead">
     <div class="ttl"><button class="linkish" id="backBtn"><span class="arw">←</span> <span>All reports</span></button>
-      <h2>${esc(r.f?.[C.titleField] || C.untitled)}</h2>
+      <h2>${esc(r.f?.[C.titleField] || T(C.appName))}</h2>
       <div class="meta">${statusChip(st, summarize(r))}${r.f?.ref ? `<span class="mono">${esc(r.f.ref)}</span>` : ""}<span>${T("Updated {d}", {d:fmtDate(r.updatedAt)})}</span>${C.mode === "private" && S.isOwner && S.ref.uid && S.ref.uid !== S.me ? `<span data-name="${esc(S.ref.uid)}" data-prefix="From ">From …</span>` : ""}</div></div>
     <div class="acts"><button class="btn btn-primary" id="pdfBtn">Download PDF</button><button class="btn" id="exportBtn" ${S.downloads ? "" : "hidden"} title="Web page version of the report">HTML</button></div>
   </div>
@@ -1122,7 +1146,7 @@ function bindReport(){
   $$("[data-review]").forEach(b => b.onclick = () => doReview(b.dataset.review));
   if (!editable()) return;
   $$("[data-f]").forEach(el => el.addEventListener("input", () => { const path = el.dataset.f; change(path, el.value);
-    if (path === "f/" + C.titleField) { const h = $(".rhead h2"); if (h) h.textContent = el.value || C.untitled; } }));
+    if (path === "f/" + C.titleField) { const h = $(".rhead h2"); if (h) h.textContent = el.value || T(C.appName); } }));
   $$("[data-choice]").forEach(el => el.addEventListener("change", () => { const k = el.dataset.choice, b = findBlock(k);
     if (b.multi) change(`f/${k}/${el.dataset.opt}`, el.checked); else change(`f/${k}`, el.dataset.opt); }));
   $$("[data-tbl]").forEach(el => el.addEventListener("input", () => { const rows = clone(S.r.f[el.dataset.tbl] || []); rows[+el.dataset.row][el.dataset.col] = el.value; change("f/" + el.dataset.tbl, rows); }));
@@ -1434,6 +1458,7 @@ render();
   setSync(B.kind === "local" ? (C.standalone ? "Saved on this phone" : "Saved in this browser") : "Connected");
   if (C.standalone) { try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch(e){} }
   render();
+  const hm = (location.hash || "").match(/^#r=([\w-]+)$/); if (hm && B.kind === "local"){ try { history.replaceState(null, "", location.pathname + location.search); } catch(e){} openReport({id:hm[1], uid:null}); }
   B.subscribeList(list => { S.list = list; if (!S.ref) { S.keepScroll = true; render(); } },
     () => { setSync("Offline"); toast("Lost connection to saved reports. Reload the page to reconnect."); });
 })();
