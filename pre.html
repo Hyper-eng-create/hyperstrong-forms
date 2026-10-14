@@ -20,7 +20,7 @@
   --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eef1f6; --line:#d7dce5; --line-strong:#b9c1cf;
   --fg:#141b2a; --fg-2:#4a5468; --fg-3:#6f788b;
   --brand:#002e77; --brand-fg:#ffffff; --brand-soft:#e3eaf7;
-  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7;
+  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7; --lift:#0f766e; --lift-soft:#dcf1ee;
   --pass:#16794a; --pass-soft:#dcf2e6; --fail:#c0262d; --fail-soft:#fbe1e2; --na:#5f6779; --na-soft:#e7e9ee; --warn:#9a5b00; --warn-soft:#fbefdc;
   --focus:#2f6fe0;
   --f-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
@@ -31,17 +31,17 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
   --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
-  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b;
   --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
   --focus:#8fb4ff; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
   --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
-  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b;
   --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
   --focus:#8fb4ff; color-scheme:dark}
 .ac-pre{--acc:var(--pre);--acc-soft:var(--pre-soft)} .ac-cold{--acc:var(--cold);--acc-soft:var(--cold-soft)}
-.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)}
+.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)} .ac-lift{--acc:var(--lift);--acc-soft:var(--lift-soft)}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -232,6 +232,19 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
 .confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13.5px}
 .loading{padding:40px 16px;text-align:center;color:var(--fg-3)}
 
+.ucard{border:1px solid var(--line);border-left:4px solid var(--line-strong);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.ucard.u-ok{border-left-color:var(--pass)} .ucard.u-damage{border-left-color:var(--fail);background:color-mix(in srgb,var(--fail-soft) 40%,var(--surface))} .ucard.u-na{border-left-color:var(--na)}
+.ucard-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ucard-h h3{font-size:17px;font-weight:600}
+.uslots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.uslot{display:flex;flex-direction:column;gap:6px;min-width:0}
+.uslot .photos{flex-wrap:wrap!important}
+.ucard .req{grid-column:auto}
+
+.gaprow{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;font-size:14px}
+.gaprow input{width:18px;height:18px;margin-top:2px;accent-color:var(--brand);flex:none}
+.gaprow:has(input:checked){background:var(--surface-2)}
+
 
 html,body{margin:0}
 body{-webkit-text-size-adjust:100%}
@@ -255,13 +268,13 @@ img{max-width:100%}
 const V = (unit, hint) => ({unit, hint});
 const F = (k, l, t, extra) => Object.assign({k, l, t: t || "text"}, extra || {});
 const PROJECT_FIELDS = [F("projectName","Project name"), F("customer","Customer"), F("epc","EPC"), F("site","Site name / identifier"), F("pmContact","PM contact info"), F("location","Project location")];
-const PRODUCT_FIELDS = [F("batteryType","Battery unit type"), F("mwType","MW unit type"), F("mvSN","MV SN", "text", {mono:true}),
-  F("transformerSN","Transformer SN", "text", {mono:true}), F("rmuType","MV / RMU type"), F("rmuSN","MV / RMU SN", "text", {mono:true})];
+const PRODUCT_FIELDS = [F("batteryType","Battery unit type"), F("mwType","MW unit type"), F("mvSN","MV SN", "text", {mono:true, snPhoto:true}),
+  F("transformerSN","Transformer SN", "text", {mono:true, snPhoto:true}), F("rmuType","MV / RMU type"), F("rmuSN","MV / RMU SN", "text", {mono:true, snPhoto:true})];
 const UNIT_TABLES = [
   {type:"table", k:"bessUnits", title:"BESS units", hint:"Add every BESS unit on site", numbered:true, addLabel:"Add BESS unit", autoName:"BESS",
-    cols:[{k:"name", l:"Unit name / ID"}, {k:"sn", l:"Serial number (SN)", mono:true}], rows:[["BESS 1"]]},
+    cols:[{k:"name", l:"Unit name / ID"}, {k:"sn", l:"Serial number (SN)", mono:true}, {k:"snPhoto", l:"SN plate photo", t:"photo"}], rows:[["BESS 1"]]},
   {type:"table", k:"pcsUnits", title:"PCS units", hint:"Add every PCS on site", numbered:true, addLabel:"Add PCS", autoName:"PCS",
-    cols:[{k:"name", l:"Unit name / ID"}, {k:"sn", l:"Serial number (SN)", mono:true}], rows:[["PCS 1"]]}];
+    cols:[{k:"name", l:"Unit name / ID"}, {k:"sn", l:"Serial number (SN)", mono:true}, {k:"snPhoto", l:"SN plate photo", t:"photo"}], rows:[["PCS 1"]]}];
 const TOOLS_TABLE = {type:"table", k:"tools", title:"Test equipment", hint:"Record serial numbers before starting", addLabel:"Add tool",
   cols:[{k:"name", l:"Tool"}, {k:"serial", l:"Serial no.", mono:true}],
   rows:[["Digital multimeter (1500 V+) + clip-on ammeter"],["USB-RS485 converter"],["PC with communication cable"],["Recharge tool"],["Megger (insulation tester)"],["Insulated torque wrench (5–200 Nm)"],["Insulated PPE (clothing, shoes, gloves)"]]};
@@ -679,7 +692,12 @@ function inputHTML(path, fd){
   const id = "f-" + path.replace(/[^\w-]/g, "-"); const v = getPath(S.r, path) ?? "";
   const common = `id="${id}" data-f="${path}" dir="auto" class="inp${fd.mono ? " mono" : ""}" ${DIS()} ${fd.ph ? `placeholder="${esc(fd.ph)}"` : ""}`;
   const ctl = fd.t === "textarea" ? `<textarea ${common} rows="${fd.rows || 3}">${esc(v)}</textarea>` : `<input ${common} type="${fd.t || "text"}" value="${esc(v)}" ${fd.t === "number" ? 'inputmode="decimal" step="any"' : ""}>`;
-  return `<div class="field${fd.full || fd.t === "textarea" ? " full" : ""}"><label for="${id}">${esc(fd.l)}</label>${ctl}</div>`;
+  return `<div class="field${fd.full || fd.t === "textarea" ? " full" : ""}"><label for="${id}">${esc(fd.l)}</label>${ctl}${fd.snPhoto ? fieldPhotoHTML(path + "Photo", fd.l) : ""}</div>`;
+}
+function fieldPhotoHTML(path, label){
+  const ph = getPath(S.r, path); const list = Array.isArray(ph) ? ph : [];
+  return `<div class="photos" style="margin-top:2px">${list.map(p => `<span class="thumb"><img data-ph="${esc(p)}" alt="${esc(label)} photo">${editable() ? `<button class="x" data-fphrm="${esc(p)}" data-path="${path}" aria-label="Remove photo">×</button>` : ""}</span>`).join("")}
+    ${editable() ? `<button class="addph" data-fph="${path}" aria-label="Add ${esc(label)} photo">${CAM}<span>${list.length ? "Add" : "SN photo"}</span></button>` : ""}</div>`;
 }
 
 function blockHTML(b){
@@ -699,7 +717,7 @@ function blockHTML(b){
   case "group": return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="panel-b" style="display:flex;flex-direction:column;gap:14px">${b.blocks.map(x => x.type === "fields" ? `<div class="grid">${x.fields.map(fd => inputHTML("f/" + fd.k, fd)).join("")}</div>` : blockHTML({...x, inline:true})).join("")}</div></section>`;
   case "table": { const rows = r.f?.[b.k] || [];
     return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="tbl-wrap"><table class="tbl"><thead><tr>${b.numbered ? "<th>#</th>" : ""}${b.cols.map(c => `<th>${esc(c.l)}</th>`).join("")}${editable() && b.addable !== false ? "<th></th>" : ""}</tr></thead><tbody>
-      ${rows.map((row, i) => `<tr>${b.numbered ? `<td class="num">${i+1}</td>` : ""}${b.cols.map(c => `<td>${c.fixed ? esc(row[c.k]) : `<input class="inp${c.mono ? " mono" : ""}" dir="auto" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" type="${c.t || "text"}" value="${esc(row[c.k])}" aria-label="${esc(c.l)} row ${i+1}" ${DIS()}>`}</td>`).join("")}${editable() && b.addable !== false ? `<td style="width:1%"><button class="btn btn-ghost btn-sm" data-tblrm="${b.k}" data-row="${i}" aria-label="Remove row ${i+1}">Remove</button></td>` : ""}</tr>`).join("")}
+      ${rows.map((row, i) => `<tr>${b.numbered ? `<td class="num">${i+1}</td>` : ""}${b.cols.map(c => `<td>${c.t === "photo" ? photoCellHTML(b, c, row, i) : c.fixed ? esc(row[c.k]) : `<input class="inp${c.mono ? " mono" : ""}" dir="auto" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" type="${c.t || "text"}" value="${esc(row[c.k])}" aria-label="${esc(c.l)} row ${i+1}" ${DIS()}>`}</td>`).join("")}${editable() && b.addable !== false ? `<td style="width:1%"><button class="btn btn-ghost btn-sm" data-tblrm="${b.k}" data-row="${i}" aria-label="Remove row ${i+1}">Remove</button></td>` : ""}</tr>`).join("")}
       </tbody></table></div>${editable() && b.addable !== false ? `<div class="panel-b" style="padding-top:10px"><button class="btn btn-sm" data-tbladd="${b.k}">${esc(b.addLabel || "Add row")}</button></div>` : ""}</section>`; }
   case "gallery": { const items = r.f?.[b.k] || [];
     return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="panel-b"><div class="gallery">
@@ -708,6 +726,17 @@ function blockHTML(b){
       ${editable() ? `<button class="gadd" data-gadd="${b.k}">${CAM} Add photo</button>` : items.length ? "" : `<span class="muted">No photos.</span>`}
     </div></div></section>`; }
   case "checklist": return checklistHTML();
+  case "unitcards": { const rows = r.f?.[b.k] || []; const tb = findBlock(b.k);
+    return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div>
+      <div class="panel-b" style="display:flex;flex-direction:column;gap:14px">
+      ${rows.length ? rows.map((row, i) => { const res = row.result || "";
+        return `<div class="ucard ${res ? "u-" + res : ""}"><div class="ucard-h"><h3>${esc(row.name || b.unitLabel + " " + (i+1))}</h3>${row.sn ? `<span class="mono muted">SN ${esc(row.sn)}</span>` : ""}
+          <div class="seg" role="group" aria-label="Result for ${esc(row.name || "")}" style="margin-left:auto">${[["ok","No damage","pass"],["damage","Damage found","fail"],["na","N/A","na"]].map(([k,l,cls]) => `<button type="button" class="${cls}" data-ucst="${b.k}" data-row="${i}" data-val="${k}" aria-pressed="${res === k}" ${editable() ? "" : "disabled"}>${l}</button>`).join("")}</div></div>
+          <div class="uslots">${b.slots.map(sl => `<div class="uslot"><span class="flabel">${esc(sl.l)}</span>${photoCellHTML(b, sl, row, i)}</div>`).join("")}</div>
+          <input class="inp" dir="auto" id="t-${b.k}-${i}-note" data-tbl="${b.k}" data-row="${i}" data-col="note" value="${esc(row.note || "")}" placeholder="${res === "damage" ? "Describe the damage and where it is" : "Comment"}" aria-label="Comment for ${esc(row.name || "")}" ${DIS()}>
+          ${res === "damage" && !row.note ? `<div class="req">Describe the damage.</div>` : ""}</div>`; }).join("") : `<p class="muted" style="margin:0">No units yet.</p>`}
+      ${editable() ? `<div><button class="btn btn-sm" data-tbladd="${b.k}">${esc((tb && tb.addLabel) || "Add unit")}</button></div>` : ""}
+      </div></section>`; }
   case "signoff": return `<section class="panel"><div class="panel-h"><h2>${esc(b.title || "Sign-off")}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="panel-b sign">
     ${b.roles.map((role, ri) => { const k = "s" + ri, so = r.signoff?.[k] || {}; return `<div class="sigbox"><h4>${esc(role)}</h4>
       ${inputHTML(`signoff/${k}/name`, {l:"Name"})}${inputHTML(`signoff/${k}/date`, {l:"Date", t:"date"})}
@@ -717,6 +746,11 @@ function blockHTML(b){
   return "";
 }
 
+function photoCellHTML(b, c, row, i){
+  const ph = Array.isArray(row[c.k]) ? row[c.k] : [];
+  return `<div class="photos" style="flex-wrap:nowrap">${ph.map(p => `<span class="thumb"><img data-ph="${esc(p)}" alt="${esc(c.l)} ${esc(row.name || "row " + (i+1))}">${editable() ? `<button class="x" data-tphrm="${esc(p)}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="Remove photo">×</button>` : ""}</span>`).join("")}
+    ${editable() ? `<button class="addph" data-tph="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="Add ${esc(c.l)} for ${esc(row.name || "row " + (i+1))}">${CAM}<span>${ph.length ? "Add" : "Photo"}</span></button>` : ph.length ? "" : `<span class="muted">—</span>`}</div>`;
+}
 function checklistHTML(){
   const r = S.r;
   return C.sections.map((s, si) => { const ids = s.groups.flatMap(g => g.items.map(i => i.id)); const done = ids.filter(id => r.results?.[id]?.s).length;
@@ -771,9 +805,15 @@ function bindReport(){
   $$("[data-choice]").forEach(el => el.addEventListener("change", () => { const k = el.dataset.choice, b = findBlock(k);
     if (b.multi) change(`f/${k}/${el.dataset.opt}`, el.checked); else change(`f/${k}`, el.dataset.opt); }));
   $$("[data-tbl]").forEach(el => el.addEventListener("input", () => { const rows = clone(S.r.f[el.dataset.tbl] || []); rows[+el.dataset.row][el.dataset.col] = el.value; change("f/" + el.dataset.tbl, rows); }));
-  $$("[data-tbladd]").forEach(b => b.onclick = () => { const k = b.dataset.tbladd, bl = findBlock(k); const rows = clone(S.r.f[k] || []); const nr = Object.fromEntries(bl.cols.map(c => [c.k, ""])); if (bl.autoName) nr[bl.cols[0].k] = bl.autoName + " " + (rows.length + 1); rows.push(nr); change("f/" + k, rows, {rerender:true}); });
+  $$("[data-tbladd]").forEach(b => b.onclick = () => { const k = b.dataset.tbladd, bl = findBlock(k); const rows = clone(S.r.f[k] || []); const nr = Object.fromEntries(bl.cols.map(c => [c.k, c.t === "photo" ? [] : ""])); if (bl.autoName) nr[bl.cols[0].k] = bl.autoName + " " + (rows.length + 1); rows.push(nr); change("f/" + k, rows, {rerender:true}); });
   $$("[data-tblrm]").forEach(b => b.onclick = () => { const k = b.dataset.tblrm; const rows = clone(S.r.f[k] || []); rows.splice(+b.dataset.row, 1); change("f/" + k, rows, {rerender:true}); });
   $$("[data-gadd]").forEach(b => b.onclick = () => pickPhoto({gallery:b.dataset.gadd}, b));
+  $$("[data-ucst]").forEach(b => b.onclick = () => { const k = b.dataset.ucst, rows = clone(S.r.f[k] || []), row = rows[+b.dataset.row]; if (!row) return; row.result = row.result === b.dataset.val ? "" : b.dataset.val; change("f/" + k, rows, {rerender:true}); });
+  $$("[data-fph]").forEach(b => b.onclick = () => pickPhoto({field:b.dataset.fph}, b));
+  $$("[data-fphrm]").forEach(b => b.onclick = () => armThen(b, () => { const path = b.dataset.path, p = b.dataset.fphrm; const cur = getPath(S.r, path); change(path, (Array.isArray(cur) ? cur : []).filter(x => x !== p), {rerender:true}); B.delPhoto(S.ref, p); }));
+  $$("[data-tph]").forEach(b => b.onclick = () => pickPhoto({table:b.dataset.tph, row:+b.dataset.row, col:b.dataset.col}, b));
+  $$("[data-tphrm]").forEach(b => b.onclick = () => armThen(b, () => { const k = b.dataset.tbl, rows = clone(S.r.f[k] || []), row = rows[+b.dataset.row]; const p = b.dataset.tphrm;
+    row[b.dataset.col] = (Array.isArray(row[b.dataset.col]) ? row[b.dataset.col] : []).filter(x => x !== p); change("f/" + k, rows, {rerender:true}); B.delPhoto(S.ref, p); }));
   $$("[data-gcap]").forEach(el => el.addEventListener("input", () => { const k = el.dataset.gcap; const a = clone(S.r.f[k] || []); a[+el.dataset.i].cap = el.value; change("f/" + k, a); }));
   $$("[data-grm]").forEach(b => b.onclick = () => armThen(b, () => { const k = b.dataset.grm; const a = clone(S.r.f[k] || []); const [g] = a.splice(+b.dataset.i, 1); change("f/" + k, a, {rerender:true}); if (g) B.delPhoto(S.ref, g.p); }));
   $$("[data-st]").forEach(b => b.addEventListener("click", () => { const id = b.dataset.item; const cur = S.r.results?.[id]?.s; change(`results/${id}/s`, cur === b.dataset.st ? "" : b.dataset.st); updateRow(id); }));
@@ -825,6 +865,8 @@ $("#photoInput").addEventListener("change", async e => {
     const p = await B.putPhoto(ref, f);
     if (!S.ref || S.ref.id !== ref.id) return;
     if (target.item){ const list = [...(S.r.results?.[target.item]?.photos || []), p]; change(`results/${target.item}/photos`, list, {rerender:true}); }
+    else if (target.field){ const cur = getPath(S.r, target.field); change(target.field, [...(Array.isArray(cur) ? cur : []), p], {rerender:true}); }
+    else if (target.table){ const rows = clone(S.r.f?.[target.table] || []); const row = rows[target.row]; if (row){ row[target.col] = [...(Array.isArray(row[target.col]) ? row[target.col] : []), p]; change("f/" + target.table, rows, {rerender:true}); } }
     else { const a = clone(S.r.f?.[target.gallery] || []); a.push({p, cap:""}); change("f/" + target.gallery, a, {rerender:true}); }
     toast("Photo added");
   } catch(err){ const c = err && err.code; btn.classList.remove("busy"); lab.textContent = old;
@@ -854,11 +896,60 @@ function drawPads(){
 
 /* ---------- export ---------- */
 async function srcToData(src){ if (!src) return null; if (src.startsWith("data:")) return src; try { return await toDataURL(await (await fetch(src)).blob()); } catch(e){ return null; } }
-async function exportReport(kind){
+function fieldsOf(b){ if (b.type === "fields") return b.fields; if (b.type === "group") return b.blocks.filter(x => x.type === "fields").flatMap(x => x.fields); return []; }
+function findGaps(r){
+  const g = [], f = r.f || {};
+  const empty = v => v == null || (Array.isArray(v) ? !v.length : typeof v === "object" ? !Object.values(v).some(Boolean) : String(v).trim() === "");
+  const fieldGaps = (title, fields) => { const miss = fields.filter(fd => empty(f[fd.k]));
+    if (miss.length) g.push({label:title, detail: miss.length === fields.length ? "Nothing filled in" : `Empty: ${miss.map(x => x.l).join(", ")}`});
+    const noPh = fields.filter(fd => fd.snPhoto && !empty(f[fd.k]) && empty(f[fd.k + "Photo"]));
+    if (noPh.length) g.push({label:title + ": serial-number photos", detail:`No photo: ${noPh.map(x => x.l).join(", ")}`}); };
+  C.tabs.forEach(t => t.blocks.forEach(b => {
+    if (b.type === "fields") fieldGaps(b.title, b.fields);
+    else if (b.type === "group"){ fieldGaps(b.title, fieldsOf(b)); b.blocks.filter(x => x.type === "choice").forEach(x => { if (empty(f[x.k])) g.push({label:b.title, detail:`${x.l}: not selected`}); }); }
+    else if (b.type === "choice"){ if (empty(f[b.k])) g.push({label:b.l, detail:"Nothing selected"}); }
+    else if (b.type === "table"){ const rows = f[b.k] || []; const textCols = b.cols.filter(c => c.t !== "photo" && !c.fixed);
+      const filled = rows.filter(row => textCols.some(c => !empty(row[c.k])));
+      if (!filled.length) g.push({label:b.title, detail:"No entries"});
+      else b.cols.filter(c => c.t === "photo").forEach(c => { const miss = filled.filter(row => empty(row[c.k])); if (miss.length) g.push({label:`${b.title}: ${c.l}`, detail:`Missing for ${miss.map((row, i) => row.name || row[textCols[0].k] || "row " + (i+1)).join(", ")}`}); }); }
+    else if (b.type === "checklist"){ C.sections.forEach((sec, si) => { const items = sec.groups.flatMap(x => x.items); const open = items.filter(it => !r.results?.[it.id]?.s).length;
+      if (open) g.push({label:`${si+1}. ${sec.t}`, detail: open === items.length ? "No items answered" : `${open} of ${items.length} items have no result`});
+      const failNoC = items.filter(it => r.results?.[it.id]?.s === "fail" && !r.results[it.id].c).length; if (failNoC) g.push({label:`${si+1}. ${sec.t}`, detail:`${failNoC} failed item${failNoC > 1 ? "s" : ""} without a comment`});
+      if (sec.photo){ const np = items.filter(it => r.results?.[it.id]?.s !== "na" && empty(r.results?.[it.id]?.photos)).length; if (np) g.push({label:`${si+1}. ${sec.t}`, detail:`${np} required photo${np > 1 ? "s" : ""} missing`}); } }); }
+    else if (b.type === "unitcards"){ const rows = f[b.k] || []; if (!rows.length) g.push({label:b.title, detail:"No units"});
+      rows.forEach((row, i) => { const mp = b.slots.filter(sl => empty(row[sl.k])).map(sl => sl.l); const parts = []; if (!row.result) parts.push("no result"); if (mp.length) parts.push(`no photo: ${mp.join(", ")}`);
+        if (parts.length) g.push({label:`${b.title}: ${row.name || b.unitLabel + " " + (i+1)}`, detail:parts.join("; ")}); }); }
+    else if (b.type === "signoff"){ const miss = b.roles.filter((role, ri) => !r.signoff?.["s" + ri]?.sig); if (miss.length) g.push({label:b.title || "Sign-off", detail:`Not signed: ${miss.join(", ")}`}); }
+  }));
+  return g;
+}
+function showGaps(gaps, kind){
+  const out = $("#pdfOut"); if (!out) return;
+  out.innerHTML = `<section class="panel" style="border-color:var(--warn)"><div class="panel-h"><h2>Some sections aren't filled in</h2><button class="btn btn-ghost btn-sm" id="gapClose" style="margin-left:auto">Go back and fill</button></div>
+    <div class="panel-b" style="display:flex;flex-direction:column;gap:12px">
+      <p class="muted" style="margin:0">Tick each section to confirm it can stay unfilled. The list of approved sections is printed at the end of the report.</p>
+      <div style="display:flex;flex-direction:column;gap:8px">${gaps.map((x, i) => `<label class="gaprow"><input type="checkbox" id="gap-${i}" data-gap="${i}"><span><b>${esc(x.label)}</b><br><span class="muted">${esc(x.detail)}</span></span></label>`).join("")}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="gapAll">Approve all</button><button class="btn btn-primary" id="gapGo" disabled>${kind === "pdf" ? "Create PDF" : "Download report"}</button></div>
+    </div></section>`;
+  out.hidden = false;
+  const boxes = $$("[data-gap]"), go = $("#gapGo");
+  const upd = () => go.disabled = !boxes.every(x => x.checked);
+  boxes.forEach(x => x.onchange = upd);
+  $("#gapAll").onclick = () => { boxes.forEach(x => x.checked = true); upd(); };
+  $("#gapClose").onclick = () => { out.hidden = true; out.innerHTML = ""; };
+  go.onclick = () => { out.hidden = true; out.innerHTML = ""; exportReport(kind, {approved:gaps}); };
+  out.scrollIntoView({behavior:"smooth", block:"start"});
+}
+async function exportReport(kind, opts = {}){
+  if (!opts.approved){ const gaps = findGaps(S.r); if (gaps.length){ showGaps(gaps, kind); return; } S.approvedGaps = []; }
+  else S.approvedGaps = opts.approved;
   const btn = $(kind === "pdf" ? "#pdfBtn" : "#exportBtn"); const label = btn.textContent; $$("#pdfBtn,#exportBtn").forEach(b => b.disabled = true); btn.textContent = "Preparing…";
   try {
     const refs = new Set(); Object.values(S.r.results || {}).forEach(x => (x.photos || []).forEach(p => refs.add(p)));
-    C.tabs.forEach(t => t.blocks.forEach(b => { if (b.type === "gallery") (S.r.f?.[b.k] || []).forEach(g => refs.add(g.p)); }));
+    C.tabs.forEach(t => t.blocks.forEach(b => { if (b.type === "gallery") (S.r.f?.[b.k] || []).forEach(g => refs.add(g.p));
+      fieldsOf(b).filter(fd => fd.snPhoto).forEach(fd => { const a = S.r.f?.[fd.k + "Photo"]; (Array.isArray(a) ? a : []).forEach(p => refs.add(p)); });
+      if (b.type === "unitcards") b.slots.forEach(sl => (S.r.f?.[b.k] || []).forEach(row => (Array.isArray(row[sl.k]) ? row[sl.k] : []).forEach(p => refs.add(p))));
+      if (b.type === "table") b.cols.filter(c => c.t === "photo").forEach(c => (S.r.f?.[b.k] || []).forEach(row => (Array.isArray(row[c.k]) ? row[c.k] : []).forEach(p => refs.add(p)))); }));
     const imgs = {}; for (const p of refs) imgs[p] = await srcToData(await B.photoSrc(S.ref, p));
     const name = (S.r.f?.[C.titleField] || C.fileStem).replace(/[^\w\- \u0590-\u05FF]+/g, "").trim().replace(/\s+/g, "_") || C.fileStem;
     const base = `${name}_${C.fileStem}${S.r.f?.ref ? "_" + S.r.f.ref : ""}`;
@@ -904,16 +995,20 @@ function showPdfFallback(blob, filename){
 function reportDoc(r, imgs){
   const st = {pass:"PASS", fail:"FAIL", na:"N/A"};
   const v = k => esc(r.f?.[k] ?? "");
+  const fphotos = fd => { if (!fd.snPhoto) return ""; const a = r.f?.[fd.k + "Photo"]; const list = (Array.isArray(a) ? a : []).filter(p => imgs[p]); return list.length ? `<div class="ph">${list.map(p => `<img src="${imgs[p]}">`).join("")}</div>` : ""; };
   const blk = b => {
     switch (b.type){
     case "note": return b.print ? `<p class="intro">${b.html}</p>` : "";
     case "summary": { if (!C.items.length) return ""; const s = stats(r); return `<p class="sub"><b>${s.done}/${s.total}</b> items checked · ${s.pass} pass · ${s.fail} fail · ${s.na} N/A</p>`; }
-    case "fields": return `<h3>${esc(b.title)}</h3><table class="kv">${b.fields.map(fd => `<tr><th>${esc(fd.l)}</th><td>${v(fd.k)}</td></tr>`).join("")}</table>`;
+    case "fields": return `<h3>${esc(b.title)}</h3><table class="kv">${b.fields.map(fd => `<tr><th>${esc(fd.l)}</th><td>${v(fd.k)}${fphotos(fd)}</td></tr>`).join("")}</table>`;
     case "group": return `<h3>${esc(b.title)}</h3><table class="kv">${b.blocks.map(x => x.type === "fields" ? x.fields.map(fd => `<tr><th>${esc(fd.l)}</th><td>${v(fd.k)}</td></tr>`).join("") : `<tr><th>${esc(x.l)}</th><td>${choiceText(x)}</td></tr>`).join("")}</table>`;
     case "choice": return `<h3>${esc(b.l)}</h3><p>${choiceText(b, true)}</p>`;
     case "table": { const rows = (r.f?.[b.k] || []).filter(row => b.cols.some(c => !c.fixed && row[c.k]) || b.cols.some(c => c.fixed));
-      return `<h3>${esc(b.title)}</h3><table><tr>${b.numbered ? "<th>#</th>" : ""}${b.cols.map(c => `<th>${esc(c.l)}</th>`).join("")}</tr>${rows.length ? rows.map((row, i) => `<tr>${b.numbered ? `<td>${i+1}</td>` : ""}${b.cols.map(c => `<td>${esc(row[c.k])}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${b.cols.length + (b.numbered ? 1 : 0)}">—</td></tr>`}</table>`; }
+      return `<h3>${esc(b.title)}</h3><table><tr>${b.numbered ? "<th>#</th>" : ""}${b.cols.map(c => `<th>${esc(c.l)}</th>`).join("")}</tr>${rows.length ? rows.map((row, i) => `<tr>${b.numbered ? `<td>${i+1}</td>` : ""}${b.cols.map(c => `<td>${c.t === "photo" ? `<div class="ph">${(Array.isArray(row[c.k]) ? row[c.k] : []).map(p => imgs[p] ? `<img src="${imgs[p]}" style="max-width:160px;max-height:120px">` : "").join("")}</div>` : esc(row[c.k])}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${b.cols.length + (b.numbered ? 1 : 0)}">—</td></tr>`}</table>`; }
     case "gallery": { const g = r.f?.[b.k] || []; return `<h3>${esc(b.title)}</h3>${g.length ? `<div class="gal">${g.map(x => `<figure>${imgs[x.p] ? `<img src="${imgs[x.p]}">` : ""}<figcaption>${esc(x.cap || "")}</figcaption></figure>`).join("")}</div>` : "<p>No photos.</p>"}`; }
+    case "unitcards": { const rows = r.f?.[b.k] || []; const lab = {ok:"NO DAMAGE", damage:"DAMAGE", na:"N/A"}; const cls = {ok:"pass", damage:"fail", na:"na"};
+      return `<h3>${esc(b.title)}</h3>${rows.length ? rows.map((row, i) => `<div class="unitblk"><table><tr><th style="width:34%">${esc(row.name || b.unitLabel + " " + (i+1))}${row.sn ? ` · SN ${esc(row.sn)}` : ""}</th><td class="s ${cls[row.result] || ""}" style="width:110px">${lab[row.result] || "—"}</td><td>${esc(row.note || "")}</td></tr>
+        <tr><td colspan="3"><div class="gal">${b.slots.map(sl => `<figure>${(Array.isArray(row[sl.k]) ? row[sl.k] : []).map(p => imgs[p] ? `<img src="${imgs[p]}">` : "").join("") || `<div style="height:60px;border:1px dashed #c9cfda"></div>`}<figcaption>${esc(sl.l)}</figcaption></figure>`).join("")}</div></td></tr></table></div>`).join("") : "<p>No units.</p>"}`; }
     case "checklist": return C.sections.map((sec, si) => `<h3>${si+1}. ${esc(sec.t)}${sec.sub ? ` <small>(${esc(sec.sub)})</small>` : ""}</h3><table><tr><th style="width:40px">#</th><th>Item</th><th style="width:60px">Status</th><th style="width:90px">Value</th><th style="width:30%">Comments</th></tr>
       ${sec.groups.map(g => `${g.t ? `<tr class="g"><td colspan="5">${esc(g.t)}</td></tr>` : ""}${g.items.map(it => { const x = r.results?.[it.id] || {}; const ph = (x.photos || []).map(p => imgs[p] ? `<img src="${imgs[p]}">` : "").join("");
         return `<tr><td class="m">${it.num}</td><td>${esc(it.t)}${ph ? `<div class="ph">${ph}</div>` : ""}</td><td class="s ${x.s || ""}">${st[x.s] || "—"}</td><td class="m">${x.v ? esc(x.v) + " " + esc(it.val?.unit || "") : ""}</td><td>${esc(x.c || "")}</td></tr>`; }).join("")}`).join("")}</table>`).join("");
@@ -928,6 +1023,7 @@ function reportDoc(r, imgs){
   const body = `<main>
 <header><div><h1>${esc(C.docTitle)}</h1><div>${r.f?.ref ? `Report ref: <b>${esc(r.f.ref)}</b> · ` : ""}Date: ${v("date")}</div>${status}</div><img src="${C.logo}" alt="HyperStrong"></header>
 ${C.tabs.map(t => `<h2>${esc(t.printTitle || t.label)}</h2>${t.blocks.map(blk).join("")}`).join("")}
+${(S.approvedGaps || []).length ? `<h2>Sections left unfilled</h2><p class="sub">The person exporting this report confirmed these sections could stay unfilled.</p><table>${S.approvedGaps.map(g => `<tr><th style="width:40%">${esc(g.label)}</th><td>${esc(g.detail)}</td></tr>`).join("")}</table>` : ""}
 <footer>${esc(C.footer || "")} Generated ${new Date().toLocaleString()}.</footer></main>`;
   return {body, title: `${r.f?.[C.titleField] || C.docTitle} – ${C.docTitle}`};
 }
@@ -942,6 +1038,7 @@ R .s{font-weight:700;text-align:center}R .s.pass{color:#16794a}R .s.fail{color:#
 R .ph{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}R .ph img{max-width:220px;max-height:160px;border:1px solid #c9cfda}
 R .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}R .gal figure{margin:0}R .gal img{width:100%;border:1px solid #c9cfda}R .gal figcaption{font-size:11px;color:#4a5468}
 R .sig{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}R .sig>div{border:1px solid #c9cfda;padding:8px}R .sg{height:70px;border-bottom:1px solid #8a93a6;margin-top:6px}R .sg img{height:68px}
+R .unitblk{margin-bottom:8px}R .unitblk .gal{grid-template-columns:repeat(5,1fr);gap:6px}R .unitblk .gal img{max-height:110px;object-fit:cover}
 R footer{margin-top:24px;color:#6f788b;font-size:11px;border-top:1px solid #c9cfda;padding-top:8px}`;
 const reportCSS = scope => REPORT_CSS.replace(/(^|\}|\n)R /g, (m, a) => a + scope + " ").replace(/,R /g, "," + scope + " ");
 function reportHTMLFile(r, imgs){ const d = reportDoc(r, imgs);
@@ -963,10 +1060,12 @@ async function buildPDF(r, imgs){
     const top0 = host.getBoundingClientRect().top; const H = host.scrollHeight;
     // Candidate break points: before headings, table rows, figures and signature boxes
     const cands = new Set();
-    host.querySelectorAll("h2,h3,tr,figure,.sig,.sig>div,p,footer,table").forEach(el => {
+    host.querySelectorAll("h2,h3,tr,figure,.sig,.sig>div,p,footer,table,.unitblk").forEach(el => {
+      if (!el.classList.contains("unitblk") && el.closest(".unitblk")) return;
       let y = el.getBoundingClientRect().top - top0;
       if (el.tagName === "TR" && !el.previousElementSibling){ const t = el.closest("table"); const h = t && t.previousElementSibling; if (h && /^H[23]$/.test(h.tagName)) y = h.getBoundingClientRect().top - top0; }
       if (el.tagName === "TABLE"){ const h = el.previousElementSibling; if (h && /^H[23]$/.test(h.tagName)) return; }
+      if (el.classList.contains("unitblk")){ const h = el.previousElementSibling; if (h && /^H[23]$/.test(h.tagName)) y = h.getBoundingClientRect().top - top0; }
       if (y > 0) cands.add(Math.floor(y) - 2); });
     const sorted = [...cands].sort((a, b) => a - b);
     const scale = 2;
