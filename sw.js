@@ -1,5 +1,5 @@
 // HyperStrong Field Forms – offline support
-const CACHE = 'hs-forms-1.0.0-202610141152';
+const CACHE = 'hs-forms-1.0.0-202610141158';
 const SHELL = ["./", "index.html", "lift.html", "pre.html", "cold.html", "hot.html", "job.html", "manifest.webmanifest", "lib/html2canvas.min.js", "lib/jspdf.umd.min.js", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png", "icons/favicon-32.png"];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('hs-forms-') && k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
@@ -14,7 +14,7 @@ self.addEventListener('fetch', e => {
   if (url.origin !== location.origin) return;
   // Pages: network first so updates arrive; cached copy when offline
   if (req.mode === 'navigate' || req.destination === 'document') {
-    e.respondWith(fetch(req).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); return r; })
+    e.respondWith(fetch(req, {cache:'no-cache'}).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); return r; })
       .catch(() => caches.match(req, {ignoreSearch:true}).then(r => r || caches.match('index.html'))));
     return;
   }
