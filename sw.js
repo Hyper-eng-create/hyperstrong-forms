@@ -1,6 +1,6 @@
 // HyperStrong Field Forms – offline support
-const CACHE = 'hs-forms-1.0.0-202610141158';
-const SHELL = ["./", "index.html", "lift.html", "pre.html", "cold.html", "hot.html", "job.html", "manifest.webmanifest", "lib/html2canvas.min.js", "lib/jspdf.umd.min.js", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png", "icons/favicon-32.png"];
+const CACHE = 'hs-forms-1.0.0-202610150711';
+const SHELL = ["./", "index.html", "manuals/block3-v1.html", "manuals/block3-v3.html", "manuals/block-m.html", "lift.html", "pre.html", "cold.html", "hot.html", "job.html", "manifest.webmanifest", "lib/html2canvas.min.js", "lib/jspdf.umd.min.js", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png", "icons/favicon-32.png"];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('hs-forms-') && k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {
@@ -16,6 +16,11 @@ self.addEventListener('fetch', e => {
   if (req.mode === 'navigate' || req.destination === 'document') {
     e.respondWith(fetch(req, {cache:'no-cache'}).then(r => { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); return r; })
       .catch(() => caches.match(req, {ignoreSearch:true}).then(r => r || caches.match('index.html'))));
+    return;
+  }
+  // Manual PDFs: keep a copy after the first download so they open offline
+  if (url.pathname.endsWith('.pdf')) {
+    e.respondWith(caches.match(req, {ignoreSearch:true}).then(hit => hit || fetch(req).then(r => { if (r.ok && r.status === 200) { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); } return r; })));
     return;
   }
   e.respondWith(caches.match(req, {ignoreSearch:true}).then(r => r || fetch(req)));

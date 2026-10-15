@@ -298,8 +298,25 @@ const TOOLS_TABLE = {type:"table", k:"tools", title:"Test equipment", hint:"Reco
   cols:[{k:"name", l:"Tool"}, {k:"serial", l:"Serial no.", mono:true}],
   rows:[["Digital multimeter (1500 V+) + clip-on ammeter"],["USB-RS485 converter"],["PC with communication cable"],["Recharge tool"],["Megger (insulation tester)"],["Insulated torque wrench (5–200 Nm)"],["Insulated PPE (clothing, shoes, gloves)"]]};
 const HS_ROLES = ["HyperStrong Engineer", "Service Partner", "Customer"];
-const PERSONNEL_ITEMS = [
-  "Appropriate PPE worn by all commissioning personnel."];
+const PERSONNEL_ITEMS = [];
+
+/* Safety requirements – first section of every form */
+const SAFETY_BASE = [
+  "Site induction completed; site safety rules briefed to the whole team.",
+  "Valid permit to work obtained from the site manager.",
+  "Risk assessment and method statement reviewed with the team.",
+  "PPE worn: safety helmet, safety shoes, high-visibility vest, safety glasses and gloves.",
+  "Emergency procedures, escape routes, first-aid kit and fire extinguishers located.",
+  "Emergency contacts and the site manager's phone number available.",
+  "At least two people on site; nobody works alone."];
+const SAFETY_ELECTRICAL = [
+  "Workers are qualified and authorized for electrical work at the voltage level involved.",
+  "Lockout/tagout applied: isolation points locked and tagged before work starts.",
+  "Absence of voltage verified with a tested voltage detector before touching conductors.",
+  "Insulated tools used; arc-flash rated PPE worn near energized equipment."];
+const SAFETY_BESS = ["Battery hazards briefed: no smoking or open flame; fire suppression system status known."];
+const SAFETY_SECTION = items => ({key:"s", t:"Safety requirements", sub:"complete before starting work", groups:[{items}]});
+const SAFETY_BLOCK = {type:"checklist", only:["s"]};
 
 window.CFG = {
   key:"cold", accent:"cold", mode:"shared", assets:false,
@@ -313,6 +330,7 @@ window.CFG = {
   tabs:[
     {label:"Overview", blocks:[
       {type:"summary"},
+      SAFETY_BLOCK,
       {type:"fields", title:"Project information", fields:PROJECT_FIELDS},
       {type:"fields", title:"Product information", fields:PRODUCT_FIELDS},
       ...UNIT_TABLES,
@@ -328,6 +346,7 @@ window.CFG = {
     ]}
   ],
   sections:[
+    SAFETY_SECTION([...SAFETY_BASE, ...SAFETY_ELECTRICAL, ...SAFETY_BESS]),
     {t:"Preconditions", groups:[{items:[
       "EPC pre-commissioning checklist received, signed and accepted.",
       "EPC confirmation received: all infrastructure works complete, site ready for local testing, no physical obstacles or access limitations.",
@@ -390,6 +409,21 @@ Object.assign(window.CFG, {"homeIntro": "Checklist for the HyperStrong commissio
 document.getElementById("topTitle").textContent = window.CFG.topTitle;
 </script>
 <script>window.HE = {
+"Safety requirements":"דרישות בטיחות","complete before starting work":"למילוי לפני תחילת העבודה","At the end of the job":"בסיום העבודה",
+"Site induction completed; site safety rules briefed to the whole team.":"בוצע תדריך כניסה לאתר; כללי הבטיחות באתר הוסברו לכל הצוות.",
+"Valid permit to work obtained from the site manager.":"התקבל היתר עבודה בתוקף ממנהל האתר.",
+"Risk assessment and method statement reviewed with the team.":"סקר הסיכונים ושיטת העבודה נסקרו עם הצוות.",
+"PPE worn: safety helmet, safety shoes, high-visibility vest, safety glasses and gloves.":"ציוד מגן אישי: קסדה, נעלי בטיחות, אפוד זוהר, משקפי מגן וכפפות.",
+"Emergency procedures, escape routes, first-aid kit and fire extinguishers located.":"נוהלי חירום, דרכי מילוט, ערכת עזרה ראשונה ומטפי כיבוי אותרו.",
+"Emergency contacts and the site manager's phone number available.":"מספרי חירום ומספר הטלפון של מנהל האתר זמינים.",
+"At least two people on site; nobody works alone.":"לפחות שני אנשים באתר; אין עבודה לבד.",
+"Workers are qualified and authorized for electrical work at the voltage level involved.":"העובדים מוסמכים ומורשים לעבודת חשמל ברמת המתח הרלוונטית.",
+"Lockout/tagout applied: isolation points locked and tagged before work starts.":"בוצעה נעילה וסימון (LOTO): נקודות הניתוק נעולות ומסומנות לפני תחילת העבודה.",
+"Absence of voltage verified with a tested voltage detector before touching conductors.":"היעדר מתח אומת בגלאי מתח שנבדק, לפני נגיעה במוליכים.",
+"Insulated tools used; arc-flash rated PPE worn near energized equipment.":"נעשה שימוש בכלים מבודדים; ליד ציוד מחושמל נלבש ציוד מגן מפני קשת חשמלית.",
+"Battery hazards briefed: no smoking or open flame; fire suppression system status known.":"הוסברו סיכוני הסוללות: אין עישון או אש גלויה; מצב מערכת כיבוי האש ידוע.",
+"Barriers and warning signs set up around energized equipment.":"הוצבו מחסומים ושלטי אזהרה סביב ציוד מחושמל.",
+"Energization coordinated with the site manager; everyone informed before switching.":"החישמול תואם עם מנהל האתר; כולם עודכנו לפני ביצוע מיתוג.",
 "Report history":"היסטוריית דוחות","Your report history":"היסטוריית הדוחות שלך","Delete all history":"מחק את כל ההיסטוריה","Delete report":"מחק דוח","Delete?":"למחוק?",
 "Delete all {n} reports and their photos from this device? This can't be undone.":"למחוק את כל {n} הדוחות והתמונות שלהם מהמכשיר? לא ניתן לבטל.","Keep them":"השאר","Delete all":"מחק הכל","History deleted":"ההיסטוריה נמחקה",
 "Report history (all forms)":"היסטוריית דוחות (כל הטפסים)","Every report saved on this phone. Open one to continue or create its PDF again.":"כל הדוחות השמורים בטלפון. פתח דוח כדי להמשיך למלא או להפיק שוב PDF.",
@@ -667,6 +701,21 @@ window.HE_RULES = [
   [/^(.+):$/, (m, tr) => { const t = tr(m[1]); return t === m[1] ? m[0] : t + ":"; }]
 ];
 
+Object.assign(window.HE, {
+"Commissioning":"הקמה והפעלה","Job report":"דוח עבודה","Manuals":"מדריכים",
+"Commissioning manual":"מדריך הפעלה","Commissioning manual · ":"מדריך הפעלה · ",
+"Text + original PDF with drawings":"טקסט + קובץ PDF מקורי עם שרטוטים","Text version · works offline":"גרסת טקסט · עובד ללא רשת",
+"Manual":"מדריך","← Home":"← דף הבית","Home":"דף הבית",
+"Open original PDF (with drawings)":"פתח PDF מקורי (עם שרטוטים)","Contents":"תוכן עניינים",
+"Text version of the manual. Drawings and photos are only in the original PDF.":"גרסת טקסט של המדריך. שרטוטים ותמונות נמצאים רק בקובץ ה-PDF המקורי.",
+"Commissioning quick access":"גישה מהירה להפעלה","Search and contents":"חיפוש ותוכן עניינים",
+"Search the manual (e.g. QF1, grounding, E-stop)":"חיפוש במדריך (למשל QF1, הארקה, E-stop)","Search the manual":"חיפוש במדריך",
+"{n} sections found":"נמצאו {n} סעיפים","Back to top":"חזרה למעלה",
+"Power on / off":"הדלקה / כיבוי","Electrical installation":"התקנה חשמלית","DC input":"כניסת DC","AC input":"כניסת AC",
+"Grounding":"הארקה","Communication":"תקשורת","UPS":"UPS","HMI / touchscreen":"HMI / מסך מגע","Emergency":"חירום",
+"Safety":"בטיחות","Lifting":"הנפה","Mechanical installation":"התקנה מכנית"
+});
+
 /* Language layer: Hebrew (default, right-to-left) / English. Text is written in English in the
    form definitions; when Hebrew is on, every text node and placeholder is swapped using HE / HE_RULES. */
 (function(){
@@ -761,9 +810,10 @@ const typing = () => { const a = document.activeElement; return a && (a.tagName 
 
 /* ---------- checklist items ---------- */
 C.items = [];
-(C.sections || []).forEach((s, si) => { let n = 0; s.groups.forEach(g => { g.items = g.items.map(it => {
+let plainIdx = 0;
+(C.sections || []).forEach((s, si) => { let n = 0; const sid = s.key ? s.key : "i" + String(++plainIdx).padStart(2,"0"); s.groups.forEach(g => { g.items = g.items.map(it => {
   const a = Array.isArray(it) ? it : [it]; n++;
-  const o = {id:`i${String(si+1).padStart(2,"0")}${String(n).padStart(2,"0")}`, num:`${si+1}.${n}`, t:a[0], val:a[1] || null, optional:!!a[2], photo:!!s.photo};
+  const o = {id:`${sid}${String(n).padStart(2,"0")}`, num:`${si+1}.${n}`, t:a[0], val:a[1] || null, optional:!!a[2], photo:!!s.photo};
   C.items.push(o); return o; }); }); });
 function stats(r){ let pass=0, fail=0, na=0, missing=0, needPhoto=0;
   for (const it of C.items){ const x = r.results?.[it.id] || {};
@@ -1101,7 +1151,7 @@ function blockHTML(b){
         <input class="inp" dir="auto" id="g-${b.k}-${i}" data-gcap="${b.k}" data-i="${i}" placeholder="Caption" value="${esc(g.cap || "")}" aria-label="Caption for photo ${i+1}" ${DIS()}></div>`).join("")}
       ${editable() ? `<button class="gadd" data-gadd="${b.k}">${CAM} Add photo</button>` : items.length ? "" : `<span class="muted">No photos.</span>`}
     </div></div></section>`; }
-  case "checklist": return checklistHTML();
+  case "checklist": return checklistHTML(b);
   case "unitcards": { const rows = r.f?.[b.k] || []; const tb = findBlock(b.k);
     return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div>
       <div class="panel-b" style="display:flex;flex-direction:column;gap:14px">
@@ -1127,9 +1177,11 @@ function photoCellHTML(b, c, row, i){
   return `<div class="photos" style="flex-wrap:nowrap">${ph.map(p => `<span class="thumb"><img data-ph="${esc(p)}" alt="${esc(c.l)} ${esc(row.name || "row " + (i+1))}">${editable() ? `<button class="x" data-tphrm="${esc(p)}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="Remove photo">×</button>` : ""}</span>`).join("")}
     ${editable() ? `<button class="addph" data-tph="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="Add ${esc(c.l)} for ${esc(row.name || "row " + (i+1))}">${CAM}<span>${ph.length ? "Add" : "Photo"}</span></button>` : ph.length ? "" : `<span class="muted">—</span>`}</div>`;
 }
-function checklistHTML(){
+// Which sections a checklist block shows: "only" picks keyed sections (e.g. safety); the default block shows the rest
+function secsOf(b){ return (C.sections || []).map((s, si) => [s, si]).filter(([s]) => b && b.only ? b.only.includes(s.key) : !s.key); }
+function checklistHTML(b){
   const r = S.r;
-  return C.sections.map((s, si) => { const ids = s.groups.flatMap(g => g.items.map(i => i.id)); const done = ids.filter(id => r.results?.[id]?.s).length;
+  return secsOf(b).map(([s, si]) => { const ids = s.groups.flatMap(g => g.items.map(i => i.id)); const done = ids.filter(id => r.results?.[id]?.s).length;
     return `<section class="panel"><div class="sec-h"><span class="n">${si+1}</span><h3><span>${esc(s.t)}</span>${s.sub ? ` <small>· <span>${esc(s.sub)}</span></small>` : ""}</h3><span class="c" data-secc="${si}">${done}/${ids.length}</span>
       ${editable() && !s.photo ? `<button class="btn btn-ghost btn-sm" data-allpass="${si}" title="Mark unanswered items in this section as Pass">Pass remaining</button>` : ""}</div>
       ${s.note ? `<div class="note warn" style="margin:12px 16px 0">${esc(s.note)}</div>` : ""}
@@ -1288,7 +1340,7 @@ function findGaps(r){
       const filled = rows.filter(row => textCols.some(c => !empty(row[c.k])));
       if (!filled.length) g.push({label:T(b.title), detail:T("No entries")});
       else b.cols.filter(c => c.t === "photo").forEach(c => { const miss = filled.filter(row => empty(row[c.k])); if (miss.length) g.push({label:`${T(b.title)}: ${T(c.l)}`, detail:T("Missing for {list}", {list:miss.map((row, i) => row.name || row[textCols[0].k] || "#" + (i+1)).join(", ")})}); }); }
-    else if (b.type === "checklist"){ C.sections.forEach((sec, si) => { const items = sec.groups.flatMap(x => x.items); const open = items.filter(it => !r.results?.[it.id]?.s).length;
+    else if (b.type === "checklist"){ secsOf(b).forEach(([sec, si]) => { const items = sec.groups.flatMap(x => x.items); const open = items.filter(it => !r.results?.[it.id]?.s).length;
       const lab = `${si+1}. ${T(sec.t)}`;
       if (open) g.push({label:lab, detail: open === items.length ? T("No items answered") : T("{n} of {t} items have no result", {n:open, t:items.length})});
       const failNoC = items.filter(it => r.results?.[it.id]?.s === "fail" && !r.results[it.id].c).length; if (failNoC) g.push({label:lab, detail:T("{n} failed items without a comment", {n:failNoC})});
@@ -1386,7 +1438,7 @@ function reportDoc(r, imgs){
     case "unitcards": { const rows = r.f?.[b.k] || []; const lab = {ok:"NO DAMAGE", damage:"DAMAGE", na:"N/A"}; const cls = {ok:"pass", damage:"fail", na:"na"};
       return `<h3>${esc(b.title)}</h3>${rows.length ? rows.map((row, i) => `<div class="unitblk"><table><tr><th style="width:34%" class="notr">${esc(row.name || b.unitLabel + " " + (i+1))}${row.sn ? ` · SN ${esc(row.sn)}` : ""}</th><td class="s ${cls[row.result] || ""}" style="width:110px">${lab[row.result] || "—"}</td><td class="notr">${esc(row.note || "")}</td></tr>
         <tr><td colspan="3"><div class="gal">${b.slots.map(sl => `<figure>${(Array.isArray(row[sl.k]) ? row[sl.k] : []).map(p => imgs[p] ? `<img src="${imgs[p]}">` : "").join("") || `<div style="height:60px;border:1px dashed #c9cfda"></div>`}<figcaption>${esc(sl.l)}</figcaption></figure>`).join("")}</div></td></tr></table></div>`).join("") : "<p>No units.</p>"}`; }
-    case "checklist": return C.sections.map((sec, si) => `<h3>${si+1}. ${esc(T(sec.t))}${sec.sub ? ` <small>(${esc(T(sec.sub))})</small>` : ""}</h3><table><tr><th style="width:40px">#</th><th>Item</th><th style="width:60px">Status</th><th style="width:90px">Value</th><th style="width:30%">Comments</th></tr>
+    case "checklist": return secsOf(b).map(([sec, si]) => `<h3>${si+1}. ${esc(T(sec.t))}${sec.sub ? ` <small>(${esc(T(sec.sub))})</small>` : ""}</h3><table><tr><th style="width:40px">#</th><th>Item</th><th style="width:60px">Status</th><th style="width:90px">Value</th><th style="width:30%">Comments</th></tr>
       ${sec.groups.map(g => `${g.t ? `<tr class="g"><td colspan="5">${esc(g.t)}</td></tr>` : ""}${g.items.map(it => { const x = r.results?.[it.id] || {}; const ph = (x.photos || []).map(p => imgs[p] ? `<img src="${imgs[p]}">` : "").join("");
         return `<tr><td class="m">${it.num}</td><td>${esc(it.t)}${ph ? `<div class="ph">${ph}</div>` : ""}</td><td class="s ${x.s || ""}">${st[x.s] || "—"}</td><td class="m notr">${x.v ? esc(x.v) + " " + esc(it.val?.unit || "") : ""}</td><td class="notr">${esc(x.c || "")}</td></tr>`; }).join("")}`).join("")}</table>`).join("");
     case "signoff": return `<h3>${esc(b.title || "Sign-off")}</h3><div class="sig">${b.roles.map((role, ri) => { const so = r.signoff?.["s" + ri] || {}; return `<div><b>${esc(role)}</b><div>${T("Name")}: <span class="notr">${esc(so.name || "")}</span></div><div>${T("Date")}: <span class="notr">${esc(so.date || "")}</span></div><div class="sg">${so.sig ? `<img src="${so.sig}">` : ""}</div></div>`; }).join("")}</div>`;

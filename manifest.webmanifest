@@ -1,7 +1,7 @@
 {
   "name": "HyperStrong Field Forms",
   "short_name": "HS Forms",
-  "description": "Pre-commissioning, cold and hot commissioning checklists and site job reports for HyperStrong BESS sites.",
+  "description": "Lifting day, pre-commissioning, cold and hot commissioning checklists, site job reports and commissioning manuals for HyperStrong BESS sites.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
