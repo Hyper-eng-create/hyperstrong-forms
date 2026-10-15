@@ -314,7 +314,7 @@ img{max-width:100%}
   </nav>
   <h2 class="sech" id="manuals">Manuals</h2>
   <nav class="tiles" aria-label="Manuals">
-    <a class="tile ac-cold" href="manuals/block3-v1.html"><span class="who">Commissioning manual · <bdi class="notr" dir="ltr">V1.4 · 2025-08-25</bdi></span><h3 class="notr"><bdi dir="ltr">HyperBlock III · version 1</bdi></h3><p><bdi class="notr" dir="ltr">20 ft DC BESS · HSL3C7001 series · US</bdi></p><p>Text + original PDF with drawings</p><span class="go">Open →</span></a><a class="tile ac-cold" href="manuals/block3-v3.html"><span class="who">Commissioning manual · <bdi class="notr" dir="ltr">V1.2 · 2026-03-20</bdi></span><h3 class="notr"><bdi dir="ltr">HyperBlock III · version 3 (DC 3.0)</bdi></h3><p><bdi class="notr" dir="ltr">20 ft DC BESS · HSL3702 series · EU</bdi></p><p>Text version · works offline</p><span class="go">Open →</span></a><a class="tile ac-cold" href="manuals/block-m.html"><span class="who">Commissioning manual · <bdi class="notr" dir="ltr">V1.2 · 2026-02-11</bdi></span><h3 class="notr"><bdi dir="ltr">HyperBlock M</bdi></h3><p><bdi class="notr" dir="ltr">10 ft DC BESS · HSL3G01 / HSL3G0U series · IEC</bdi></p><p>Text version · works offline</p><span class="go">Open →</span></a>
+    <a class="tile ac-cold" href="manuals/block3-v1.html"><span class="who">Manual · <bdi class="notr" dir="ltr">V1.4 · 2025-08-25</bdi></span><h3 class="notr"><bdi dir="ltr">HyperBlock III · version 1</bdi></h3><p><bdi class="notr" dir="ltr">20 ft DC BESS · HSL3C7001 series · US</bdi></p><span class="go">Open PDF →</span></a><div class="tile ac-cold" style="opacity:.6"><span class="who">Manual · <bdi class="notr" dir="ltr">V1.2 · 2026-03-20</bdi></span><h3 class="notr"><bdi dir="ltr">HyperBlock III · version 3 (DC 3.0)</bdi></h3><p><bdi class="notr" dir="ltr">20 ft DC BESS · HSL3702 series · EU</bdi></p><span class="go" style="color:var(--fg-3)">PDF not uploaded yet</span></div><div class="tile ac-cold" style="opacity:.6"><span class="who">Manual · <bdi class="notr" dir="ltr">V1.2 · 2026-02-11</bdi></span><h3 class="notr"><bdi dir="ltr">HyperBlock M</bdi></h3><p><bdi class="notr" dir="ltr">10 ft DC BESS · HSL3G01 / HSL3G0U series · IEC</bdi></p><span class="go" style="color:var(--fg-3)">PDF not uploaded yet</span></div>
   </nav>
   <section class="panel" id="history" aria-labelledby="histh">
     <div class="panel-h"><h2 id="histh">Report history (all forms)</h2><span class="muted mono" id="histCount"></span><span id="histClear"></span></div>
@@ -637,6 +637,8 @@ Object.assign(window.HE, {
 "Grounding":"הארקה","Communication":"תקשורת","UPS":"UPS","HMI / touchscreen":"HMI / מסך מגע","Emergency":"חירום",
 "Safety":"בטיחות","Lifting":"הנפה","Mechanical installation":"התקנה מכנית"
 });
+Object.assign(window.HE, {"Close":"סגור","Loading manual…":"טוען מדריך…","Couldn't open the manual.":"לא ניתן לפתוח את המדריך.","Open the PDF file":"פתח את קובץ ה-PDF",
+"Open PDF":"פתח PDF","PDF not uploaded yet":"קובץ ה-PDF עדיין לא הועלה","Zoom in":"הגדל","Zoom out":"הקטן","Manual · ":"מדריך · ","Manual ·":"מדריך ·","Manual":"מדריך"});
 
 /* Language layer: Hebrew (default, right-to-left) / English. Text is written in English in the
    form definitions; when Hebrew is on, every text node and placeholder is swapped using HE / HE_RULES. */
