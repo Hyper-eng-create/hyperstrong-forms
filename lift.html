@@ -264,6 +264,13 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
 #clearWrap,#histClear{margin-inline-start:auto}
 #clearWrap .confirm{font-size:13px}
 
+.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}
+@media (max-width:520px){.tgrid{grid-template-columns:1fr}}
+.tfld{display:flex;flex-direction:column;gap:4px;min-width:0}.tfld.full{grid-column:1/-1}
+.tfld .photos,.tcard .photos{flex-wrap:wrap!important}
+.tfix{display:flex;flex-direction:column;gap:2px;font-size:14px;color:var(--fg-2)}
+.ucard.u-open{border-inline-start-color:var(--fail)}
+
 
 html,body{margin:0}
 body{-webkit-text-size-adjust:100%}
@@ -1132,6 +1139,7 @@ function blockHTML(b){
     return `<section class="panel"><div class="panel-h"><h2>${esc(b.l)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="panel-b">${body}</div></section>`; }
   case "group": return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="panel-b" style="display:flex;flex-direction:column;gap:14px">${b.blocks.map(x => x.type === "fields" ? `<div class="grid">${x.fields.map(fd => inputHTML("f/" + fd.k, fd)).join("")}</div>` : blockHTML({...x, inline:true})).join("")}</div></section>`;
   case "table": { const rows = r.f?.[b.k] || [];
+    if (b.cards) return tableCardsHTML(b, rows);
     return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="tbl-wrap"><table class="tbl"><thead><tr>${b.numbered ? "<th>#</th>" : ""}${b.cols.map(c => `<th>${esc(c.l)}</th>`).join("")}${editable() && b.addable !== false ? "<th></th>" : ""}</tr></thead><tbody>
       ${rows.map((row, i) => `<tr>${b.numbered ? `<td class="num">${i+1}</td>` : ""}${b.cols.map(c => `<td>${c.t === "photo" ? photoCellHTML(b, c, row, i) : c.fixed ? esc(row[c.k]) : c.t === "select" ? `<select class="inp" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="${esc(c.l)} row ${i+1}" ${DIS()}><option value=""></option>${c.opts.map(o => `<option value="${esc(o)}"${row[c.k] === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>` : `<input class="inp${c.mono ? " mono" : ""}" dir="auto" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" type="${c.t || "text"}" value="${esc(row[c.k])}" aria-label="${esc(c.l)} row ${i+1}" ${DIS()}>`}</td>`).join("")}${editable() && b.addable !== false ? `<td style="width:1%"><button class="btn btn-ghost btn-sm" data-tblrm="${b.k}" data-row="${i}" aria-label="Remove row ${i+1}">Remove</button></td>` : ""}</tr>`).join("")}
       </tbody></table></div>${editable() && b.addable !== false ? `<div class="panel-b" style="padding-top:10px"><button class="btn btn-sm" data-tbladd="${b.k}">${esc(b.addLabel || "Add row")}</button></div>` : ""}</section>`; }
@@ -1162,6 +1170,25 @@ function blockHTML(b){
   return "";
 }
 
+// Table shown as one card per row (better on phones: every field and photo is visible without side-scrolling)
+function tcellHTML(b, c, row, i){
+  if (c.t === "photo") return photoCellHTML(b, c, row, i);
+  if (c.t === "select") return `<select class="inp" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="${esc(c.l)} ${i+1}" ${DIS()}><option value=""></option>${c.opts.map(o => `<option value="${esc(o)}"${row[c.k] === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+  return `<input class="inp${c.mono ? " mono" : ""}" dir="auto" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" type="${c.t || "text"}" value="${esc(row[c.k] ?? "")}" aria-label="${esc(c.l)} ${i+1}" ${DIS()}>`;
+}
+function tableCardsHTML(b, rows){
+  const fx = b.cols.filter(c => c.fixed), ed = b.cols.filter(c => !c.fixed), canAdd = editable() && b.addable !== false;
+  return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div>
+    <div class="panel-b" style="display:flex;flex-direction:column;gap:14px">
+    ${rows.length ? rows.map((row, i) => { const st = row.status === "Closed" ? " u-ok" : row.status === "Open" ? " u-open" : "";
+      return `<div class="ucard tcard${st}"><div class="ucard-h"><h3>${b.numbered ? `<span class="mono muted">${i+1}.</span> ` : ""}${fx.length ? esc(row[fx[0].k]) : esc(b.rowLabel || "Item") + " " + (i+1)}</h3>
+        ${canAdd ? `<button class="btn btn-ghost btn-sm" style="margin-inline-start:auto" data-tblrm="${b.k}" data-row="${i}" aria-label="Remove ${i+1}">Remove</button>` : ""}</div>
+        ${fx.slice(1).map(c => `<div class="tfix"><span class="flabel">${esc(c.l)}</span><span>${esc(row[c.k])}</span></div>`).join("")}
+        <div class="tgrid">${ed.map(c => `<div class="tfld${c.t === "photo" || c.full ? " full" : ""}"><span class="flabel">${esc(c.l)}</span>${tcellHTML(b, c, row, i)}</div>`).join("")}</div></div>`; }).join("")
+      : `<p class="muted" style="margin:0">${esc(b.emptyText || "Nothing added yet.")}</p>`}
+    ${canAdd ? `<div><button class="btn btn-sm" data-tbladd="${b.k}">${esc(b.addLabel || "Add row")}</button></div>` : ""}
+    </div></section>`;
+}
 function photoCellHTML(b, c, row, i){
   const ph = Array.isArray(row[c.k]) ? row[c.k] : [];
   return `<div class="photos" style="flex-wrap:nowrap">${ph.map(p => `<span class="thumb"><img data-ph="${esc(p)}" alt="${esc(c.l)} ${esc(row.name || "row " + (i+1))}">${editable() ? `<button class="x" data-tphrm="${esc(p)}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="Remove photo">×</button>` : ""}</span>`).join("")}

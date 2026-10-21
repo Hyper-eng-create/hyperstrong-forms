@@ -264,6 +264,13 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
 #clearWrap,#histClear{margin-inline-start:auto}
 #clearWrap .confirm{font-size:13px}
 
+.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}
+@media (max-width:520px){.tgrid{grid-template-columns:1fr}}
+.tfld{display:flex;flex-direction:column;gap:4px;min-width:0}.tfld.full{grid-column:1/-1}
+.tfld .photos,.tcard .photos{flex-wrap:wrap!important}
+.tfix{display:flex;flex-direction:column;gap:2px;font-size:14px;color:var(--fg-2)}
+.ucard.u-open{border-inline-start-color:var(--fail)}
+
 
 html,body{margin:0}
 body{-webkit-text-size-adjust:100%}
