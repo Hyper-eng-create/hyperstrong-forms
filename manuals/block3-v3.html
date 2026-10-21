@@ -285,6 +285,10 @@ html,body{background:#525659}
 .pgn{font-size:13px;white-space:nowrap;opacity:.9}
 .vmsg{color:#fff;text-align:center;padding:40px 16px;font-size:16px;display:flex;flex-direction:column;gap:14px;align-items:center}
 .vmsg a{color:#fff}
+.lock{margin:40px auto;max-width:340px;width:calc(100% - 16px);background:var(--surface);color:var(--fg);border-radius:var(--r);padding:24px 20px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.lock svg{color:var(--acc)}.lock h2{font-size:20px;font-weight:600;margin:0}.lock p{margin:0;color:var(--fg-2);font-size:15px}
+.lock .inp{width:100%;font-size:17px;text-align:center}.lock .btn{width:100%;justify-content:center}.lock .err{color:#b91c1c;font-weight:600}
+.dlb{border:1.5px solid rgba(255,255,255,.55);color:inherit;border-radius:6px;padding:4px 9px;font-size:13px;text-decoration:none;white-space:nowrap}
 
 </style>
 </head><body data-pdf="pdf/HyperBlock-III-v3-DC3.0-EU-User-Manual-V1.4.pdf">
@@ -294,6 +298,7 @@ html,body{background:#525659}
   <h1 class="notr" dir="ltr">Block 3 v3</h1><div class="sp"></div>
   <span class="pgn mono notr" id="pg" dir="ltr"></span>
   <button class="zb notr" id="zout" type="button" aria-label="Zoom out">−</button><button class="zb notr" id="zin" type="button" aria-label="Zoom in">+</button>
+  
   <button class="langbtn notr" id="langBtn" type="button" hidden>EN</button>
 </div></header>
 <main class="pv" id="pages"><div class="vmsg">Loading manual…</div></main>
@@ -607,6 +612,10 @@ Object.assign(window.HE, {
 });
 Object.assign(window.HE, {"Close":"סגור","Loading manual…":"טוען מדריך…","Couldn't open the manual.":"לא ניתן לפתוח את המדריך.","Open the PDF file":"פתח את קובץ ה-PDF",
 "Open PDF":"פתח PDF","PDF not uploaded yet":"קובץ ה-PDF עדיין לא הועלה","Zoom in":"הגדל","Zoom out":"הקטן","Manual · ":"מדריך · ","Manual ·":"מדריך ·","Manual":"מדריך"});
+Object.assign(window.HE, {"Password required":"נדרשת סיסמה","Enter the password to open this document.":"הזן סיסמה כדי לפתוח את המסמך.","Password":"סיסמה","Open":"פתח",
+"Opening…":"פותח…","Wrong password. Try again.":"סיסמה שגויה. נסה שוב.","Loading…":"טוען…","Couldn't open the document. Check your connection and try again.":"לא ניתן לפתוח את המסמך. בדוק את החיבור ונסה שוב.",
+"Site passdown":"העברת אתר","Commissioning to Operation: passdown rule, site identification, passdown criteria, punch list and sign-off.":"מהקמה לתפעול: כלל ההעברה, פרטי האתר, קריטריוני העברה, רשימת ליקויים וחתימות.",
+"Password required ":"נדרשת סיסמה"});
 
 /* Language layer: Hebrew (default, right-to-left) / English. Text is written in English in the
    form definitions; when Hebrew is on, every text node and placeholder is swapped using HE / HE_RULES. */
@@ -708,12 +717,36 @@ Object.assign(window.HE, {"Close":"סגור","Loading manual…":"טוען מד�
   function setZoom(z){ const keep = cur; zoom = Math.max(1, Math.min(3, z)); layout(); const p = pages[keep - 1]; if (p) p.el.scrollIntoView(); }
   document.getElementById("zin").onclick = () => setZoom(zoom + .5);
   document.getElementById("zout").onclick = () => setZoom(zoom - .5);
-  pdfjsLib.getDocument({url: URL_, disableFontFace: true, isEvalSupported: false}).promise.then(async d => {
+  const ENC = document.body.dataset.enc;
+  function open(src){ return pdfjsLib.getDocument(Object.assign({disableFontFace: true, isEvalSupported: false}, src)).promise.then(async d => {
     doc = d; box.innerHTML = "";
     const first = await d.getPage(1); const v = first.getViewport({scale:1}); const r = v.height / v.width;
     for (let i = 1; i <= d.numPages; i++){ const el = document.createElement("div"); el.className = "pg"; el.innerHTML = `<span class="n notr">${i}</span>`; box.appendChild(el); pages.push({i, el, r}); }
     layout();
-  }).catch(() => { box.innerHTML = `<div class="vmsg"><span>${T("Couldn't open the manual.")}</span><a href="${URL_}">${T("Open the PDF file")}</a></div>`; });
+  }).catch(() => { box.innerHTML = `<div class="vmsg"><span>${T("Couldn't open the manual.")}</span>${URL_ ? `<a href="${URL_}">${T("Open the PDF file")}</a>` : ""}</div>`; }); }
+  if (!ENC){ open({url: URL_}); return; }
+  // Password-protected document: the file is stored encrypted (AES-256-GCM, key from the password with PBKDF2)
+  const ITER = +document.body.dataset.iter;
+  function ask(err){
+    box.innerHTML = `<form class="lock" id="lockf"><svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+      <h2>${T("Password required")}</h2><p>${T("Enter the password to open this document.")}</p>
+      <input class="inp" id="pw" type="password" autocomplete="current-password" aria-label="${T("Password")}" placeholder="${T("Password")}">
+      ${err ? `<p class="err">${T(err)}</p>` : ""}<button class="btn btn-primary" type="submit">${T("Open")}</button></form>`;
+    const f = document.getElementById("lockf"), pw = document.getElementById("pw"); pw.focus();
+    f.onsubmit = async e => { e.preventDefault(); const v = pw.value; if (!v) return;
+      f.querySelector("button").disabled = true; f.querySelector("button").textContent = T("Opening…");
+      try {
+        const buf = new Uint8Array(await (await fetch(ENC)).arrayBuffer());
+        const salt = buf.slice(0, 16), iv = buf.slice(16, 28), ct = buf.slice(28);
+        const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(v), "PBKDF2", false, ["deriveKey"]);
+        const key = await crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations: ITER, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+        let pdf; try { pdf = new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM", iv}, key, ct)); } catch(x){ ask("Wrong password. Try again."); return; }
+        const dl = document.getElementById("dl"); if (dl){ dl.hidden = false; const url = URL.createObjectURL(new Blob([pdf], {type:"application/pdf"})); dl.href = url; }
+        box.innerHTML = `<div class="vmsg">${T("Loading…")}</div>`; open({data: pdf});
+      } catch(x){ ask("Couldn't open the document. Check your connection and try again."); }
+    };
+  }
+  ask();
 })();
 </script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('../sw.js').catch(() => {}));</script>

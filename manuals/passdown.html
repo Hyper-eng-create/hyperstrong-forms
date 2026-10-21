@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#002e77">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HS Forms">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans+Hebrew:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<title>Site passdown – Commissioning to Operation</title>
+<style>
+/* Layout: field tool — sticky brand bar, report list, report header with status, tabs, checklist rows that stack on a phone */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eef1f6; --line:#d7dce5; --line-strong:#b9c1cf;
+  --fg:#141b2a; --fg-2:#4a5468; --fg-3:#6f788b;
+  --brand:#002e77; --brand-fg:#ffffff; --brand-soft:#e3eaf7;
+  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7; --lift:#0f766e; --lift-soft:#dcf1ee;
+  --pass:#16794a; --pass-soft:#dcf2e6; --fail:#c0262d; --fail-soft:#fbe1e2; --na:#5f6779; --na-soft:#e7e9ee; --warn:#9a5b00; --warn-soft:#fbefdc;
+  --focus:#2f6fe0;
+  --f-display:"IBM Plex Sans Condensed","IBM Plex Sans Hebrew","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","IBM Plex Sans Hebrew",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
+  --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b;
+  --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
+  --focus:#8fb4ff; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
+  --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b;
+  --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
+  --focus:#8fb4ff; color-scheme:dark}
+.ac-pre{--acc:var(--pre);--acc-soft:var(--pre-soft)} .ac-cold{--acc:var(--cold);--acc-soft:var(--cold-soft)}
+.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)} .ac-lift{--acc:var(--lift);--acc-soft:var(--lift-soft)}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.45}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:.01em}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-display);font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--fg-3)}
+.muted{color:var(--fg-3);font-size:13px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--brand);color:var(--brand-fg);border-bottom:4px solid var(--acc)}
+.topbar-in{max-width:1120px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.mark{width:28px;height:28px;border:2px solid currentColor;border-radius:6px;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:13px;flex:none}
+.topbar h1{font-size:18px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .sp{flex:1}
+.sync{font-size:12px;opacity:.85;white-space:nowrap}
+
+main{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:20px 80px;display:flex;flex-direction:column;gap:20px}
+
+a.btn{text-decoration:none;color:inherit}
+a.btn-primary{color:var(--brand-fg)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:var(--surface);border-radius:6px;padding:7px 12px;font-weight:500;font-size:14px;white-space:nowrap}
+.btn:hover:not(:disabled){border-color:var(--fg-3)}
+.btn-primary{background:var(--brand);color:var(--brand-fg);border-color:var(--brand)}
+.btn-primary:hover:not(:disabled){filter:brightness(1.12);border-color:var(--brand)}
+.btn:disabled{opacity:.5}
+.btn-ghost{background:transparent}
+.btn-ok{background:var(--pass);border-color:var(--pass);color:#fff}
+.btn-danger{color:var(--fail);border-color:color-mix(in srgb,var(--fail) 50%,transparent);background:transparent}
+.btn-sm{padding:4px 9px;font-size:13px}
+.linkish{background:none;border:0;padding:0;color:var(--fg-2);text-decoration:underline;text-underline-offset:2px;font-size:14px}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.panel-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line)}
+.panel-h h2{font-size:18px;font-weight:600}
+.panel-h .muted{margin-inline-start:auto}
+.panel-b{padding:16px}
+
+.hero{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;justify-content:space-between}
+.hero h2{font-size:28px;font-weight:600}
+.hero p{margin:4px 0 0;color:var(--fg-2);max-width:62ch}
+
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label,.flabel{font-size:12.5px;font-weight:500;color:var(--fg-2)}
+.inp{width:100%;min-width:0;border:1px solid var(--line-strong);background:var(--surface);border-radius:6px;padding:7px 9px;font-size:14px}
+.inp:focus{border-color:var(--focus);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 22%,transparent)}
+.inp:disabled{background:var(--surface-2);color:var(--fg-2)}
+textarea.inp{resize:vertical;min-height:38px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.grid{grid-template-columns:1fr}}
+
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;font-size:14px;background:var(--surface);cursor:pointer;user-select:none}
+.pill input{width:16px;height:16px;margin:0;accent-color:var(--acc)}
+.pill:has(input:checked){border-color:var(--acc);background:var(--acc-soft);font-weight:500}
+.pill:has(input:disabled){cursor:default}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--line)}
+.filters button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;font-size:13px;color:var(--fg-2)}
+.filters button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.rlist{display:flex;flex-direction:column}
+.ritem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 16px;border:0;border-top:1px solid var(--line);text-align:left;background:none;width:100%}
+.ritem:first-child{border-top:0}
+.ritem:hover{background:var(--surface-2)}
+.ritem .t{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.ritem .t span{font-weight:400;color:var(--fg-3)}
+.ritem .s{font-size:12.5px;color:var(--fg-3);grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ritem .d{font-size:12px;color:var(--fg-3);white-space:nowrap}
+.empty{padding:32px 16px;text-align:center;color:var(--fg-3)}
+.empty strong{display:block;color:var(--fg-2);margin-bottom:4px;font-weight:600}
+
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--fg-2);white-space:nowrap}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip.draft{background:var(--na-soft);color:var(--na)}
+.chip.submitted{background:var(--brand-soft);color:var(--brand)}
+:root[data-theme="dark"] .chip.submitted{color:#9fbcff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip.submitted{color:#9fbcff}}
+.chip.accepted,.chip.complete{background:var(--pass-soft);color:var(--pass)}
+.chip.returned,.chip.fail{background:var(--fail-soft);color:var(--fail)}
+.chip.progress{background:var(--acc-soft);color:var(--acc)}
+.minibar{width:70px;height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden;display:inline-flex}
+.minibar i{display:block;height:100%;background:var(--acc)}
+
+.rhead{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.rhead .ttl{flex:1;min-width:220px}
+.rhead h2{font-size:26px;font-weight:600;overflow-wrap:anywhere;margin-top:6px}
+.rhead .meta{color:var(--fg-3);font-size:13px;margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rhead .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+.statusbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;border:1px solid var(--line);border-inline-start:4px solid var(--sc,var(--line-strong));border-radius:var(--r);background:var(--surface)}
+.statusbar.submitted{--sc:var(--brand)} .statusbar.accepted{--sc:var(--pass)} .statusbar.returned{--sc:var(--fail)}
+.statusbar .msg{flex:1;min-width:220px;font-size:14px}
+.statusbar .msg b{display:block;font-family:var(--f-display);font-size:16px}
+.issues{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:var(--fail)}
+.review{display:flex;flex-direction:column;gap:10px;width:100%}
+.review .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+.tabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:10;background:var(--bg);display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-inline:-16px;padding-inline:16px;scrollbar-width:thin}
+.tab{border:0;background:none;padding:11px 12px 9px;border-bottom:3px solid transparent;font-family:var(--f-display);font-weight:600;font-size:15px;color:var(--fg-2);white-space:nowrap;display:flex;gap:8px;align-items:center}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--acc)}
+.tab .mini{font-family:var(--f-mono);font-size:11.5px;font-weight:400;color:var(--fg-3)}
+.tabpane{display:flex;flex-direction:column;gap:20px}
+.pager{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+.sumbox{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px;align-items:center;padding:16px;border:1px solid var(--line);border-top:4px solid var(--acc);border-radius:var(--r);background:var(--surface)}
+.sumbox h3{font-size:16px;font-weight:600}
+.bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden;display:flex;grid-column:1/-1}
+.bar i{display:block;height:100%}
+.bar .p{background:var(--pass)} .bar .f{background:var(--fail)} .bar .n{background:var(--na)}
+.nums{display:flex;gap:12px;font-size:12.5px;color:var(--fg-2);flex-wrap:wrap;grid-column:1/-1}
+.nums span{display:inline-flex;gap:5px;align-items:center}
+.nums .k{width:8px;height:8px;border-radius:2px;display:inline-block}
+
+.note{border:1px solid var(--line);border-inline-start:4px solid var(--acc);background:var(--acc-soft);border-radius:6px;padding:10px 12px;font-size:13.5px;color:var(--fg)}
+.note.warn{border-inline-start-color:var(--warn);background:var(--warn-soft)}
+
+.sec-h{display:flex;align-items:baseline;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.sec-h .n{font-family:var(--f-mono);font-size:13px;color:var(--acc);font-weight:500}
+.sec-h h3{font-size:17px;font-weight:600;flex:1;min-width:0}
+.sec-h h3 small{font-weight:400;color:var(--fg-3);font-size:14px;font-family:var(--f-body)}
+.sec-h .c{font-family:var(--f-mono);font-size:12px;color:var(--fg-3)}
+.grp{padding:8px 16px 4px;font-family:var(--f-display);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-3);background:var(--surface-2);border-bottom:1px solid var(--line)}
+.row{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:6px 12px;padding:12px 16px;border-bottom:1px solid var(--line);align-items:start}
+.row:last-child{border-bottom:0}
+.row .id{font-family:var(--f-mono);font-size:12px;color:var(--fg-3);padding-top:2px}
+.row .txt{min-width:0;overflow-wrap:anywhere}
+.row .opt{font-size:11.5px;color:var(--fg-3);margin-left:6px}
+.row.s-pass{box-shadow:inset 3px 0 0 var(--pass)}
+.row.s-fail{box-shadow:inset 3px 0 0 var(--fail);background:color-mix(in srgb,var(--fail-soft) 45%,transparent)}
+.row.s-na{box-shadow:inset 3px 0 0 var(--na)}
+.seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:6px;overflow:hidden;flex:none}
+.seg button{border:0;background:var(--surface);padding:7px 11px;font-size:13px;font-weight:600;min-width:52px;color:var(--fg-2)}
+.seg button+button{border-left:1px solid var(--line-strong)}
+.seg button[aria-pressed="true"].pass{background:var(--pass);color:var(--surface)}
+.seg button[aria-pressed="true"].fail{background:var(--fail);color:var(--surface)}
+.seg button[aria-pressed="true"].na{background:var(--na);color:var(--surface)}
+.extra{grid-column:2/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start}
+.val{display:flex;align-items:stretch;flex:0 0 180px;direction:ltr}
+.val .inp{border-radius:6px 0 0 6px;font-family:var(--f-mono)}
+.val .u{border:1px solid var(--line-strong);border-left:0;border-radius:0 6px 6px 0;padding:7px 8px;font-size:13px;background:var(--surface-2);color:var(--fg-2);font-family:var(--f-mono);white-space:nowrap}
+.extra .cmt{flex:1 1 220px;min-width:0}
+.req{grid-column:2/-1;font-size:12.5px;color:var(--fail);font-weight:500}
+.hint{grid-column:2/-1;font-size:12.5px;color:var(--fg-3)}
+.photos{grid-column:2/-1;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.thumb{position:relative;width:76px;height:58px;border-radius:5px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2);flex:none}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .x{position:absolute;top:2px;inset-inline-end:2px;border:0;border-radius:4px;background:rgba(10,15,25,.72);color:#fff;font-size:11px;padding:1px 5px}
+.thumb .x.arm{background:var(--fail)}
+.addph{display:inline-flex;align-items:center;gap:5px;font-size:13px;border:1px dashed var(--line-strong);border-radius:6px;padding:6px 10px;background:transparent;color:var(--fg-2)}
+.addph:hover{border-color:var(--fg-3);color:var(--fg)}
+.addph.need{border-color:var(--warn);color:var(--warn)}
+.addph.busy{opacity:.6;pointer-events:none}
+@media (max-width:640px){
+  .row{grid-template-columns:minmax(0,1fr)}
+  .row .id{display:none}
+  .extra,.req,.hint,.photos{grid-column:1/-1}
+  .seg{justify-self:start}
+  .val{flex:1 1 100%}
+}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.gcard{display:flex;flex-direction:column;gap:6px}
+.gcard .im{position:relative;aspect-ratio:4/3;max-width:100%;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2)}
+.gcard .im img{width:100%;height:100%;object-fit:cover;display:block}
+.gadd{aspect-ratio:4/3;border:1.5px dashed var(--line-strong);border-radius:6px;background:transparent;color:var(--fg-2);display:grid;place-items:center;font-size:14px}
+
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font-size:12px;font-weight:600;color:var(--fg-3);text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl .inp{min-width:110px}
+.tbl td.num{width:1%;font-family:var(--f-mono);color:var(--fg-3)}
+
+.sign{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.sigbox{border:1px solid var(--line);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.sigbox h4{font-size:15px;font-weight:600}
+.pad{position:relative;border:1px dashed var(--line-strong);border-radius:6px;background:#fff;height:110px;touch-action:none}
+.pad canvas{width:100%;height:100%;display:block;border-radius:6px}
+.pad .ph{position:absolute;inset:0;display:grid;place-items:center;color:#8a93a6;font-size:13px;pointer-events:none}
+.pad img{width:100%;height:100%;object-fit:contain;display:block}
+.sigrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:var(--fg-3)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:6px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13.5px}
+.loading{padding:40px 16px;text-align:center;color:var(--fg-3)}
+
+.ucard{border:1px solid var(--line);border-inline-start:4px solid var(--line-strong);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.ucard.u-ok{border-inline-start-color:var(--pass)} .ucard.u-damage{border-inline-start-color:var(--fail);background:color-mix(in srgb,var(--fail-soft) 40%,var(--surface))} .ucard.u-na{border-inline-start-color:var(--na)}
+.ucard-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ucard-h h3{font-size:17px;font-weight:600}
+.uslots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.uslot{display:flex;flex-direction:column;gap:6px;min-width:0}
+.uslot .photos{flex-wrap:wrap!important}
+.ucard .req{grid-column:auto}
+
+.gaprow{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;font-size:14px}
+.gaprow input{width:18px;height:18px;margin-top:2px;accent-color:var(--brand);flex:none}
+.gaprow:has(input:checked){background:var(--surface-2)}
+
+/* Right-to-left (Hebrew) */
+.arw{display:inline-block}
+[dir="rtl"] .arw{transform:scaleX(-1)}
+[dir="rtl"] .row.s-pass{box-shadow:inset -3px 0 0 var(--pass)}
+[dir="rtl"] .row.s-fail{box-shadow:inset -3px 0 0 var(--fail)}
+[dir="rtl"] .row.s-na{box-shadow:inset -3px 0 0 var(--na)}
+[dir="rtl"] .gcard .im .x{right:auto!important;left:4px}
+.langbtn{border:1.5px solid color-mix(in srgb,currentColor 55%,transparent);background:transparent;color:inherit;border-radius:6px;padding:3px 10px;font-weight:600;font-size:14px;font-family:var(--f-body);min-width:44px}
+.langbtn:hover{background:rgba(255,255,255,.12)}
+
+.rrow{display:flex;align-items:stretch;border-top:1px solid var(--line)}
+.rlist .rrow:first-child{border-top:0}
+.rrow .ritem{border-top:0;flex:1;min-width:0}
+.rdel{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:64px;border:0;border-inline-start:1px solid var(--line);background:transparent;color:var(--fg-3);font-size:11.5px}
+.rdel:hover{color:var(--fail);background:var(--fail-soft)}
+.rdel.arm{color:#fff;background:var(--fail)}
+#clearWrap,#histClear{margin-inline-start:auto}
+#clearWrap .confirm{font-size:13px}
+
+
+html,body{margin:0}
+body{-webkit-text-size-adjust:100%}
+img{max-width:100%}
+:root{padding-bottom:env(safe-area-inset-bottom,0px)}
+.topbar{padding-top:env(safe-area-inset-top,0px);top:0}
+.tabs{top:calc(env(safe-area-inset-top,0px) + 52px)}
+.back{display:inline-flex;align-items:center;gap:6px;color:inherit;text-decoration:none;font-size:14px;font-weight:500;border:1.5px solid color-mix(in srgb,currentColor 55%,transparent);border-radius:6px;padding:3px 9px;white-space:nowrap}
+.back:hover{background:rgba(255,255,255,.12)}
+@media (max-width:480px){.topbar .sync{display:none}}
+
+html,body{background:#525659}
+.pv{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 6px calc(24px + env(safe-area-inset-bottom,0px));overflow-x:auto}
+.pv .pg{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.35);position:relative;flex:none}
+.pv .pg canvas{display:block;width:100%;height:100%}
+.pv .pg .n{position:absolute;inset-inline-end:6px;bottom:4px;font:12px var(--f-mono);color:#888}
+.topbar h1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.zb{border:1.5px solid rgba(255,255,255,.55);background:none;color:inherit;border-radius:6px;width:34px;height:30px;font-size:18px;line-height:1;cursor:pointer;flex:none}
+.pgn{font-size:13px;white-space:nowrap;opacity:.9}
+.vmsg{color:#fff;text-align:center;padding:40px 16px;font-size:16px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.vmsg a{color:#fff}
+.lock{margin:40px auto;max-width:340px;width:calc(100% - 16px);background:var(--surface);color:var(--fg);border-radius:var(--r);padding:24px 20px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.lock svg{color:var(--acc)}.lock h2{font-size:20px;font-weight:600;margin:0}.lock p{margin:0;color:var(--fg-2);font-size:15px}
+.lock .inp{width:100%;font-size:17px;text-align:center}.lock .btn{width:100%;justify-content:center}.lock .err{color:#b91c1c;font-weight:600}
+.dlb{border:1.5px solid rgba(255,255,255,.55);color:inherit;border-radius:6px;padding:4px 9px;font-size:13px;text-decoration:none;white-space:nowrap}
+
+</style>
+</head><body data-enc="pdf/passdown.bin" data-iter="300000">
+<div class="ac-cold">
+<header class="topbar"><div class="topbar-in">
+  <a class="back" href="../index.html#comm"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Close</span></a>
+  <h1 class="notr" dir="ltr">Site passdown</h1><div class="sp"></div>
+  <span class="pgn mono notr" id="pg" dir="ltr"></span>
+  <button class="zb notr" id="zout" type="button" aria-label="Zoom out">−</button><button class="zb notr" id="zin" type="button" aria-label="Zoom in">+</button>
+  <a class="dlb" id="dl" hidden download="Site_Passdown_Commissioning_to_Operation.pdf">PDF ↓</a>
+  <button class="langbtn notr" id="langBtn" type="button" hidden>EN</button>
+</div></header>
+<main class="pv" id="pages"><div class="vmsg">Loading manual…</div></main>
+</div>
+<script>window.HE = {
+"Safety requirements":"דרישות בטיחות","complete before starting work":"למילוי לפני תחילת העבודה","At the end of the job":"בסיום העבודה",
+"Site induction completed; site safety rules briefed to the whole team.":"בוצע תדריך כניסה לאתר; כללי הבטיחות באתר הוסברו לכל הצוות.",
+"Valid permit to work obtained from the site manager.":"התקבל היתר עבודה בתוקף ממנהל האתר.",
+"Risk assessment and method statement reviewed with the team.":"סקר הסיכונים ושיטת העבודה נסקרו עם הצוות.",
+"PPE worn: safety helmet, safety shoes, high-visibility vest, safety glasses and gloves.":"ציוד מגן אישי: קסדה, נעלי בטיחות, אפוד זוהר, משקפי מגן וכפפות.",
+"Emergency procedures, escape routes, first-aid kit and fire extinguishers located.":"נוהלי חירום, דרכי מילוט, ערכת עזרה ראשונה ומטפי כיבוי אותרו.",
+"Emergency contacts and the site manager's phone number available.":"מספרי חירום ומספר הטלפון של מנהל האתר זמינים.",
+"At least two people on site; nobody works alone.":"לפחות שני אנשים באתר; אין עבודה לבד.",
+"Workers are qualified and authorized for electrical work at the voltage level involved.":"העובדים מוסמכים ומורשים לעבודת חשמל ברמת המתח הרלוונטית.",
+"Lockout/tagout applied: isolation points locked and tagged before work starts.":"בוצעה נעילה וסימון (LOTO): נקודות הניתוק נעולות ומסומנות לפני תחילת העבודה.",
+"Absence of voltage verified with a tested voltage detector before touching conductors.":"היעדר מתח אומת בגלאי מתח שנבדק, לפני נגיעה במוליכים.",
+"Insulated tools used; arc-flash rated PPE worn near energized equipment.":"נעשה שימוש בכלים מבודדים; ליד ציוד מחושמל נלבש ציוד מגן מפני קשת חשמלית.",
+"Battery hazards briefed: no smoking or open flame; fire suppression system status known.":"הוסברו סיכוני הסוללות: אין עישון או אש גלויה; מצב מערכת כיבוי האש ידוע.",
+"Barriers and warning signs set up around energized equipment.":"הוצבו מחסומים ושלטי אזהרה סביב ציוד מחושמל.",
+"Energization coordinated with the site manager; everyone informed before switching.":"החישמול תואם עם מנהל האתר; כולם עודכנו לפני ביצוע מיתוג.",
+"Report history":"היסטוריית דוחות","Your report history":"היסטוריית הדוחות שלך","Delete all history":"מחק את כל ההיסטוריה","Delete report":"מחק דוח","Delete?":"למחוק?",
+"Delete all {n} reports and their photos from this device? This can't be undone.":"למחוק את כל {n} הדוחות והתמונות שלהם מהמכשיר? לא ניתן לבטל.","Keep them":"השאר","Delete all":"מחק הכל","History deleted":"ההיסטוריה נמחקה",
+"Report history (all forms)":"היסטוריית דוחות (כל הטפסים)","Every report saved on this phone. Open one to continue or create its PDF again.":"כל הדוחות השמורים בטלפון. פתח דוח כדי להמשיך למלא או להפיק שוב PDF.",
+"No reports saved on this phone yet.":"עדיין אין דוחות שמורים בטלפון.","Delete all {n} reports from all forms on this phone? Photos are deleted too. This can't be undone.":"למחוק את כל {n} הדוחות מכל הטפסים בטלפון? גם התמונות יימחקו. לא ניתן לבטל.",
+"View history":"היסטוריית דוחות",
+/* ---------- App / engine ---------- */
+"Saving…":"שומר…","Saved":"נשמר","Saved on this phone":"נשמר בטלפון","Saved in this browser":"נשמר בדפדפן","Connected":"מחובר","Offline":"לא מחובר","View only":"צפייה בלבד","Storage full":"האחסון מלא","Not saved":"לא נשמר",
+"You can view this page but not change it.":"אפשר לצפות בדף אבל לא לשנות אותו.",
+"Storage for this page is full. Delete old reports or photos, then try again.":"האחסון של הדף מלא. מחק דוחות או תמונות ישנים ונסה שוב.",
+"Couldn't save the last change. Check your connection.":"השינוי האחרון לא נשמר. בדוק את החיבור.",
+"This report was deleted.":"הדוח נמחק.","Lost connection. Reload the page to reconnect.":"החיבור אבד. טען את הדף מחדש.",
+"Every item in this section already has a result.":"לכל הסעיפים בפרק כבר יש תוצאה.",
+"Withdrawn. You can edit the report again.":"הדוח הוחזר לעריכה.",
+"Marked as final. Download the report and send it to HyperStrong.":"סומן כסופי. הורד את הדוח ושלח אותו ל-HyperStrong.",
+"Submitted to HyperStrong":"נשלח ל-HyperStrong","Accepted":"אושר","Returned to the submitter":"הוחזר לשולח",
+"Photo added":"התמונה נוספה","That photo is too large.":"התמונה גדולה מדי.","That file isn't a supported photo. Use JPG or PNG.":"הקובץ אינו תמונה נתמכת. השתמש ב-JPG או PNG.",
+"Photo storage for this page is full.":"אחסון התמונות של הדף מלא.","Couldn't add the photo. Try again.":"לא ניתן להוסיף את התמונה. נסה שוב.",
+"Report deleted":"הדוח נמחק","PDF downloaded":"ה-PDF הורד","Report downloaded":"הדוח הורד",
+"A download is already waiting for your answer.":"הורדה קודמת עדיין ממתינה לאישורך.",
+"Couldn't load the PDF tools. Check your connection and try again.":"לא ניתן לטעון את כלי ה-PDF. בדוק את החיבור ונסה שוב.",
+"Couldn't create the download.":"לא ניתן ליצור את הקובץ.","Sharing didn't work here. Use Save PDF instead.":"השיתוף לא עבד כאן. השתמש בשמירת PDF.",
+"Lost connection to saved reports. Reload the page to reconnect.":"החיבור לדוחות השמורים אבד. טען את הדף מחדש.",
+"Draft":"טיוטה","Submitted":"נשלח","Returned for correction":"הוחזר לתיקון","Complete":"הושלם","Complete with failures":"הושלם עם ליקויים","In progress":"בתהליך","Not started":"טרם התחיל",
+"Loading…":"טוען…","Opening report…":"פותח דוח…","Loading reports…":"טוען דוחות…",
+"Reports are saved on this phone. When a report is finished, open it and tap <b>Download PDF</b>, then <b>Share PDF</b> to send it to HyperStrong by WhatsApp or email.":"הדוחות נשמרים בטלפון. כשדוח מוכן, פתח אותו, לחץ <b>הורד PDF</b> ואז <b>שתף PDF</b> כדי לשלוח אותו ל-HyperStrong בוואטסאפ או במייל.",
+"<b>Filling in on this device.</b> Your report is saved on this phone or computer only, so finish it on the same device. When it's done, open the report, tap <b>Download PDF</b> and send the file to HyperStrong by email or WhatsApp.":"<b>מילוי במכשיר זה.</b> הדוח נשמר רק בטלפון או במחשב הזה, לכן סיים אותו באותו מכשיר. בסיום פתח את הדוח, לחץ <b>הורד PDF</b> ושלח את הקובץ ל-HyperStrong במייל או בוואטסאפ.",
+"All submissions":"כל הדוחות שהוגשו","Your reports":"הדוחות שלך","Reports":"דוחות","All":"הכל","To review":"לבדיקה","Returned":"הוחזרו","Drafts":"טיוטות",
+"Nothing here":"אין כאן דוחות","No reports yet":"אין עדיין דוחות","No reports with this status.":"אין דוחות בסטטוס הזה.",
+"View only. Ask the page owner for access to fill in reports.":"צפייה בלבד. בקש מבעל הדף הרשאה למילוי דוחות.",
+"All reports":"כל הדוחות","Download PDF":"הורד PDF","HTML":"HTML","Web page version of the report":"גרסת דף אינטרנט של הדוח","Delete report":"מחק דוח",
+"HyperStrong asked for changes. Update the report and submit it again.":"HyperStrong ביקשה תיקונים. עדכן את הדוח ושלח אותו שוב.",
+"Submit again":"שלח שוב","HyperStrong is reviewing it. Withdraw it if you need to make changes.":"HyperStrong בודקת את הדוח. ניתן להחזיר אותו לעריכה אם צריך לתקן.",
+"Waiting for your review.":"ממתין לבדיקה שלך.","Withdraw to edit":"החזר לעריכה","Marked as final":"סומן כסופי",
+"Download the report and send the file to HyperStrong.":"הורד את הדוח ושלח את הקובץ ל-HyperStrong.","Edit again":"ערוך שוב","Accepted by HyperStrong":"אושר על ידי HyperStrong",
+"Review note (shown to the submitter)":"הערת בדיקה (מוצגת לשולח)","e.g. Add IR test report for the DC cables":"לדוגמה: צרף דוח בדיקת בידוד לכבלי ה-DC","Accept":"אשר","Return for correction":"החזר לתיקון",
+"SN photo":"צילום SN","Add":"הוסף","Remove photo":"הסר תמונה","Progress":"התקדמות","Remove":"הסר","Add row":"הוסף שורה",
+"Caption":"כיתוב","Add photo":"הוסף תמונה","No photos.":"אין תמונות.",
+"No damage":"ללא נזק","Damage found":"נמצא נזק","N/A":"לא רלוונטי","Describe the damage and where it is":"תאר את הנזק ואת מיקומו","Comment":"הערה","Describe the damage.":"תאר את הנזק.","No units yet.":"אין עדיין יחידות.","Add unit":"הוסף יחידה",
+"Sign-off":"חתימות","Name":"שם","Date":"תאריך","Sign here":"חתום כאן","Not signed":"לא נחתם","Signed":"נחתם","Draw with finger or mouse":"חתום עם האצבע או העכבר","Clear":"נקה","Photo":"צילום",
+"Pass remaining":"סמן את השאר כתקין","Mark unanswered items in this section as Pass":"סמן כתקין את כל הסעיפים שלא נבדקו בפרק","optional":"רשות",
+"Pass":"תקין","Fail":"לא תקין","Value":"ערך","Describe the failure and corrective action":"תאר את הליקוי ואת הפעולה המתקנת","A failed item needs a comment.":"סעיף לא תקין מחייב הערה.","Add required photo":"הוסף צילום חובה",
+"Delete this report? This can't be undone.":"למחוק את הדוח? לא ניתן לבטל.","Keep it":"השאר","Delete":"מחק","Remove?":"להסיר?","Uploading…":"מעלה…","Photo unavailable":"התמונה אינה זמינה",
+"Press submit again to send it anyway.":"לחץ שוב על שליחה כדי לשלוח בכל זאת.","Write a review note so the submitter knows what to fix.":"כתוב הערת בדיקה כדי שהשולח יידע מה לתקן.",
+"Some sections aren't filled in":"יש פרקים שלא מולאו","Go back and fill":"חזור למילוי",
+"Tick each section to confirm it can stay unfilled. The list of approved sections is printed at the end of the report.":"סמן כל פרק כדי לאשר שהוא יכול להישאר לא ממולא. רשימת הפרקים שאושרו תודפס בסוף הדוח.",
+"Approve all":"אשר הכל","Create PDF":"צור PDF","Download report":"הורד דוח","Preparing…":"מכין…",
+"PDF ready":"ה-PDF מוכן","Close":"סגור","Share PDF":"שתף PDF","Save PDF":"שמור PDF","Open":"פתח",
+"Share sends it to WhatsApp, Mail or Files.":"שיתוף שולח לוואטסאפ, למייל או לקבצים.","Save puts it in your Downloads; send it to HyperStrong from there.":"השמירה מכניסה את הקובץ להורדות; שלח אותו משם ל-HyperStrong.",
+"Your PDF is ready":"ה-PDF מוכן","Open PDF":"פתח PDF","Opens the PDF in your phone's viewer. From there, tap Share to save it to Files or send it by email or WhatsApp.":"פותח את ה-PDF במציג של הטלפון. משם לחץ שיתוף כדי לשמור בקבצים או לשלוח במייל או בוואטסאפ.",
+"If Open PDF does nothing on this device, press and hold each page below and choose “Save to Photos” or “Share”, or open this page on a computer and download the PDF there.":"אם \"פתח PDF\" לא עובד במכשיר הזה, לחץ לחיצה ארוכה על כל עמוד למטה ובחר \"שמור בתמונות\" או \"שתף\", או פתח את הדף במחשב והורד משם את ה-PDF.",
+"PASS":"תקין","FAIL":"לא תקין","NO DAMAGE":"ללא נזק","DAMAGE":"נזק","Item":"סעיף","Status":"סטטוס","Comments":"הערות","No units.":"אין יחידות.",
+"Sections left unfilled":"פרקים שלא מולאו","The person exporting this report confirmed these sections could stay unfilled.":"מפיק הדוח אישר שהפרקים האלה יכולים להישאר לא ממולאים.","Report ref":"מספר דוח",
+"‹ Forms":"› טפסים","Back to all forms":"חזרה לכל הטפסים","Switch to English":"Switch to English",
+/* templates */
+"{n} fail":"{n} לא תקין","From {name}":"נשלח על ידי {name}","by {name}":"מאת {name}","Someone":"משתמש","Updated {d}":"עודכן {d}","Sent {d}.":"נשלח {d}.",
+"{done} of {total} items checked":"{done} מתוך {total} סעיפים נבדקו","{n} pass":"{n} תקין","{n} N/A":"{n} לא רלוונטי","{n} failed without comment":"{n} ליקויים ללא הערה",
+"{n} required photos missing":"חסרים {n} צילומי חובה","{n} required photo missing":"חסר צילום חובה אחד","{n} items marked Pass":"{n} סעיפים סומנו כתקין","{n} item marked Pass":"סעיף אחד סומן כתקין",
+"{n} items have no result yet.":"ל-{n} סעיפים אין עדיין תוצאה.","{n} failed items need a comment.":"{n} סעיפים לא תקינים מחייבים הערה.","{f} is empty.":"השדה \"{f}\" ריק.",
+"Missing signature: {list}.":"חסרה חתימה: {list}.","{n} photo-evidence items have no photo.":"ל-{n} סעיפי תיעוד אין צילום.",
+"Nothing filled in":"לא מולא דבר","Empty: {list}":"ריק: {list}","{t}: serial-number photos":"{t}: צילומי מספר סידורי","No photo: {list}":"אין צילום: {list}","{f}: not selected":"{f}: לא נבחר","Nothing selected":"לא נבחר דבר",
+"No entries":"אין רשומות","Missing for {list}":"חסר עבור {list}","No items answered":"אף סעיף לא נבדק","{n} of {t} items have no result":"ל-{n} מתוך {t} סעיפים אין תוצאה","{n} failed items without a comment":"{n} סעיפים לא תקינים ללא הערה",
+"No units":"אין יחידות","no result":"אין תוצאה","no photo: {list}":"אין צילום: {list}","Not signed: {list}":"לא נחתם: {list}","Page {i} of {n}":"עמוד {i} מתוך {n}",
+"{done}/{total} items checked · {p} pass · {f} fail · {n} N/A":"{done}/{total} סעיפים נבדקו · {p} תקין · {f} לא תקין · {n} לא רלוונטי","Generated {d}.":"הופק {d}.",
+
+/* ---------- Shared fields ---------- */
+"Project name":"שם הפרויקט","EPC company":"חברת EPC","Project":"פרויקט","Project information":"פרטי הפרויקט","Customer":"לקוח","Site name":"שם האתר",
+"EPC PM contact info":"פרטי קשר של מנהל פרויקט EPC","Project location":"מיקום הפרויקט","Product information":"פרטי המוצר","Battery unit type":"סוג יחידת הסוללות","MW unit type":"סוג יחידת MW","MV SN":"מספר סידורי MV",
+"Transformer SN":"מספר סידורי שנאי","MV / RMU type":"סוג MV / RMU","MV / RMU SN":"מספר סידורי MV / RMU","BESS units":"יחידות BESS","Add every BESS unit on site":"הוסף כל יחידת BESS באתר","Add BESS unit":"הוסף יחידת BESS",
+"Unit name / ID":"שם / מזהה יחידה","Serial number (SN)":"מספר סידורי (SN)","SN plate photo":"צילום לוחית SN","PCS units":"יחידות PCS","Add every PCS on site":"הוסף כל PCS באתר","Add PCS":"הוסף PCS",
+"Filled in by":"מולא על ידי","Role":"תפקיד","Phone":"טלפון","Email":"דוא\"ל","Checklist":"רשימת בדיקות","Remarks":"הערות","Site name / identifier":"שם / מזהה אתר","PM contact info":"פרטי קשר של מנהל הפרויקט",
+"EPC":"EPC","Overview":"כללי","Comments":"הערות","Unit photo":"צילום יחידה",
+
+/* ---------- Pre-commissioning ---------- */
+"Pre-commissioning checklist":"רשימת בדיקות טרום הרצה","Pre-commissioning · EPC":"טרום הרצה · EPC","HyperStrong ESS Pre-Commissioning Checklist for EPC":"רשימת בדיקות טרום הרצה ל-EPC – מערכת ESS של HyperStrong",
+"For the EPC contractor · before energization":"לקבלן ה-EPC · לפני חישמול",
+"Complete this checklist before the HyperStrong service engineer arrives for cold commissioning. Record each result, the measured values and the photo evidence, sign it, and submit it to HyperStrong for review.":"מלא רשימה זו לפני הגעת מהנדס השירות של HyperStrong להרצה הקרה. רשום כל תוצאה, את הערכים שנמדדו ואת צילומי התיעוד, חתום ושלח ל-HyperStrong לבדיקה.",
+"<b>Cold commissioning starts only after the EPC contractor confirms</b> that all site infrastructure works are complete and the site is ready for local testing, with no physical obstacles or access limitations.":"<b>ההרצה הקרה תתחיל רק לאחר שקבלן ה-EPC יאשר</b> שכל עבודות התשתית באתר הושלמו והאתר מוכן לבדיקות מקומיות, ללא מכשולים פיזיים או מגבלות גישה.",
+"Start a checklist":"התחל רשימת בדיקות","Start a checklist for your project. Only you and HyperStrong can see it.":"התחל רשימת בדיקות לפרויקט שלך. רק אתה ו-HyperStrong יכולים לראות אותה.",
+"Submit to HyperStrong":"שלח ל-HyperStrong","Answer every item, add the photo evidence, sign, then submit to HyperStrong.":"ענה על כל סעיף, הוסף צילומי תיעוד, חתום ושלח ל-HyperStrong.",
+"This checklist is not a replacement for the installation or operation manuals; follow the procedures and safety precautions they prescribe. All items must be witnessed, documented and signed off before cold commissioning.":"רשימה זו אינה מחליפה את מדריכי ההתקנה וההפעלה; יש לפעול לפי הנהלים והוראות הבטיחות שבהם. כל הסעיפים חייבים להיבדק, לתועד ולהיחתם לפני ההרצה הקרה.",
+"This page can't save your checklist online for your account, so it's kept in this browser. When it's finished, use “Download report” and email the file to HyperStrong.":"הדף לא יכול לשמור את הרשימה אונליין בחשבון שלך, ולכן היא נשמרת בדפדפן. בסיום השתמש ב\"הורד דוח\" ושלח את הקובץ במייל ל-HyperStrong.",
+"This checklist verifies that the Battery Energy Storage System (BESS) and Power Conversion System (PCS) skid are mechanically complete, electrically sound and safe before energization. Every item must be witnessed and documented (photos, torque records, test reports) and signed off before cold commissioning.":"רשימה זו מאמתת שמערכת אגירת האנרגיה בסוללות (BESS) והסקיד של מערכת המרת ההספק (PCS) שלמים מכנית, תקינים חשמלית ובטוחים לפני חישמול. כל סעיף חייב להיבדק ולתועד (צילומים, רישומי מומנט, דוחות בדיקה) ולהיחתם לפני ההרצה הקרה.",
+"Sign-off & submit":"חתימה ושליחה","Remarks for HyperStrong":"הערות ל-HyperStrong","Final sign-off":"חתימה סופית","Both signatures are required before you can submit":"נדרשות שתי החתימות לפני שליחה",
+"EPC Engineer":"מהנדס EPC","EPC Project Manager":"מנהל פרויקט EPC",
+"Skid mechanical installation and visual inspection":"התקנה מכנית של הסקיד ובדיקה חזותית","BESS container + PCS skid":"מכולת BESS + סקיד PCS",
+"Skid/container is level, properly anchored/bolted/welded to foundation per drawings (no settlement or misalignment).":"הסקיד/המכולה מפולסים ומעוגנים/מוברגים/מרותכים כראוי ליסוד לפי השרטוטים (ללא שקיעה או סטייה).",
+"All load-bearing cushions/pads interface fully with ground; no standing water, open trenches or unsafe conditions nearby.":"כל רפידות התמיכה נושאות במלואן על הקרקע; אין מים עומדים, תעלות פתוחות או מפגעים בסביבה.",
+"No visible transport/handling damage (bent frames, rust, dents on container, racks, PCS enclosure or LCS).":"אין נזקי הובלה/שינוע נראים (מסגרות כפופות, חלודה, שקעים במכולה, במסדים, במעטפת ה-PCS או ב-LCS).",
+"All shipping materials removed (silica gel, dust covers, tape, packaging).":"כל חומרי המשלוח הוסרו (סיליקה ג'ל, כיסויי אבק, סרטים, אריזות).",
+"Doors open/close smoothly; latches, hinges and seals function correctly.":"הדלתות נפתחות ונסגרות בקלות; התפסים, הצירים והאטמים תקינים.",
+"Sufficient clearance for service access (door sides, hatches, maintenance areas).":"מרווח מספיק לגישת שירות (צידי הדלתות, פתחים, אזורי תחזוקה).",
+"No debris, tools or sundries inside/on top of container or skid.":"אין פסולת, כלים או חפצים בתוך המכולה או הסקיד או עליהם.",
+"All gland plates installed; conduits/cable entries sealed against water ingress.":"כל פלטות האנטיגרונים מותקנות; צנרת וכניסות כבלים אטומות בפני חדירת מים.",
+"Cooling pipes, tanks (LCS) and connectors checked for leaks; coolant levels normal and clamps tight.":"צנרת הקירור, המיכלים (LCS) והמחברים נבדקו לדליפות; מפלס נוזל הקירור תקין והחבקים מהודקים.",
+"Battery system mechanical interface":"ממשק מכני של מערכת הסוללות","BESS racks / modules":"מסדים / מודולים של BESS",
+"Battery racks/modules installed; inter-rack connections secure.":"מסדי/מודולי הסוללות מותקנים; החיבורים בין המסדים מאובטחים.",
+"No coolant leaks on battery surfaces, pipes or container bottom.":"אין דליפות נוזל קירור על הסוללות, הצנרת או רצפת המכולה.",
+"Physical condition of racks verified (no swelling, corrosion or damage).":"מצבם הפיזי של המסדים נבדק (ללא התנפחות, קורוזיה או נזק).",
+"Shunts provided and match number of packs.":"השנטים סופקו ותואמים למספר הפאקים.",
+"PCS skid mechanical and interface checks":"בדיקות מכניות וממשקים של סקיד ה-PCS",
+"PCS inverter/enclosure mounted securely on skid; no vibration or misalignment.":"הממיר/מעטפת ה-PCS מותקנים היטב על הסקיד; ללא רעידות או סטייה.",
+"Cooling system (fans, heat exchangers) clear of obstructions; airflow paths verified.":"מערכת הקירור (מאווררים, מחליפי חום) נקייה ממכשולים; נתיבי זרימת האוויר נבדקו.",
+"All internal components (modules, busbar, controls) free of debris, swarf or damage.":"כל הרכיבים הפנימיים (מודולים, פסי צבירה, פיקוד) נקיים מפסולת, שבבים או נזק.",
+"Auxiliary cabinet and control panel properly seated and connected.":"ארון העזר ולוח הפיקוד מותקנים ומחוברים כראוי.",
+"Electrical interfaces and cabling":"ממשקים חשמליים וכבילה","pre-energization":"לפני חישמול",
+"All DC power cables (PCS ↔ BESS) installed correctly, polarity verified, fuses in place, torqued according to the manual.":"כל כבלי ה-DC (PCS ↔ BESS) מותקנים נכון, הקוטביות נבדקה, הנתיכים במקומם והחיבורים מהודקים במומנט לפי המדריך.",
+"RMU MV AC cables phased correctly (phase sequence confirmed); tightening torque per spec.":"כבלי ה-MV AC של ה-RMU מחוברים בפאזות הנכונות (סדר הפאזות אומת); מומנט הידוק לפי המפרט.",
+"Communication cables (BMS ↔ PCS ↔ EMS) connected with correct pinouts/terminals; tested end-to-end.":"כבלי התקשורת (BMS ↔ PCS ↔ EMS) מחוברים עם פינים/הדקים נכונים; נבדקו מקצה לקצה.",
+"All power/control cables properly sized, insulated, routed and protected against mechanical damage.":"כל כבלי הכוח והפיקוד בחתך נכון, מבודדים, מנותבים ומוגנים מפני נזק מכני.",
+"Fuses, SPDs, breakers and isolators installed and verified (all switches/breakers in OPEN position; mechanical operation OK).":"נתיכים, מגיני ברק (SPD), מפסקים ומנתקים מותקנים ונבדקו (כל המפסקים במצב פתוח; פעולה מכנית תקינה).",
+"Cable entries sealed; bottom cable holes blocked.":"כניסות הכבלים אטומות; פתחי הכבלים בתחתית חסומים.","All cables are tagged.":"כל הכבלים מסומנים.",
+"Grounding and bonding":"הארקה והשוואת פוטנציאלים",
+"All grounding cables installed per drawings; correct material, size, terminations and labelling verified.":"כל כבלי ההארקה מותקנים לפי השרטוטים; נבדקו החומר, החתך, הסיומות והסימון.",
+"Ground continuity tested.":"נבדקה רציפות ההארקה.","< 0.1 Ω typical":"בדרך כלל < 0.1 Ω","Earth electrode / grounding system resistance measured.":"נמדדה התנגדות אלקטרודת ההארקה / מערכת ההארקה.",
+"≤ 5 Ω per Israeli regulations · ≤ 4 Ω recommended":"≤ 5 Ω לפי התקנות בישראל · מומלץ ≤ 4 Ω","Bonding of all metallic parts complete.":"השוואת הפוטנציאלים של כל החלקים המתכתיים הושלמה.",
+"Safety and signage":"בטיחות ושילוט","All required signage installed (arc-flash, shock hazard, fire, shutdown procedures, voltage/fault current).":"כל השילוט הנדרש מותקן (קשת חשמלית, סכנת התחשמלות, אש, נוהלי כיבוי, מתח/זרם קצר).",
+"No exposed live parts; all terminals protected.":"אין חלקים חיים חשופים; כל ההדקים מוגנים.","Clearance and ventilation adequate.":"המרווחים והאוורור מספקים.",
+"Pre-energization electrical tests":"בדיקות חשמליות לפני חישמול","attach Megger / Fluke reports":"צרף דוחות Megger / Fluke",
+"Insulation resistance (IR) test on all cables.":"בדיקת התנגדות בידוד (IR) לכל הכבלים.","Record the lowest measured value; attach the Megger report as a photo":"רשום את הערך הנמוך ביותר שנמדד; צרף את דוח ה-Megger כצילום",
+"Continuity and polarity checks on all power cables.":"בדיקות רציפות וקוטביות לכל כבלי הכוח.","Record value":"רשום ערך",
+"Torque verification on all busbars, terminations and cable lugs.":"אימות מומנט בכל פסי הצבירה, הסיומות ונעלי הכבלים.","Record values per connection type":"רשום ערכים לפי סוג חיבור",
+"Overall readiness and punch list":"מוכנות כללית ורשימת ליקויים","All punch-list items from mechanical/electrical inspections closed.":"כל הליקויים מהבדיקות המכניות והחשמליות נסגרו.",
+"System is clean, secure and ready for cold commissioning.":"המערכת נקייה, מאובטחת ומוכנה להרצה קרה.",
+"Photo evidence":"תיעוד בצילומים","a photo is required for each item":"נדרש צילום לכל סעיף","Passage clearance.":"מרווח מעבר.","Cable connections, torques and tags.":"חיבורי כבלים, מומנטים וסימון.",
+"Communication cable connections and tags.":"חיבורי כבלי תקשורת וסימון.","RMU cable entrance sealing.":"איטום כניסת הכבלים ל-RMU.","PCS DC cable entrance sealing.":"איטום כניסת כבלי ה-DC ל-PCS.","BESS DC cable entrance sealing.":"איטום כניסת כבלי ה-DC ל-BESS.",
+"Torque verification on busbars, terminations and cable lugs (recorded values visible).":"אימות מומנט בפסי צבירה, סיומות ונעלי כבלים (הערכים הרשומים נראים).",
+"Continuity and polarity check readings on power cables.":"קריאות בדיקת רציפות וקוטביות בכבלי הכוח.","Insulation resistance (IR) readings on cables.":"קריאות התנגדות בידוד (IR) בכבלים.",
+
+/* ---------- Lifting day ---------- */
+"Lifting day":"יום הנפה","HyperStrong ESS Lifting Day Inspection Report":"דוח פיקוח יום הנפה – מערכת ESS של HyperStrong","HyperStrong engineer or service partner · on the lifting day":"מהנדס HyperStrong או שותף שירות · ביום ההנפה",
+"Check that the EPC lifts BESS and PCS units according to the HyperStrong lifting plan, then confirm each unit is placed stable and level, every door opens smoothly, and there is no damage, with photos of every side and the roof.":"וודא שה-EPC מניף את יחידות ה-BESS וה-PCS לפי תוכנית ההנפה של HyperStrong, ולאחר מכן אשר שכל יחידה מונחת יציבה ומפולסת, כל הדלתות נפתחות בקלות ואין נזק – עם צילומים מכל צד ומהגג.",
+"<b>Stop the lift and report to HyperStrong</b> if the EPC doesn't follow the lifting plan, the weather turns (heavy rain, fog, strong wind) or anyone enters the exclusion zone.":"<b>עצור את ההנפה ודווח ל-HyperStrong</b> אם ה-EPC אינו פועל לפי תוכנית ההנפה, מזג האוויר משתנה (גשם כבד, ערפל, רוח חזקה) או מישהו נכנס לאזור האסור.",
+"New lifting day report":"דוח יום הנפה חדש","Create the first lifting day report.":"צור את דוח יום ההנפה הראשון.",
+"Reference: HyperStrong HB3 Transportation & Lifting Plan and Container Lifting drawing HBMGES0007.J10Y.01.10. Record every deviation and damage in the comments with a photo.":"מקור: תוכנית שינוע והנפה HB3 של HyperStrong ושרטוט הנפת מכולה HBMGES0007.J10Y.01.10. רשום כל חריגה ונזק בהערות עם צילום.",
+"Lifting date":"תאריך ההנפה","Lifting team":"צוות ההנפה","HyperStrong engineer / service partner":"מהנדס HyperStrong / שותף שירות","Service partner company":"חברת שותף השירות","Lifting / crane contractor":"קבלן הנפה / מנוף",
+"Lifting supervisor":"מפקח הנפה","Crane operator":"מפעיל מנוף","Rigger / signalman":"אתת / מכוון",
+"Add every BESS unit with a photo of the unit and of its serial-number plate":"הוסף כל יחידת BESS עם צילום של היחידה ושל לוחית המספר הסידורי","Add every PCS with a photo of the unit and of its serial-number plate":"הוסף כל PCS עם צילום של היחידה ושל לוחית המספר הסידורי",
+"From the HyperStrong lifting plan: <b>one crane</b>, recommended capacity ≥ 100 t · BESS weight about 42 t · keep a <b>5–10 m</b> exclusion zone · trial lift at <b>300 mm</b> · lift vertically and land gently.":"לפי תוכנית ההנפה של HyperStrong: <b>מנוף אחד</b>, כושר הרמה מומלץ ≥ 100 טון · משקל BESS כ-42 טון · יש לשמור <b>אזור אסור של 5–10 מ'</b> · הרמת ניסיון ל-<b>300 מ\"מ</b> · הרמה אנכית והנחה עדינה.",
+"Photo inspection: BESS":"בדיקה בצילומים: BESS","Photo of every side and the roof for each unit; check corner fittings and look for coolant leaks":"צילום של כל צד ושל הגג לכל יחידה; בדוק את פינות ההנפה וחפש דליפות נוזל קירור",
+"Front side":"צד קדמי","Rear side":"צד אחורי","Left end":"דופן שמאל","Right end":"דופן ימין","Roof / top":"גג / חלק עליון","Photo inspection: PCS":"בדיקה בצילומים: PCS",
+"Photo of every side and the roof for each unit; check corner fittings":"צילום של כל צד ושל הגג לכל יחידה; בדוק את פינות ההנפה",
+"Damage & sign-off":"נזקים וחתימות","Damage and sign-off":"נזקים וחתימות","Close-up photo of every dent, scratch, leak or broken part, with unit and location in the caption":"צילום תקריב של כל שקע, שריטה, דליפה או חלק שבור, עם היחידה והמיקום בכיתוב",
+"Findings":"ממצאים","Deviations from the lifting plan and damage found":"חריגות מתוכנית ההנפה ונזקים שנמצאו","Actions required / who is responsible":"פעולות נדרשות / אחראי",
+"Sign after the units are placed and inspected":"חתום לאחר הצבת היחידות ובדיקתן","HyperStrong Engineer / Service Partner":"מהנדס HyperStrong / שותף שירות","EPC Site Manager":"מנהל אתר EPC","Lifting Supervisor":"מפקח הנפה",
+"Before lifting: site and preparation":"לפני ההנפה: אתר והכנות","Approved lifting plan / method statement on site and briefed to the lifting crew.":"תוכנית הנפה / שיטת עבודה מאושרת נמצאת באתר והוצגה לצוות ההנפה.",
+"Crane capacity matches the lifting plan for the unit weight (BESS about 42 t; recommended crane ≥ 100 t).":"כושר ההרמה של המנוף תואם לתוכנית ההנפה ולמשקל היחידה (BESS כ-42 טון; מנוף מומלץ ≥ 100 טון).",
+"Crane set up on firm, level ground; outriggers fully extended on pads.":"המנוף מוצב על קרקע יציבה ומפולסת; רגלי התמיכה פתוחות במלואן על פלטות.",
+"Lifting area fenced with warning signs or tape; 5–10 m exclusion zone kept clear of unauthorized people.":"אזור ההנפה מגודר בשלטי אזהרה או סרט; אזור אסור של 5–10 מ' נקי מאנשים לא מורשים.",
+"Travel path cleared of obstacles (trees, cables, overhead lines).":"נתיב התנועה פנוי ממכשולים (עצים, כבלים, קווי חשמל עיליים).","Weather acceptable: no heavy rain, fog or strong wind.":"מזג האוויר מתאים: ללא גשם כבד, ערפל או רוח חזקה.",
+"Lifting crew trained; a qualified supervisor present for the whole operation.":"צוות ההנפה מוסמך; מפקח מוסמך נוכח לאורך כל העבודה.","Unit doors locked before lifting.":"דלתות היחידה נעולות לפני ההנפה.",
+"Units inspected on the truck before unloading: no transport damage.":"היחידות נבדקו על המשאית לפני הפריקה: ללא נזקי הובלה.","Foundation / plinth clean, level, drained and free of protrusions; fixing points per drawing.":"היסוד / בסיס הבטון נקי, מפולס, מנוקז וללא בליטות; נקודות הקיבוע לפי השרטוט.",
+"During lifting":"במהלך ההנפה","Trial lift: unit raised about 300 mm, held, and rigging connections inspected before continuing.":"הרמת ניסיון: היחידה הורמה כ-300 מ\"מ, הוחזקה, וחיבורי ההנפה נבדקו לפני ההמשך.",
+"Unit lifted vertically, never dragged or pushed on any surface.":"היחידה הורמה אנכית, ללא גרירה או דחיפה על משטח כלשהו.","Unit kept level with no tilting or swinging; tag lines used to control it.":"היחידה נשמרה מאוזנת ללא הטיה או נדנוד; נעשה שימוש בחבלי הכוונה.",
+"Nobody under the load or inside the exclusion zone during the lift.":"אף אחד לא שהה מתחת למטען או באזור האסור בזמן ההנפה.","Unit lowered gently and landed smoothly and vertically, not swung into place.":"היחידה הונחה בעדינות ובאופן אנכי, ללא הנפה בתנופה למקומה.",
+"After placement: position, stability and level":"לאחר ההצבה: מיקום, יציבות ופילוס","BESS units placed in position per the layout drawing (orientation, door side, clearances).":"יחידות ה-BESS הוצבו לפי שרטוט ההעמדה (כיוון, צד הדלתות, מרווחים).",
+"PCS units placed in position per the layout drawing.":"יחידות ה-PCS הוצבו לפי שרטוט ההעמדה.","Units sit fully on the foundation / supports: no gaps, no rocking.":"היחידות נשענות במלואן על היסוד / התמיכות: ללא רווחים וללא נדנוד.",
+"BESS level checked along length and width (spirit level / laser).":"פילוס ה-BESS נבדק לאורך ולרוחב (פלס / לייזר).","PCS level checked along length and width (spirit level / laser).":"פילוס ה-PCS נבדק לאורך ולרוחב (פלס / לייזר).",
+"Service clearance around units per drawing.":"מרווח שירות סביב היחידות לפי השרטוט.","Doors":"דלתות","All BESS doors open and close smoothly; latches and locks work.":"כל דלתות ה-BESS נפתחות ונסגרות בקלות; התפסים והמנעולים תקינים.",
+"All PCS doors open and close smoothly; latches and locks work.":"כל דלתות ה-PCS נפתחות ונסגרות בקלות; התפסים והמנעולים תקינים.","Door seals intact and seat correctly when closed.":"אטמי הדלתות שלמים ויושבים נכון כשהדלת סגורה.",
+"Doors locked again after the check.":"הדלתות ננעלו שוב לאחר הבדיקה.",
+
+/* ---------- Cold commissioning ---------- */
+"Cold commissioning":"הרצה קרה","HyperStrong ESS Cold Commissioning Report":"דוח הרצה קרה – מערכת ESS של HyperStrong","HyperStrong service team · before energization":"צוות השירות של HyperStrong · לפני חישמול",
+"Checklist for the HyperStrong commissioning engineer with the system de-energized: documentation, mechanics, grounding, cabling and internal equipment. Reports are shared with the whole team.":"רשימת בדיקות למהנדס ההרצה של HyperStrong כשהמערכת ללא מתח: תיעוד, מכניקה, הארקה, כבילה וציוד פנימי. הדוחות משותפים לכל הצוות.",
+"<b>Start only after the EPC pre-commissioning checklist is accepted</b> and the EPC has confirmed that all site infrastructure works are complete, with no physical obstacles or access limitations.":"<b>יש להתחיל רק לאחר שרשימת הבדיקות של ה-EPC אושרה</b> וה-EPC אישר שכל עבודות התשתית באתר הושלמו, ללא מכשולים פיזיים או מגבלות גישה.",
+"New cold commissioning":"הרצה קרה חדשה","Create the first cold commissioning report.":"צור את דוח ההרצה הקרה הראשון.",
+"Sign and date when the test item passes; complete the comments when the test item fails. This table is designed for HyperStrong BESS. This report is valid after an affixed seal or signature.":"יש לחתום ולציין תאריך כשהסעיף תקין; יש למלא הערות כשהסעיף אינו תקין. הטבלה מיועדת ל-BESS של HyperStrong. הדוח תקף לאחר הטבעת חותמת או חתימה.",
+"Commissioning visit":"ביקור ההרצה","HyperStrong engineer":"מהנדס HyperStrong","Supervising person":"גורם מפקח","Start time":"שעת התחלה","End time":"שעת סיום",
+"Proceed in order and don't start a step before the previous one is accepted. Treat every component as live until it is confirmed not live.":"התקדם לפי הסדר ואל תתחיל שלב לפני שהקודם אושר. התייחס לכל רכיב כחי עד שאומת שאינו חי.",
+"Evaluation & sign-off":"הערכה וחתימות","Evaluation and sign-off":"הערכה וחתימות","Evaluation":"הערכה","Evaluation of customer":"הערכת הלקוח","Evaluation of HyperStrong":"הערכת HyperStrong","Sign when the stage passes":"חתום כשהשלב עבר בהצלחה",
+"HyperStrong Engineer":"מהנדס HyperStrong","Service Partner":"שותף שירות","Preconditions":"תנאים מקדימים",
+"EPC pre-commissioning checklist received, signed and accepted.":"רשימת הבדיקות טרום הרצה של ה-EPC התקבלה, נחתמה ואושרה.",
+"EPC confirmation received: all infrastructure works complete, site ready for local testing, no physical obstacles or access limitations.":"התקבל אישור ה-EPC: כל עבודות התשתית הושלמו, האתר מוכן לבדיקות מקומיות, ללא מכשולים פיזיים או מגבלות גישה.",
+"Appropriate PPE worn by all commissioning personnel.":"כל צוות ההרצה לובש ציוד מגן אישי מתאים.","Documentation and pre-work verification":"תיעוד ואימות לפני העבודה",
+"Latest approved drawings, SLDs and wiring diagrams are available.":"השרטוטים, תרשימי ה-SLD ותרשימי החיווט המאושרים העדכניים זמינים.","All safety signs are present and undamaged.":"כל שלטי הבטיחות קיימים ושלמים.",
+"Escape routes and emergency exits are accessible.":"דרכי המילוט ויציאות החירום נגישות.","Site and mechanical installation":"אתר והתקנה מכנית",
+"Container placed on prepared foundation per mechanical installation section.":"המכולה הוצבה על היסוד המוכן לפי פרק ההתקנה המכנית.","Container leveling and structural integrity verified.":"פילוס המכולה ושלמותה המבנית נבדקו.","HVAC units checked.":"יחידות ה-HVAC נבדקו.",
+"Doors, locks, hinges and seals inspected.":"הדלתות, המנעולים, הצירים והאטמים נבדקו.","Lifting lugs removed or secured after installation.":"אוזני ההנפה הוסרו או אובטחו לאחר ההתקנה.","Grounding system":"מערכת הארקה",
+"Container grounding conductor installed first (per grounding rules).":"מוליך ההארקה של המכולה הותקן ראשון (לפי כללי ההארקה).","Grounding resistance meets project/local code.":"התנגדות ההארקה עומדת בדרישות הפרויקט/התקנות המקומיות.",
+"≤ 5 Ω per Israeli regulations":"≤ 5 Ω לפי התקנות בישראל","All internal cabinets (PDU, SCDC, rack frames, HVAC, UPS) bonded to main ground bar.":"כל הארונות הפנימיים (PDU, SCDC, מסגרות המסדים, HVAC, UPS) מחוברים לפס ההארקה הראשי.",
+"No paint or corrosion at grounding contact points (PCS and BESS).":"אין צבע או קורוזיה בנקודות מגע ההארקה (PCS ו-BESS).","Cable installation":"התקנת כבלים","before energization":"לפני חישמול","DC cables":"כבלי DC",
+"Correct polarity and torque on DC bus connections (BESS and PCS).":"קוטביות ומומנט נכונים בחיבורי ה-DC bus (BESS ו-PCS).","No exposed copper, no insulation damage (BESS and PCS).":"אין נחושת חשופה ואין נזק לבידוד (BESS ו-PCS).",
+"Cable route through cable access ports with proper sealing (BESS and PCS).":"תוואי הכבלים דרך פתחי הכניסה עם איטום תקין (BESS ו-PCS).",
+"Cable markings verified: all cables clearly labeled, correctly identified and matching the latest approved drawings and schedules (BESS and PCS).":"סימון הכבלים נבדק: כל הכבלים מסומנים בבירור, מזוהים נכון ותואמים לשרטוטים ולטבלאות המאושרים העדכניים (BESS ו-PCS).",
+"AC cables":"כבלי AC","AC input cables connected to correct terminals (SCDC and AUX panel).":"כבלי כניסת ה-AC מחוברים להדקים הנכונים (SCDC ולוח AUX).","Phase sequence and neutral/ground continuity checked.":"נבדקו סדר הפאזות ורציפות האפס/הארקה.",
+"Communication cables":"כבלי תקשורת","PMS, BAMS and PCS communication lines connected per topology diagrams.":"קווי התקשורת של PMS, BAMS ו-PCS מחוברים לפי תרשימי הטופולוגיה.",
+"Client network cable terminated to a female keystone jack, with a flexible patch cable for the final connection.":"כבל הרשת של הלקוח מסתיים בשקע Keystone נקבה, עם כבל מגשר גמיש לחיבור הסופי.",
+"Internal equipment inspection":"בדיקת ציוד פנימי","Racks and packs":"מסדים ופאקים","All packs seated correctly and locked.":"כל הפאקים יושבים נכון ונעולים.",
+"BMU and CAN communication wiring harnesses free of damage or loose connectors.":"רתמות החיווט של BMU ותקשורת CAN ללא נזק או מחברים רופפים.","Liquid cooling quick-connects locked and leak-free.":"מחברי הקירור המהירים נעולים וללא דליפות.",
+"PDU":"PDU","All PDUs intact with no damage.":"כל יחידות ה-PDU שלמות וללא נזק.","SCDC":"SCDC","Control power wiring, UPS, MCBs, MCCBs and terminal blocks inspected.":"נבדקו חיווט מתח הפיקוד, ה-UPS, מפסקי ה-MCB וה-MCCB ופסי ההדקים.",
+"Labeling matches drawings.":"הסימון תואם לשרטוטים.","Fire suppression system (FSS)":"מערכת כיבוי אש (FSS)","All sensors intact and undamaged.":"כל החיישנים שלמים וללא נזק.","Manual release and emergency stop accessible.":"שחרור ידני ועצירת חירום נגישים.",
+"Liquid cooling system (LCS)":"מערכת קירור נוזלי (LCS)","Coolant level checked.":"מפלס נוזל הקירור נבדק.","Pumps, valves, filters and hoses inspected.":"המשאבות, השסתומים, המסננים והצינורות נבדקו.","No leaks.":"אין דליפות.",
+"Transformer":"שנאי","Oil temperature signal checked.":"נבדק אות טמפרטורת השמן.","Pressure valve signal checked.":"נבדק אות שסתום הלחץ.","Buchholz relay signal checked.":"נבדק אות ממסר בוכהולץ.","RMU":"RMU","RMU free of damage.":"ה-RMU ללא נזק.","All cables sealed.":"כל הכבלים אטומים.",
+"Signage on RMU present (incomer, outgoing, safety signage, etc.).":"השילוט על ה-RMU קיים (כניסה, יציאה, שלטי בטיחות וכו').",
+
+/* ---------- Hot commissioning ---------- */
+"Hot commissioning":"הרצה חמה","HyperStrong ESS Hot Commissioning Report":"דוח הרצה חמה – מערכת ESS של HyperStrong","HyperStrong service team · after energization":"צוות השירות של HyperStrong · לאחר חישמול",
+"Checklist for energizing and proving the system: power-on sequence, communications, cooling, fire suppression, PCS integration, charge/discharge and safety tests. Reports are shared with the whole team.":"רשימת בדיקות לחישמול ואימות המערכת: רצף הפעלה, תקשורת, קירור, כיבוי אש, שילוב PCS, טעינה/פריקה ובדיקות בטיחות. הדוחות משותפים לכל הצוות.",
+"<b>Start only after cold commissioning is signed off</b> and the transformer has been energized with no load for at least 24 hours.":"<b>יש להתחיל רק לאחר שההרצה הקרה נחתמה</b> והשנאי חושמל ללא עומס במשך 24 שעות לפחות.",
+"New hot commissioning":"הרצה חמה חדשה","Create the first hot commissioning report.":"צור את דוח ההרצה החמה הראשון.","Equipment IP addresses":"כתובות IP של הציוד","Add equipment":"הוסף ציוד","Equipment":"ציוד","IP address":"כתובת IP","Notes":"הערות",
+"BAMS":"BAMS","BCMS":"BCMS","PMS / EMS":"PMS / EMS","HMI":"HMI","FACP":"FACP","Test equipment":"ציוד בדיקה","Record serial numbers before starting":"רשום מספרים סידוריים לפני תחילת העבודה","Add tool":"הוסף כלי","Tool":"כלי","Serial no.":"מספר סידורי",
+"Digital multimeter (1500 V+) + clip-on ammeter":"מולטימטר דיגיטלי (1500V ומעלה) + מד זרם צבת","USB-RS485 converter":"ממיר USB-RS485","PC with communication cable":"מחשב עם כבל תקשורת","Recharge tool":"כלי טעינה","Megger (insulation tester)":"מגר (בודק בידוד)",
+"Insulated torque wrench (5–200 Nm)":"מפתח מומנט מבודד (5–200 Nm)","Insulated PPE (clothing, shoes, gloves)":"ציוד מגן אישי מבודד (ביגוד, נעליים, כפפות)",
+"Proceed in order and don't start a step before the previous one is accepted. All components are treated as live until confirmed otherwise.":"התקדם לפי הסדר ואל תתחיל שלב לפני שהקודם אושר. כל הרכיבים נחשבים חיים עד שאומת אחרת.",
+"Cold commissioning completed and signed off.":"ההרצה הקרה הושלמה ונחתמה.","All test tools checked; serial numbers recorded in the Test equipment table.":"כל כלי הבדיקה נבדקו; המספרים הסידוריים נרשמו בטבלת ציוד הבדיקה.",
+"Initial energization":"חישמול ראשוני","Transformer energized at least 24 hours before hot commissioning, with no load.":"השנאי חושמל ללא עומס לפחות 24 שעות לפני ההרצה החמה.","Hours energized":"שעות חישמול",
+"AC auxiliary power supply energized.":"אספקת מתח העזר AC חושמלה.","SCDC breakers energized.":"מפסקי ה-SCDC חושמלו.","HMI boots normally.":"ה-HMI עולה כרגיל.","SCDC indicators and alarms checked.":"נוריות והתראות ה-SCDC נבדקו.",
+"System power-on sequence":"רצף הפעלת המערכת","follow the documented power-on process":"פעל לפי תהליך ההפעלה המתועד","Step 1 · AC auxiliary ON.":"שלב 1 · מתח עזר AC מופעל.","Step 2 · Control system ON.":"שלב 2 · מערכת הפיקוד מופעלת.",
+"Step 3 · Cooling system ON (LCS circuit breakers on).":"שלב 3 · מערכת הקירור מופעלת (מפסקי ה-LCS סגורים).","Step 4 · Racks / BCMS / BAMS activation.":"שלב 4 · הפעלת מסדים / BCMS / BAMS.","No alarms on HMI during the sequence.":"אין התראות ב-HMI במהלך הרצף.",
+"Functional tests":"בדיקות תפקוד","Cooling system":"מערכת קירור","LCS pumps started.":"משאבות ה-LCS הופעלו.","Coolant flow and temperature readings verified.":"נבדקו זרימת נוזל הקירור וקריאות הטמפרטורה.","Coolant temperature":"טמפרטורת נוזל הקירור","HVAC operation confirmed.":"פעולת ה-HVAC אומתה.",
+"Communication and subsystem verification":"אימות תקשורת ותת-מערכות","Communication":"תקשורת","Device IP addressing configured / verified (see IP table in Overview).":"כתובות ה-IP של הרכיבים הוגדרו / אומתו (ראה טבלת IP בלשונית כללי).",
+"Fire suppression system":"מערכת כיבוי אש","FACP batteries connected.":"מצברי ה-FACP חוברו.","No alarms on FACP screen.":"אין התראות במסך ה-FACP.","Rack and pack activation":"הפעלת מסדים ופאקים",
+"Pack and cell voltages, temperatures and SOC values verified.":"נבדקו מתחי הפאקים והתאים, הטמפרטורות וערכי ה-SOC.","No pack isolation faults.":"אין תקלות בידוד בפאקים.","PDU and DC bus":"PDU ו-DC bus","DC contactor operation verified.":"פעולת מגען ה-DC אומתה.",
+"Bus voltage matches expected value.":"מתח ה-bus תואם לערך הצפוי.","Measured bus voltage":"מתח bus שנמדד","No abnormal noise or heating.":"אין רעש או התחממות חריגים.","PCS integration":"שילוב PCS","if PCS is external":"אם ה-PCS חיצוני",
+"DC bus voltage within PCS allowable range.":"מתח ה-DC bus בתחום המותר ל-PCS.","Measured":"נמדד","PCS communication and control signals confirmed.":"אותות התקשורת והפיקוד של ה-PCS אומתו.","PCS start and stop test performed.":"בוצעה בדיקת הפעלה ועצירה של ה-PCS.",
+"Charge / discharge test":"בדיקת טעינה / פריקה","Low-power charge test performed.":"בוצעה בדיקת טעינה בהספק נמוך.","Test power":"הספק הבדיקה","Low-power discharge test performed.":"בוצעה בדיקת פריקה בהספק נמוך.","Current accuracy verified.":"דיוק הזרם אומת.",
+"Voltage stability verified.":"יציבות המתח אומתה.","Temperature rise verified.":"עליית הטמפרטורה נבדקה.","Maximum rise":"עלייה מרבית","SOC tracking verified.":"מעקב ה-SOC אומת.","No alarms or derating.":"אין התראות או הורדת הספק.",
+"Safety system validation":"אימות מערכות בטיחות","Emergency stop (E-STOP) tested.":"נבדקה עצירת החירום (E-STOP).","System shutdown sequence verified.":"רצף כיבוי המערכת אומת.","Alarms appear on HMI and EMS.":"ההתראות מופיעות ב-HMI וב-EMS.","Door interlocks tested.":"נבדקו נעילות הבטיחות של הדלתות.",
+"All PCS fans running.":"כל מאווררי ה-PCS פועלים.","Final acceptance checks":"בדיקות קבלה סופיות","All alarms cleared.":"כל ההתראות נוקו.","System operates in normal mode.":"המערכת פועלת במצב רגיל.",
+
+/* ---------- Site job report ---------- */
+"Site job report":"דוח עבודה באתר","HyperStrong Site Job Report":"דוח עבודה באתר – HyperStrong","Service partner · after every site visit":"שותף שירות · אחרי כל ביקור באתר",
+"Report each site visit: what was requested, the work carried out with pictures, findings, materials used, safety and follow-up. Sign it with the customer's representative and submit it to HyperStrong.":"דווח על כל ביקור באתר: מה התבקש, העבודה שבוצעה עם תמונות, ממצאים, חומרים שנעשה בהם שימוש, בטיחות והמשך טיפול. חתום יחד עם נציג הלקוח ושלח ל-HyperStrong.",
+"New job report":"דוח עבודה חדש","Create a job report after your next site visit. Only you and HyperStrong can see it.":"צור דוח עבודה אחרי הביקור הבא באתר. רק אתה ו-HyperStrong יכולים לראות אותו.",
+"Fill in the visit, the work carried out and sign-off, then submit to HyperStrong.":"מלא את פרטי הביקור, העבודה שבוצעה והחתימות, ושלח ל-HyperStrong.",
+"This page can't save your report online for your account, so it's kept in this browser. When it's finished, use “Download report” and email the file to HyperStrong.":"הדף לא יכול לשמור את הדוח אונליין בחשבון שלך, ולכן הוא נשמר בדפדפן. בסיום השתמש ב\"הורד דוח\" ושלח את הקובץ במייל ל-HyperStrong.",
+"Engineer / technician name":"שם המהנדס / הטכנאי","Detailed description of work performed":"תיאור מפורט של העבודה שבוצעה","Job details":"פרטי העבודה","Report":"דוח","Job type":"סוג העבודה","Installation":"התקנה","Maintenance":"תחזוקה","Repair / Fault":"תיקון / תקלה",
+"Inspection / Survey":"בדיקה / סקר","Cold Commissioning":"הרצה קרה","Hot Commissioning":"הרצה חמה","Service partner details":"פרטי שותף השירות","Company name":"שם החברה","Contact person":"איש קשר","Contact number":"מספר טלפון","Email address":"כתובת דוא\"ל",
+"Customer & site information":"פרטי הלקוח והאתר","Customer / company name":"שם הלקוח / החברה","Site address":"כתובת האתר","City / region":"עיר / אזור","Priority level":"רמת עדיפות","High":"גבוהה","Medium":"בינונית","Low":"נמוכה",
+"Date of visit":"תאריך הביקור","Arrival time":"שעת הגעה","Departure time":"שעת עזיבה","Total hours on site":"סה\"כ שעות באתר","Description of work requested":"תיאור העבודה שהתבקשה","Scope of work / task summary":"היקף העבודה / סיכום המשימה",
+"Work & findings":"עבודה וממצאים","Work carried out":"העבודה שבוצעה","Pictures":"תמונות","Add photos of the work, with a short caption":"הוסף תמונות של העבודה עם כיתוב קצר","Equipment worked on":"ציוד שטופל",
+"Serial number and a photo of the SN plate for each unit":"מספר סידורי וצילום לוחית ה-SN לכל יחידה","Equipment / unit":"ציוד / יחידה","Job status":"סטטוס העבודה","Completed":"הושלם","Partially completed":"הושלם חלקית","Pending follow-up":"ממתין להמשך טיפול","Escalated":"הועבר להסלמה",
+"If not fully completed — reason / outstanding actions":"אם לא הושלם במלואו – סיבה / פעולות פתוחות","Findings & observations":"ממצאים ותצפיות","Fault / issue found":"תקלה / בעיה שנמצאה","Root cause analysis":"ניתוח שורש הבעיה","Corrective action taken":"פעולה מתקנת שבוצעה",
+"Recommendations / further actions required":"המלצות / פעולות נוספות נדרשות","Materials & parts used":"חומרים וחלקים שנעשה בהם שימוש","Add part":"הוסף חלק","Part / material description":"תיאור החלק / החומר","Part no. / SKU":"מק\"ט","Qty":"כמות","Supplied by":"סופק על ידי",
+"Safety & sign-off":"בטיחות וחתימות","Safety, follow-up and sign-off":"בטיחות, המשך טיפול וחתימות","Health, safety & compliance":"בריאות, בטיחות ועמידה בדרישות","PPE worn":"נלבש ציוד מגן אישי","Risk assessment completed":"בוצע סקר סיכונים","Method statement followed":"בוצע לפי שיטת העבודה",
+"Site induction completed":"בוצע תדריך כניסה לאתר","Permit to work obtained":"התקבל היתר עבודה","Hazardous materials handled":"טופלו חומרים מסוכנים","All tools / equipment removed":"כל הכלים / הציוד הוצאו","Area left clean & safe":"האזור הושאר נקי ובטוח","Incident / near-miss to report":"אירוע / כמעט תאונה לדיווח",
+"Safety notes":"הערות בטיחות","Safety notes / incident details (if applicable)":"הערות בטיחות / פרטי אירוע (אם רלוונטי)","Next steps & follow-up":"צעדים הבאים והמשך טיפול","Actions required / pending items":"פעולות נדרשות / נושאים פתוחים","Follow-up visit required?":"נדרש ביקור המשך?","Yes":"כן","No":"לא",
+"Proposed follow-up date":"תאריך מוצע לביקור המשך","Assigned to":"באחריות","Service Engineer / Technician":"מהנדס / טכנאי שירות","Customer / Site Representative":"נציג הלקוח / האתר","Additional notes":"הערות נוספות",
+
+/* ---------- Phone app home ---------- */
+"Field Forms":"טפסי שטח","Works offline":"עובד ללא אינטרנט","HyperStrong · Israel service team":"HyperStrong · צוות השירות בישראל","Field forms":"טפסי שטח",
+"Choose a form. Reports are saved on this phone, work without signal, and finish as a PDF you share to HyperStrong by WhatsApp or email.":"בחר טופס. הדוחות נשמרים בטלפון, עובדים ללא קליטה ומסתיימים בקובץ PDF שמשתפים עם HyperStrong בוואטסאפ או במייל.",
+"Open →":"פתח ←","Install on your phone":"התקנה בטלפון","Adds a HyperStrong icon to your home screen":"מוסיף סמל של HyperStrong למסך הבית","iPhone (Safari)":"אייפון (Safari)","Android (Chrome)":"אנדרואיד (Chrome)",
+"Open this page in Safari.":"פתח את הדף ב-Safari.","Tap the Share button.":"לחץ על כפתור השיתוף.","Choose Add to Home Screen, then Add.":"בחר \"הוסף למסך הבית\" ואז \"הוסף\".","Open this page in Chrome.":"פתח את הדף ב-Chrome.","Tap the ⋮ menu.":"לחץ על תפריט ⋮.","Choose Install app (or Add to Home screen).":"בחר \"התקן אפליקציה\" (או \"הוסף למסך הבית\").",
+"Reports stay on the phone where they were created. Finish each report on the same phone and share its PDF with HyperStrong when done.":"הדוחות נשארים בטלפון שבו נוצרו. סיים כל דוח באותו טלפון ושתף את ה-PDF שלו עם HyperStrong בסיום.",
+"Pre-commissioning":"טרום הרצה","Lifting Day":"יום הנפה","Hot commissioning ":"הרצה חמה",
+"For the EPC contractor · before energization ":"לקבלן ה-EPC · לפני חישמול",
+"Skid mechanics, cabling, grounding, IR / continuity / torque values and photo evidence. Signed by the EPC engineer and PM.":"מכניקה של הסקיד, כבילה, הארקה, ערכי בידוד / רציפות / מומנט ותיעוד בצילומים. נחתם על ידי מהנדס ומנהל פרויקט ה-EPC.",
+"HyperStrong engineer or service partner · lifting day":"מהנדס HyperStrong או שותף שירות · יום ההנפה",
+"EPC lifting per the HyperStrong lifting plan, placement and level, doors, and photo damage check of every BESS and PCS with serial-number photos.":"הנפה של ה-EPC לפי תוכנית ההנפה של HyperStrong, הצבה ופילוס, דלתות ובדיקת נזקים בצילומים לכל BESS ו-PCS כולל צילומי מספר סידורי.",
+"Preconditions, documentation, site and mechanics, grounding, DC / AC / comms cabling and internal equipment.":"תנאים מקדימים, תיעוד, אתר ומכניקה, הארקה, כבילת DC / AC / תקשורת וציוד פנימי.",
+"Energization and power-on sequence, IP table, communications, cooling, FSS, PCS integration, charge / discharge and safety tests.":"חישמול ורצף הפעלה, טבלת IP, תקשורת, קירור, FSS, שילוב PCS, טעינה / פריקה ובדיקות בטיחות.",
+"Visit details, work carried out with pictures, findings, materials, safety, follow-up and customer sign-off.":"פרטי הביקור, העבודה שבוצעה עם תמונות, ממצאים, חומרים, בטיחות, המשך טיפול וחתימת הלקוח.",
+"Mark as final":"סמן כסופי",
+"Answer every item, add the photo evidence and sign. Then mark it as final, download the PDF and share it with HyperStrong.":"ענה על כל סעיף, הוסף צילומי תיעוד וחתום. לאחר מכן סמן כסופי, הורד את ה-PDF ושתף אותו עם HyperStrong.",
+"Complete this checklist before the HyperStrong service engineer arrives for cold commissioning. Record each result, the measured values and the photo evidence, sign it, and send the PDF to HyperStrong.":"מלא רשימה זו לפני הגעת מהנדס השירות של HyperStrong להרצה הקרה. רשום כל תוצאה, את הערכים שנמדדו ואת צילומי התיעוד, חתום ושלח את ה-PDF ל-HyperStrong.",
+"Start a checklist for your project. It's saved on this phone.":"התחל רשימת בדיקות לפרויקט שלך. היא נשמרת בטלפון.",
+"Checklist for the HyperStrong commissioning engineer with the system de-energized: documentation, mechanics, grounding, cabling and internal equipment.":"רשימת בדיקות למהנדס ההרצה של HyperStrong כשהמערכת ללא מתח: תיעוד, מכניקה, הארקה, כבילה וציוד פנימי.",
+"Create the first cold commissioning report. It's saved on this phone.":"צור את דוח ההרצה הקרה הראשון. הוא נשמר בטלפון.",
+"Checklist for energizing and proving the system: power-on sequence, communications, cooling, fire suppression, PCS integration, charge/discharge and safety tests.":"רשימת בדיקות לחישמול ואימות המערכת: רצף הפעלה, תקשורת, קירור, כיבוי אש, שילוב PCS, טעינה/פריקה ובדיקות בטיחות.",
+"Create the first hot commissioning report. It's saved on this phone.":"צור את דוח ההרצה החמה הראשון. הוא נשמר בטלפון.",
+"Fill in the visit, the work carried out and sign-off. Then mark it as final, download the PDF and share it with HyperStrong.":"מלא את פרטי הביקור, העבודה שבוצעה והחתימות. לאחר מכן סמן כסופי, הורד את ה-PDF ושתף אותו עם HyperStrong.",
+"Create a job report after your next site visit. It's saved on this phone.":"צור דוח עבודה אחרי הביקור הבא באתר. הוא נשמר בטלפון.",
+"Check that the EPC lifts the BESS and PCS units according to the HyperStrong lifting plan, then confirm each unit is placed stable and level, every door opens smoothly and there is no damage, with photos of every side and the roof.":"וודא שה-EPC מניף את יחידות ה-BESS וה-PCS לפי תוכנית ההנפה של HyperStrong, ולאחר מכן אשר שכל יחידה מונחת יציבה ומפולסת, כל הדלתות נפתחות בקלות ואין נזק – עם צילומים מכל צד ומהגג.",
+"Create the first lifting day report. It's saved on this phone.":"צור את דוח יום ההנפה הראשון. הוא נשמר בטלפון.",
+"This form can't open here.":"לא ניתן לפתוח את הטופס כאן."
+};
+window.HE_RULES = [
+  [/^← (.+)$/, (m, tr) => tr(m[1])],
+  [/^(.+) →$/, (m, tr) => tr(m[1])],
+  [/^· (.+)$/, (m, tr) => "· " + tr(m[1])],
+  [/^\((.+)\)$/, (m, tr) => "(" + tr(m[1]) + ")"],
+  [/^(\d+)\. (.+)$/, (m, tr) => m[1] + ". " + tr(m[2])],
+  [/^Version (.+)$/, m => "גרסה " + m[1]],
+  [/^(.+):$/, (m, tr) => { const t = tr(m[1]); return t === m[1] ? m[0] : t + ":"; }]
+];
+
+Object.assign(window.HE, {
+"Commissioning":"הקמה והפעלה","Job report":"דוח עבודה","Manuals":"מדריכים",
+"Commissioning manual":"מדריך הפעלה","Commissioning manual · ":"מדריך הפעלה · ",
+"Text + original PDF with drawings":"טקסט + קובץ PDF מקורי עם שרטוטים","Text version · works offline":"גרסת טקסט · עובד ללא רשת",
+"Manual":"מדריך","← Home":"← דף הבית","Home":"דף הבית",
+"Open original PDF (with drawings)":"פתח PDF מקורי (עם שרטוטים)","Contents":"תוכן עניינים",
+"Text version of the manual. Drawings and photos are only in the original PDF.":"גרסת טקסט של המדריך. שרטוטים ותמונות נמצאים רק בקובץ ה-PDF המקורי.",
+"Commissioning quick access":"גישה מהירה להפעלה","Search and contents":"חיפוש ותוכן עניינים",
+"Search the manual (e.g. QF1, grounding, E-stop)":"חיפוש במדריך (למשל QF1, הארקה, E-stop)","Search the manual":"חיפוש במדריך",
+"{n} sections found":"נמצאו {n} סעיפים","Back to top":"חזרה למעלה",
+"Power on / off":"הדלקה / כיבוי","Electrical installation":"התקנה חשמלית","DC input":"כניסת DC","AC input":"כניסת AC",
+"Grounding":"הארקה","Communication":"תקשורת","UPS":"UPS","HMI / touchscreen":"HMI / מסך מגע","Emergency":"חירום",
+"Safety":"בטיחות","Lifting":"הנפה","Mechanical installation":"התקנה מכנית"
+});
+Object.assign(window.HE, {"Close":"סגור","Loading manual…":"טוען מדריך…","Couldn't open the manual.":"לא ניתן לפתוח את המדריך.","Open the PDF file":"פתח את קובץ ה-PDF",
+"Open PDF":"פתח PDF","PDF not uploaded yet":"קובץ ה-PDF עדיין לא הועלה","Zoom in":"הגדל","Zoom out":"הקטן","Manual · ":"מדריך · ","Manual ·":"מדריך ·","Manual":"מדריך"});
+Object.assign(window.HE, {"Password required":"נדרשת סיסמה","Enter the password to open this document.":"הזן סיסמה כדי לפתוח את המסמך.","Password":"סיסמה","Open":"פתח",
+"Opening…":"פותח…","Wrong password. Try again.":"סיסמה שגויה. נסה שוב.","Loading…":"טוען…","Couldn't open the document. Check your connection and try again.":"לא ניתן לפתוח את המסמך. בדוק את החיבור ונסה שוב.",
+"Site passdown":"העברת אתר","Commissioning to Operation: passdown rule, site identification, passdown criteria, punch list and sign-off.":"מהקמה לתפעול: כלל ההעברה, פרטי האתר, קריטריוני העברה, רשימת ליקויים וחתימות.",
+"Password required ":"נדרשת סיסמה"});
+
+/* Language layer: Hebrew (default, right-to-left) / English. Text is written in English in the
+   form definitions; when Hebrew is on, every text node and placeholder is swapped using HE / HE_RULES. */
+(function(){
+  const HE = window.HE || {}, RULES = window.HE_RULES || [];
+  let lang = "he";
+  try { lang = localStorage.getItem("hs-lang") || "he"; } catch(e){}
+  const subst = (s, vars) => vars ? s.replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m) : s;
+  // T(): translate a known key (with optional {placeholders}) – used by the engine for built strings
+  function T(key, vars){ const s = (lang === "he" && HE[key] != null) ? HE[key] : key; return subst(s, vars); }
+  // tr(): translate a whole text fragment if it matches the dictionary or a rule
+  function tr(s){
+    if (lang !== "he" || !s) return s;
+    const k = s.trim(); if (!k || !/[A-Za-z]/.test(k)) return s;
+    if (HE[k] != null) return s.replace(k, HE[k]);
+    for (const [re, fn] of RULES){ const m = k.match(re); if (m) return s.replace(k, fn(m, tr)); }
+    return s;
+  }
+  const ATTRS = ["placeholder", "title", "aria-label", "alt"];
+  function skip(el){ return el && el.closest && el.closest("script,style,.notr,[translate=no]"); }
+  function translateNode(root){
+    if (lang !== "he" || !root) return;
+    const doc = root.ownerDocument || document;
+    const w = doc.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let n; const todo = [];
+    while ((n = w.nextNode())) todo.push(n);
+    todo.forEach(t => { if (skip(t.parentElement)) return; const v = t.nodeValue; const nv = tr(v); if (nv !== v){ if (t.__orig == null) t.__orig = v; t.nodeValue = nv; } });
+    const els = root.querySelectorAll ? root.querySelectorAll(ATTRS.map(a => `[${a}]`).join(",")) : [];
+    [root.nodeType === 1 ? root : null, ...els].forEach(el => { if (!el || !el.getAttribute || skip(el)) return;
+      ATTRS.forEach(a => { const v = el.getAttribute(a); if (v == null) return; const nv = tr(v); if (nv !== v){ el.__origA = el.__origA || {}; if (el.__origA[a] == null) el.__origA[a] = v; el.setAttribute(a, nv); } }); });
+  }
+  function restore(root){
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) if (n.__orig != null){ n.nodeValue = n.__orig; n.__orig = null; }
+    root.querySelectorAll("*").forEach(el => { if (el.__origA){ for (const a in el.__origA) el.setAttribute(a, el.__origA[a]); el.__origA = null; } });
+  }
+  let mo = null;
+  function observe(){
+    if (mo) mo.disconnect();
+    mo = new MutationObserver(muts => {
+      if (lang !== "he") return; mo.disconnect();
+      muts.forEach(m => {
+        if (m.type === "childList") m.addedNodes.forEach(nd => { if (nd.nodeType === 1) translateNode(nd); else if (nd.nodeType === 3 && !skip(nd.parentElement)){ const nv = tr(nd.nodeValue); if (nv !== nd.nodeValue){ nd.__orig = nd.nodeValue; nd.nodeValue = nv; } } });
+        else if (m.type === "characterData"){ const nd = m.target; if (!skip(nd.parentElement)){ const nv = tr(nd.nodeValue); if (nv !== nd.nodeValue){ nd.__orig = nd.nodeValue; nd.nodeValue = nv; } } }
+        else if (m.type === "attributes" && m.target.nodeType === 1) translateNode(m.target);
+      });
+      mo.observe(document.body, {subtree:true, childList:true, characterData:true, attributes:true, attributeFilter:ATTRS});
+    });
+    mo.observe(document.body, {subtree:true, childList:true, characterData:true, attributes:true, attributeFilter:ATTRS});
+  }
+  function applyDir(){
+    document.documentElement.lang = lang === "he" ? "he" : "en";
+    document.documentElement.dir = lang === "he" ? "rtl" : "ltr";
+    const b = document.getElementById("langBtn"); if (b){ b.textContent = lang === "he" ? "EN" : "עב"; b.setAttribute("aria-label", lang === "he" ? "Switch to English" : "החלף לעברית"); b.__origA = null; }
+  }
+  const listeners = [];
+  function set(l){
+    lang = l; try { localStorage.setItem("hs-lang", l); } catch(e){}
+    applyDir();
+    if (l === "he") translateNode(document.body); else restore(document.body);
+    listeners.forEach(f => { try { f(l); } catch(e){} });
+  }
+  function start(){
+    applyDir(); translateNode(document.body); observe();
+    const b = document.getElementById("langBtn"); if (b) b.onclick = () => set(lang === "he" ? "en" : "he");
+  }
+  window.I18N = { get lang(){ return lang; }, T, tr, translateNode, set, start, onChange: f => listeners.push(f) };
+})();
+</script>
+<script>window.I18N && I18N.start();</script>
+<script src="../lib/pdfjs/pdf.min.js"></script>
+<script>
+(function(){
+  const T = (k, v) => window.I18N ? I18N.T(k, v) : k.replace(/\{(\w+)\}/g, (m, x) => v && v[x] != null ? v[x] : m);
+  const URL_ = document.body.dataset.pdf, box = document.getElementById("pages"), pgn = document.getElementById("pg");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "../lib/pdfjs/pdf.worker.min.js";
+  let doc, pages = [], zoom = 1, cur = 1;
+  const width = () => Math.min(box.clientWidth - 12, 1000) * zoom;
+  function layout(){ pages.forEach(p => { const w = width(); p.el.style.width = w + "px"; p.el.style.height = (w * p.r) + "px"; p.done = 0; }); refresh(); }
+  async function draw(p){
+    const w = width(); if (p.done === w) return; p.done = w;
+    const page = await doc.getPage(p.i); const vp1 = page.getViewport({scale:1});
+    const dpr = Math.min(window.devicePixelRatio || 1, 2); const vp = page.getViewport({scale: w / vp1.width * dpr});
+    let c = p.el.querySelector("canvas"); if (!c){ c = document.createElement("canvas"); p.el.prepend(c); }
+    c.width = Math.floor(vp.width); c.height = Math.floor(vp.height);
+    if (p.task) try { p.task.cancel(); } catch(e){}
+    p.task = page.render({canvasContext: c.getContext("2d"), viewport: vp}); try { await p.task.promise; } catch(e){}
+  }
+  function drop(p){ const c = p.el.querySelector("canvas"); if (c){ c.width = c.height = 0; c.remove(); } p.done = 0; }
+  function refresh(){
+    const vh = innerHeight; let best = 1, bd = 1e9;
+    pages.forEach(p => { const r = p.el.getBoundingClientRect();
+      const near = r.bottom > -vh * 1.5 && r.top < vh * 2.5; if (near) draw(p); else if (p.done) drop(p);
+      const d = Math.abs(r.top - 60); if (r.top < vh / 2 && d < bd){ bd = d; best = p.i; } if (r.top >= 60 && r.top < vh / 2 && bd > 1e8) best = p.i; });
+    cur = best; pgn.textContent = cur + " / " + pages.length;
+  }
+  let raf = 0; addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; refresh(); }); }, {passive:true});
+  addEventListener("resize", () => { clearTimeout(raf); setTimeout(layout, 150); });
+  function setZoom(z){ const keep = cur; zoom = Math.max(1, Math.min(3, z)); layout(); const p = pages[keep - 1]; if (p) p.el.scrollIntoView(); }
+  document.getElementById("zin").onclick = () => setZoom(zoom + .5);
+  document.getElementById("zout").onclick = () => setZoom(zoom - .5);
+  const ENC = document.body.dataset.enc;
+  function open(src){ return pdfjsLib.getDocument(Object.assign({disableFontFace: true, isEvalSupported: false}, src)).promise.then(async d => {
+    doc = d; box.innerHTML = "";
+    const first = await d.getPage(1); const v = first.getViewport({scale:1}); const r = v.height / v.width;
+    for (let i = 1; i <= d.numPages; i++){ const el = document.createElement("div"); el.className = "pg"; el.innerHTML = `<span class="n notr">${i}</span>`; box.appendChild(el); pages.push({i, el, r}); }
+    layout();
+  }).catch(() => { box.innerHTML = `<div class="vmsg"><span>${T("Couldn't open the manual.")}</span>${URL_ ? `<a href="${URL_}">${T("Open the PDF file")}</a>` : ""}</div>`; }); }
+  if (!ENC){ open({url: URL_}); return; }
+  // Password-protected document: the file is stored encrypted (AES-256-GCM, key from the password with PBKDF2)
+  const ITER = +document.body.dataset.iter;
+  function ask(err){
+    box.innerHTML = `<form class="lock" id="lockf"><svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+      <h2>${T("Password required")}</h2><p>${T("Enter the password to open this document.")}</p>
+      <input class="inp" id="pw" type="password" autocomplete="current-password" aria-label="${T("Password")}" placeholder="${T("Password")}">
+      ${err ? `<p class="err">${T(err)}</p>` : ""}<button class="btn btn-primary" type="submit">${T("Open")}</button></form>`;
+    const f = document.getElementById("lockf"), pw = document.getElementById("pw"); pw.focus();
+    f.onsubmit = async e => { e.preventDefault(); const v = pw.value; if (!v) return;
+      f.querySelector("button").disabled = true; f.querySelector("button").textContent = T("Opening…");
+      try {
+        const buf = new Uint8Array(await (await fetch(ENC)).arrayBuffer());
+        const salt = buf.slice(0, 16), iv = buf.slice(16, 28), ct = buf.slice(28);
+        const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(v), "PBKDF2", false, ["deriveKey"]);
+        const key = await crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations: ITER, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["decrypt"]);
+        let pdf; try { pdf = new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM", iv}, key, ct)); } catch(x){ ask("Wrong password. Try again."); return; }
+        const dl = document.getElementById("dl"); if (dl){ dl.hidden = false; const url = URL.createObjectURL(new Blob([pdf], {type:"application/pdf"})); dl.href = url; }
+        box.innerHTML = `<div class="vmsg">${T("Loading…")}</div>`; open({data: pdf});
+      } catch(x){ ask("Couldn't open the document. Check your connection and try again."); }
+    };
+  }
+  ask();
+})();
+</script>
+<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('../sw.js').catch(() => {}));</script>
+</body></html>
