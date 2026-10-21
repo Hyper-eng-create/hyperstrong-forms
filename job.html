@@ -20,7 +20,7 @@
   --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eef1f6; --line:#d7dce5; --line-strong:#b9c1cf;
   --fg:#141b2a; --fg-2:#4a5468; --fg-3:#6f788b;
   --brand:#002e77; --brand-fg:#ffffff; --brand-soft:#e3eaf7;
-  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7; --lift:#0f766e; --lift-soft:#dcf1ee;
+  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7; --lift:#0f766e; --lift-soft:#dcf1ee; --pass:#6d28d9; --pass-soft:#ede9fe;
   --pass:#16794a; --pass-soft:#dcf2e6; --fail:#c0262d; --fail-soft:#fbe1e2; --na:#5f6779; --na-soft:#e7e9ee; --warn:#9a5b00; --warn-soft:#fbefdc;
   --focus:#2f6fe0;
   --f-display:"IBM Plex Sans Condensed","IBM Plex Sans Hebrew","Arial Narrow",system-ui,sans-serif;
@@ -31,17 +31,17 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
   --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
-  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b; --pass:#b79cff; --pass-soft:#261a40;
   --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
   --focus:#8fb4ff; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
   --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
-  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b; --pass:#b79cff; --pass-soft:#261a40;
   --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
   --focus:#8fb4ff; color-scheme:dark}
 .ac-pre{--acc:var(--pre);--acc-soft:var(--pre-soft)} .ac-cold{--acc:var(--cold);--acc-soft:var(--cold-soft)}
-.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)} .ac-lift{--acc:var(--lift);--acc-soft:var(--lift-soft)}
+.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)} .ac-lift{--acc:var(--lift);--acc-soft:var(--lift-soft)} .ac-pass{--acc:var(--pass);--acc-soft:var(--pass-soft)}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -690,6 +690,11 @@ Object.assign(window.HE, {"Password required":"נדרשת סיסמה","Enter the
 "Opening…":"פותח…","Wrong password. Try again.":"סיסמה שגויה. נסה שוב.","Loading…":"טוען…","Couldn't open the document. Check your connection and try again.":"לא ניתן לפתוח את המסמך. בדוק את החיבור ונסה שוב.",
 "Site passdown":"העברת אתר","Commissioning to Operation: passdown rule, site identification, passdown criteria, punch list and sign-off.":"מהקמה לתפעול: כלל ההעברה, פרטי האתר, קריטריוני העברה, רשימת ליקויים וחתימות.",
 "Password required ":"נדרשת סיסמה"});
+Object.assign(window.HE, {
+"Enter the password to open this form.":"הזן סיסמה כדי לפתוח את הטופס.",
+"Site passdown":"העברת אתר","Site Passdown":"העברת אתר","New site passdown":"העברת אתר חדשה","Create the first site passdown. It's saved on this phone.":"צור את טופס העברת האתר הראשון. הוא נשמר בטלפון.",
+"Commissioning to Operation: site identification, passdown criteria, punch list and sign-off. Fill it in and export the PDF.":"מהקמה לתפעול: פרטי האתר, קריטריוני העברה, רשימת ליקויים וחתימות. מלא את הטופס והפק PDF."
+});
 
 /* Language layer: Hebrew (default, right-to-left) / English. Text is written in English in the
    form definitions; when Hebrew is on, every text node and placeholder is swapped using HE / HE_RULES. */
@@ -1118,7 +1123,7 @@ function blockHTML(b){
   case "group": return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="panel-b" style="display:flex;flex-direction:column;gap:14px">${b.blocks.map(x => x.type === "fields" ? `<div class="grid">${x.fields.map(fd => inputHTML("f/" + fd.k, fd)).join("")}</div>` : blockHTML({...x, inline:true})).join("")}</div></section>`;
   case "table": { const rows = r.f?.[b.k] || [];
     return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="tbl-wrap"><table class="tbl"><thead><tr>${b.numbered ? "<th>#</th>" : ""}${b.cols.map(c => `<th>${esc(c.l)}</th>`).join("")}${editable() && b.addable !== false ? "<th></th>" : ""}</tr></thead><tbody>
-      ${rows.map((row, i) => `<tr>${b.numbered ? `<td class="num">${i+1}</td>` : ""}${b.cols.map(c => `<td>${c.t === "photo" ? photoCellHTML(b, c, row, i) : c.fixed ? esc(row[c.k]) : `<input class="inp${c.mono ? " mono" : ""}" dir="auto" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" type="${c.t || "text"}" value="${esc(row[c.k])}" aria-label="${esc(c.l)} row ${i+1}" ${DIS()}>`}</td>`).join("")}${editable() && b.addable !== false ? `<td style="width:1%"><button class="btn btn-ghost btn-sm" data-tblrm="${b.k}" data-row="${i}" aria-label="Remove row ${i+1}">Remove</button></td>` : ""}</tr>`).join("")}
+      ${rows.map((row, i) => `<tr>${b.numbered ? `<td class="num">${i+1}</td>` : ""}${b.cols.map(c => `<td>${c.t === "photo" ? photoCellHTML(b, c, row, i) : c.fixed ? esc(row[c.k]) : c.t === "select" ? `<select class="inp" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="${esc(c.l)} row ${i+1}" ${DIS()}><option value=""></option>${c.opts.map(o => `<option value="${esc(o)}"${row[c.k] === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>` : `<input class="inp${c.mono ? " mono" : ""}" dir="auto" id="t-${b.k}-${i}-${c.k}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" type="${c.t || "text"}" value="${esc(row[c.k])}" aria-label="${esc(c.l)} row ${i+1}" ${DIS()}>`}</td>`).join("")}${editable() && b.addable !== false ? `<td style="width:1%"><button class="btn btn-ghost btn-sm" data-tblrm="${b.k}" data-row="${i}" aria-label="Remove row ${i+1}">Remove</button></td>` : ""}</tr>`).join("")}
       </tbody></table></div>${editable() && b.addable !== false ? `<div class="panel-b" style="padding-top:10px"><button class="btn btn-sm" data-tbladd="${b.k}">${esc(b.addLabel || "Add row")}</button></div>` : ""}</section>`; }
   case "gallery": { const items = r.f?.[b.k] || [];
     return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div><div class="panel-b"><div class="gallery">
@@ -1408,7 +1413,7 @@ function reportDoc(r, imgs){
     case "group": return `<h3>${esc(b.title)}</h3><table class="kv">${b.blocks.map(x => x.type === "fields" ? x.fields.map(fd => `<tr><th>${esc(fd.l)}</th><td>${v(fd.k)}</td></tr>`).join("") : `<tr><th>${esc(x.l)}</th><td>${choiceText(x)}</td></tr>`).join("")}</table>`;
     case "choice": return `<h3>${esc(b.l)}</h3><p>${choiceText(b, true)}</p>`;
     case "table": { const rows = (r.f?.[b.k] || []).filter(row => b.cols.some(c => !c.fixed && row[c.k]) || b.cols.some(c => c.fixed));
-      return `<h3>${esc(b.title)}</h3><table><tr>${b.numbered ? "<th>#</th>" : ""}${b.cols.map(c => `<th>${esc(c.l)}</th>`).join("")}</tr>${rows.length ? rows.map((row, i) => `<tr>${b.numbered ? `<td>${i+1}</td>` : ""}${b.cols.map(c => `<td class="notr">${c.t === "photo" ? `<div class="ph">${(Array.isArray(row[c.k]) ? row[c.k] : []).map(p => imgs[p] ? `<img src="${imgs[p]}" style="max-width:160px;max-height:120px">` : "").join("")}</div>` : esc(row[c.k])}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${b.cols.length + (b.numbered ? 1 : 0)}">—</td></tr>`}</table>`; }
+      return `<h3>${esc(b.title)}</h3><table><tr>${b.numbered ? "<th>#</th>" : ""}${b.cols.map(c => `<th>${esc(c.l)}</th>`).join("")}</tr>${rows.length ? rows.map((row, i) => `<tr>${b.numbered ? `<td>${i+1}</td>` : ""}${b.cols.map(c => (c.fixed || c.t === "select") ? `<td>${esc(T(row[c.k] || ""))}</td>` : `<td class="notr">${c.t === "photo" ? `<div class="ph">${(Array.isArray(row[c.k]) ? row[c.k] : []).map(p => imgs[p] ? `<img src="${imgs[p]}" style="max-width:160px;max-height:120px">` : "").join("")}</div>` : esc(row[c.k])}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${b.cols.length + (b.numbered ? 1 : 0)}">—</td></tr>`}</table>`; }
     case "gallery": { const g = r.f?.[b.k] || []; return `<h3>${esc(b.title)}</h3>${g.length ? `<div class="gal">${g.map(x => `<figure>${imgs[x.p] ? `<img src="${imgs[x.p]}">` : ""}<figcaption class="notr">${esc(x.cap || "")}</figcaption></figure>`).join("")}</div>` : "<p>No photos.</p>"}`; }
     case "unitcards": { const rows = r.f?.[b.k] || []; const lab = {ok:"NO DAMAGE", damage:"DAMAGE", na:"N/A"}; const cls = {ok:"pass", damage:"fail", na:"na"};
       return `<h3>${esc(b.title)}</h3>${rows.length ? rows.map((row, i) => `<div class="unitblk"><table><tr><th style="width:34%" class="notr">${esc(row.name || b.unitLabel + " " + (i+1))}${row.sn ? ` · SN ${esc(row.sn)}` : ""}</th><td class="s ${cls[row.result] || ""}" style="width:110px">${lab[row.result] || "—"}</td><td class="notr">${esc(row.note || "")}</td></tr>

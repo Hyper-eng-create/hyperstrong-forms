@@ -20,7 +20,7 @@
   --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eef1f6; --line:#d7dce5; --line-strong:#b9c1cf;
   --fg:#141b2a; --fg-2:#4a5468; --fg-3:#6f788b;
   --brand:#002e77; --brand-fg:#ffffff; --brand-soft:#e3eaf7;
-  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7; --lift:#0f766e; --lift-soft:#dcf1ee;
+  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7; --lift:#0f766e; --lift-soft:#dcf1ee; --pass:#6d28d9; --pass-soft:#ede9fe;
   --pass:#16794a; --pass-soft:#dcf2e6; --fail:#c0262d; --fail-soft:#fbe1e2; --na:#5f6779; --na-soft:#e7e9ee; --warn:#9a5b00; --warn-soft:#fbefdc;
   --focus:#2f6fe0;
   --f-display:"IBM Plex Sans Condensed","IBM Plex Sans Hebrew","Arial Narrow",system-ui,sans-serif;
@@ -31,17 +31,17 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
   --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
-  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b; --pass:#b79cff; --pass-soft:#261a40;
   --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
   --focus:#8fb4ff; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
   --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
-  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b; --pass:#b79cff; --pass-soft:#261a40;
   --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
   --focus:#8fb4ff; color-scheme:dark}
 .ac-pre{--acc:var(--pre);--acc-soft:var(--pre-soft)} .ac-cold{--acc:var(--cold);--acc-soft:var(--cold-soft)}
-.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)} .ac-lift{--acc:var(--lift);--acc-soft:var(--lift-soft)}
+.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)} .ac-lift{--acc:var(--lift);--acc-soft:var(--lift-soft)} .ac-pass{--acc:var(--pass);--acc-soft:var(--pass-soft)}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -317,7 +317,7 @@ img{max-width:100%}
   </nav>
   <nav class="tiles pane" data-pane="comm" aria-label="Commissioning">
     <a class="tile ac-lift" href="lift.html"><span class="who">HyperStrong engineer or service partner · lifting day</span><h3>Lifting day</h3><p>EPC lifting per the HyperStrong lifting plan, placement and level, doors, and photo damage check of every BESS and PCS with serial-number photos.</p><span class="go">Open →</span></a><a class="tile ac-pre" href="pre.html"><span class="who">For the EPC contractor · before energization</span><h3>Pre-commissioning</h3><p>Skid mechanics, cabling, grounding, IR / continuity / torque values and photo evidence. Signed by the EPC engineer and PM.</p><span class="go">Open →</span></a><a class="tile ac-cold" href="cold.html"><span class="who">HyperStrong service team · before energization</span><h3>Cold commissioning</h3><p>Preconditions, documentation, site and mechanics, grounding, DC / AC / comms cabling and internal equipment.</p><span class="go">Open →</span></a><a class="tile ac-hot" href="hot.html"><span class="who">HyperStrong service team · after energization</span><h3>Hot commissioning</h3><p>Energization and power-on sequence, IP table, communications, cooling, FSS, PCS integration, charge / discharge and safety tests.</p><span class="go">Open →</span></a>
-    <a class="tile ac-hot" href="manuals/passdown.html"><span class="who"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-1px"><rect x="4.5" y="10.5" width="15" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg> Password required</span><h3>Site passdown</h3><p>Commissioning to Operation: passdown rule, site identification, passdown criteria, punch list and sign-off.</p><span class="go">Open →</span></a>
+    <a class="tile ac-pass" href="passdown.html"><span class="who"><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-1px"><rect x="4.5" y="10.5" width="15" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2.4"/></svg> Password required</span><h3>Site passdown</h3><p>Commissioning to Operation: site identification, passdown criteria, punch list and sign-off. Fill it in and export the PDF.</p><span class="go">Open →</span></a>
   </nav>
   <nav class="tiles pane" data-pane="job" aria-label="Job report" hidden>
     <a class="tile ac-job" href="job.html"><span class="who">Service partner · after every site visit</span><h3>Site job report</h3><p>Visit details, work carried out with pictures, findings, materials, safety, follow-up and customer sign-off.</p><span class="go">Open →</span></a>
@@ -662,6 +662,11 @@ Object.assign(window.HE, {"Password required":"נדרשת סיסמה","Enter the
 "Opening…":"פותח…","Wrong password. Try again.":"סיסמה שגויה. נסה שוב.","Loading…":"טוען…","Couldn't open the document. Check your connection and try again.":"לא ניתן לפתוח את המסמך. בדוק את החיבור ונסה שוב.",
 "Site passdown":"העברת אתר","Commissioning to Operation: passdown rule, site identification, passdown criteria, punch list and sign-off.":"מהקמה לתפעול: כלל ההעברה, פרטי האתר, קריטריוני העברה, רשימת ליקויים וחתימות.",
 "Password required ":"נדרשת סיסמה"});
+Object.assign(window.HE, {
+"Enter the password to open this form.":"הזן סיסמה כדי לפתוח את הטופס.",
+"Site passdown":"העברת אתר","Site Passdown":"העברת אתר","New site passdown":"העברת אתר חדשה","Create the first site passdown. It's saved on this phone.":"צור את טופס העברת האתר הראשון. הוא נשמר בטלפון.",
+"Commissioning to Operation: site identification, passdown criteria, punch list and sign-off. Fill it in and export the PDF.":"מהקמה לתפעול: פרטי האתר, קריטריוני העברה, רשימת ליקויים וחתימות. מלא את הטופס והפק PDF."
+});
 
 /* Language layer: Hebrew (default, right-to-left) / English. Text is written in English in the
    form definitions; when Hebrew is on, every text node and placeholder is swapped using HE / HE_RULES. */
@@ -734,7 +739,7 @@ Object.assign(window.HE, {"Password required":"נדרשת סיסמה","Enter the
 <script>window.I18N && I18N.start();</script>
 <script>
 (function(){
-  const FORMS = [["pre","Pre-commissioning"],["lift","Lifting day"],["cold","Cold commissioning"],["hot","Hot commissioning"],["job","Site job report"]];
+  const FORMS = [["pre","Pre-commissioning"],["lift","Lifting day"],["cold","Cold commissioning"],["hot","Hot commissioning"],["job","Site job report"],["passdown","Site passdown"]];
   const T = (k, v) => window.I18N ? I18N.T(k, v) : k.replace(/\{(\w+)\}/g, (m, x) => v && v[x] != null ? v[x] : m);
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const openDB = k => new Promise(res => { try { const r = indexedDB.open("hs-" + k, 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => res(r.result); r.onerror = () => res(null); } catch(e){ res(null); } });
