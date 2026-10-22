@@ -20,7 +20,7 @@
   --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eef1f6; --line:#d7dce5; --line-strong:#b9c1cf;
   --fg:#141b2a; --fg-2:#4a5468; --fg-3:#6f788b;
   --brand:#002e77; --brand-fg:#ffffff; --brand-soft:#e3eaf7;
-  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7; --lift:#0f766e; --lift-soft:#dcf1ee; --pass:#6d28d9; --pass-soft:#ede9fe;
+  --pre:#b26a00; --pre-soft:#fbefdc; --cold:#1d63b8; --cold-soft:#e2edfa; --hot:#c2410c; --hot-soft:#fde7dc; --job:#002e77; --job-soft:#e3eaf7; --lift:#0f766e; --lift-soft:#dcf1ee; --pdn:#6d28d9; --pdn-soft:#ede9fe; --tilt:#be123c; --tilt-soft:#fde4e9;
   --pass:#16794a; --pass-soft:#dcf2e6; --fail:#c0262d; --fail-soft:#fbe1e2; --na:#5f6779; --na-soft:#e7e9ee; --warn:#9a5b00; --warn-soft:#fbefdc;
   --focus:#2f6fe0;
   --f-display:"IBM Plex Sans Condensed","IBM Plex Sans Hebrew","Arial Narrow",system-ui,sans-serif;
@@ -31,17 +31,17 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
   --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
-  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b; --pass:#b79cff; --pass-soft:#261a40;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b; --pdn:#b79cff; --pdn-soft:#261a40; --tilt:#fb7185; --tilt-soft:#3f1520;
   --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
   --focus:#8fb4ff; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e131d; --surface:#161d2a; --surface-2:#1d2636; --line:#2b3547; --line-strong:#3d4a60;
   --fg:#e8ecf3; --fg-2:#b2bacb; --fg-3:#8a93a6; --brand:#163f8a; --brand-fg:#ffffff; --brand-soft:#1c2a48;
-  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b; --pass:#b79cff; --pass-soft:#261a40;
+  --pre:#f0a63a; --pre-soft:#3a2a12; --cold:#6aa8f5; --cold-soft:#15283f; --hot:#ff8a55; --hot-soft:#3d1f13; --job:#8fb0ff; --job-soft:#1c2a48; --lift:#4fd1c0; --lift-soft:#0f2e2b; --pdn:#b79cff; --pdn-soft:#261a40; --tilt:#fb7185; --tilt-soft:#3f1520;
   --pass:#4fcf8c; --pass-soft:#123326; --fail:#ff6b70; --fail-soft:#3d1719; --na:#a3abbc; --na-soft:#262e3d; --warn:#f0a63a; --warn-soft:#3a2a12;
   --focus:#8fb4ff; color-scheme:dark}
 .ac-pre{--acc:var(--pre);--acc-soft:var(--pre-soft)} .ac-cold{--acc:var(--cold);--acc-soft:var(--cold-soft)}
-.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)} .ac-lift{--acc:var(--lift);--acc-soft:var(--lift-soft)} .ac-pass{--acc:var(--pass);--acc-soft:var(--pass-soft)}
+.ac-hot{--acc:var(--hot);--acc-soft:var(--hot-soft)} .ac-job{--acc:var(--job);--acc-soft:var(--job-soft)} .ac-lift{--acc:var(--lift);--acc-soft:var(--lift-soft)} .ac-pass{--acc:var(--pdn);--acc-soft:var(--pdn-soft)} .ac-tilt{--acc:var(--tilt);--acc-soft:var(--tilt-soft)}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -270,6 +270,30 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px}
 .tfld .photos,.tcard .photos{flex-wrap:wrap!important}
 .tfix{display:flex;flex-direction:column;gap:2px;font-size:14px;color:var(--fg-2)}
 .ucard.u-open{border-inline-start-color:var(--fail)}
+/* tilt inspection */
+.tstep{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.tstep h4{margin:0;font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
+.tstep p{margin:0;font-size:13.5px}
+.tn{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 6px;border-radius:999px;background:var(--acc);color:#fff;font-size:13px;font-family:var(--f-mono)}
+.tsum{font-size:13px;color:var(--fg-2);display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tb{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:1px 7px;border-radius:4px;background:var(--line);color:var(--fg-2)}
+.tb.pass{background:var(--pass-soft,#dcf3e6);color:var(--pass)}.tb.fail{background:var(--fail-soft,#fbe1e2);color:var(--fail)}.tb.part{background:var(--line);color:var(--fg-2)}
+.tf{color:var(--fail)}
+details.track{border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+details.track>summary{cursor:pointer;padding:10px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;list-style:none}
+details.track>summary::-webkit-details-marker{display:none}
+details.track>summary::before{content:"▸";color:var(--fg-3);transition:transform .15s}
+details.track[open]>summary::before{transform:rotate(90deg)}
+[dir="rtl"] details.track>summary::before{content:"◂"}[dir="rtl"] details.track[open]>summary::before{transform:rotate(-90deg)}
+.tpacks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0 12px 12px}
+@media (max-width:560px){.tpacks{grid-template-columns:1fr}}
+.tpack{border:1px solid var(--line);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.tpack.tins{grid-column:1/-1;border-style:dashed}
+.tph{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tnums{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tnum{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tin{display:flex;align-items:center;gap:4px}.tin .inp{min-width:0;width:100%}.tin i{font-style:normal;font-size:12.5px;color:var(--fg-3);font-family:var(--f-mono)}
+.tunit .photos{flex-wrap:wrap!important}
 
 
 html,body{margin:0}
@@ -647,6 +671,8 @@ Object.assign(window.HE, {
 });
 Object.assign(window.HE, {"Word":"Word","{k} file ready":"קובץ {k} מוכן","Share {k}":"שתף {k}","Save {k}":"שמור {k}","Word file downloaded":"קובץ ה-Word הורד","Sharing didn't work here. Use Save instead.":"השיתוף לא עבד כאן. השתמש בשמירה."});
 Object.assign(window.HE, {"Create Word file":"צור קובץ Word"});
+Object.assign(window.HE, {"Post-tilt inspection": "בדיקה לאחר הטיה", "Post-tilt Inspection": "בדיקה לאחר הטיה", "HyperStrong engineer or service partner · before power-on": "מהנדס HyperStrong או שותף שירות · לפני הדלקה", "HB3 V1 container with tilt indicator above 30°: visual check, enclosure voltage, pack-to-enclosure voltage for 12 racks × 4 packs, and rack insulation, with photos.": "מכולת HB3 V1 שמחוון ההטיה שלה מעל 30°: בדיקה ויזואלית, מתח מעטפת, מתח פאק למעטפת ל-12 ראקים × 4 פאקים ובידוד ראקים, עם צילומים.", "Post-Abnormality Inspection: BESS Container after Excessive Tilt during Transport": "בדיקה לאחר חריגה: מכולת BESS לאחר הטיה חריגה בהובלה", "For any HyperBlock III (HB3 V1) container whose tilt indicator shows more than 30° on arrival. Perform it per container on site, after placement on the foundation and before any energization, and record every pack and rack.": "לכל מכולת HyperBlock III (HB3 V1) שמחוון ההטיה שלה מראה יותר מ-30° בהגעה. מבצעים לכל מכולה באתר, אחרי ההצבה על היסוד ולפני כל חישמול, ומתעדים כל פאק וכל ראק.", "<b>Before any energization:</b> no auxiliary / LV power, no UPS start-up, no DC breaker closing and no MV / PCS energization until this inspection is complete. It is a precondition for SAT / commissioning.": "<b>לפני כל חישמול:</b> אין להפעיל מתח עזר / מתח נמוך, אין להפעיל UPS, אין לסגור מפסקי DC ואין לחשמל מ\"ג / PCS עד לסיום בדיקה זו. זהו תנאי מקדים ל-SAT / להרצה.", "New post-tilt inspection": "בדיקה חדשה לאחר הטיה", "Create the first post-tilt inspection. It's saved on this phone.": "צור את הבדיקה הראשונה לאחר הטיה. היא נשמרת בטלפון.", "Procedure: HyperStrong R&D guidance, HB3 V1 post-abnormality inspection after excessive tilt, rev. 00 (22-Oct-2026). Insulation test per SAT outline item 7.": "נוהל: הנחיית R&D של HyperStrong, בדיקת HB3 V1 לאחר הטיה חריגה, מהדורה 00 (22-אוק-2026). בדיקת בידוד לפי סעיף 7 במתווה ה-SAT.", "<b>Requirement:</b> the tilt angle shall be less than 30°. At 50° or more, unforeseen problems may occur. Perform the safety tests below before powering on.<br><b>Sequence:</b> Delivery and tilt-indicator check → Placement on foundation → <b>This inspection (steps 1–4)</b> → First power-on → Full SAT": "<b>דרישה:</b> זווית ההטיה חייבת להיות קטנה מ-30°. ב-50° ומעלה עלולות להופיע בעיות בלתי צפויות. יש לבצע את בדיקות הבטיחות הבאות לפני הדלקה.<br><b>סדר:</b> קבלה ובדיקת מחוון הטיה ← הצבה על היסוד ← <b>בדיקה זו (שלבים 1–4)</b> ← הדלקה ראשונה ← SAT מלא", "Project / site": "פרויקט / אתר", "Inspection date": "תאריך הבדיקה", "Relative humidity (% RH)": "לחות יחסית (% RH)", "Ambient temperature (°C)": "טמפרטורת סביבה (°C)", "Voltage tester (model / SN)": "בודק מתח (דגם / מס' סידורי)", "Multimeter (model / SN)": "מולטימטר (דגם / מס' סידורי)", "Insulation resistance tester (model / SN)": "מגר – בודק התנגדות בידוד (דגם / מס' סידורי)", "Insulation test voltage (V DC)": "מתח בדיקת בידוד (V DC)", "Each BESS: 12 racks × 4 packs. Open a rack to record its packs and insulation.": "כל BESS: 12 ראקים × 4 פאקים. פתח ראק כדי לתעד את הפאקים והבידוד שלו.", "Result & sign-off": "תוצאה וחתימות", "Acceptance and sign-off": "קבלה וחתימות", "If no abnormalities are found in all the steps, the container can be considered to have no safety issues. Complete SAT verification is still required to check for functional abnormalities, with special attention to the unit performance.": "אם לא נמצאו חריגות בכל השלבים, ניתן לקבוע שאין במכולה בעיית בטיחות. עדיין נדרש אימות SAT מלא כדי לבדוק חריגות תפקודיות, עם תשומת לב מיוחדת לביצועי היחידה.", "Inspection result": "תוצאת הבדיקה", "No abnormalities: container has no safety issues, continue to first power-on and full SAT": "אין חריגות: אין במכולה בעיית בטיחות, ממשיכים להדלקה ראשונה ול-SAT מלא", "Abnormality found: do not energize, report to HyperStrong": "נמצאה חריגה: אין לחשמל, לדווח ל-HyperStrong", "Findings and abnormalities": "ממצאים וחריגות", "Actions required": "פעולות נדרשות", "Inspected by (name / company)": "נבדק ע\"י (שם / חברה)", "Witnessed by (customer / EPC)": "בנוכחות (לקוח / EPC)", "OK": "תקין", "Packs {ok}/{n} OK": "פאקים {ok}/{n} תקינים", "{n} failed": "{n} נכשלו", "Insulation": "בידוד", "Remove unit": "הסר יחידה", "Container S/N": "מס' סידורי של המכולה", "Tilt indicator reading (°)": "קריאת מחוון הטיה (°)", "50° or more: unforeseen problems may occur. Inform HyperStrong R&D.": "50° ומעלה: עלולות להופיע בעיות בלתי צפויות. יש לעדכן את R&D של HyperStrong.", "Above the 30° limit: this inspection is required before power-on.": "מעל גבול ה-30°: בדיקה זו נדרשת לפני הדלקה.", "SN plate and tilt indicator photos": "צילומי לוחית מס' סידורי ומחוון הטיה", "Visual inspection": "בדיקה ויזואלית", "Per SAT. Pay special attention to battery pack displacement, the top and bottom brackets of the control cabinet, and the UPS.": "לפי ה-SAT. תשומת לב מיוחדת לתזוזת פאקים, לתושבות העליונות והתחתונות של ארון הבקרה ול-UPS.", "Result": "תוצאה", "Photos": "צילומים", "Enclosure voltage check (voltage tester)": "בדיקת מתח מעטפת (בודק מתח)", "Check at least 2 grounding points on the enclosure with the voltage tester. Safe when no voltage is detected (0 V).": "בדוק לפחות 2 נקודות הארקה על המעטפת עם בודק המתח. בטוח כאשר לא מתגלה מתח (0 V).", "Grounding point 1": "נקודת הארקה 1", "Grounding point 2": "נקודת הארקה 2", "No voltage (0 V)": "אין מתח (0 V)", "Voltage detected": "התגלה מתח", "Step 3: multimeter, voltage between the + and − terminals of every battery pack and the enclosure. 0 V = no insulation problem (readings below {v} V count as 0).": "שלב 3: מולטימטר, מתח בין הדקי + ו-− של כל פאק סוללות לבין המעטפת. 0 V = אין בעיית בידוד (קריאה מתחת ל-{v} V נחשבת 0).", "Step 4 (SAT item 7): disconnect HV box terminals B+, B−, 2B+ and 2B−, then measure the insulation resistance between the battery string + / − and earth. Pass: R ≥ {t} MΩ at the recorded humidity (≥ 50 MΩ below 55% RH, ≥ 20 MΩ at 55% RH or more).": "שלב 4 (סעיף 7 ב-SAT): נתק את הדקי קופסת המתח הגבוה B+, B−, 2B+ ו-2B−, ומדוד את התנגדות הבידוד בין + / − של שרשרת הסוללות לבין הארקה. תקין: R ≥ {t} MΩ בלחות שנרשמה (≥ 50 MΩ מתחת ל-55% RH, ≥ 20 MΩ ב-55% RH ומעלה).", "Rack {n}": "ראק {n}", "Pack {n}": "פאק {n}", "+ to enclosure": "+ למעטפת", "− to enclosure": "− למעטפת", "Insulation, string to earth": "בידוד, שרשרת להארקה", "+ to earth": "+ להארקה", "− to earth": "− להארקה", "No BESS units yet.": "עדיין אין יחידות BESS.", "No abnormality": "אין חריגה", "Abnormality found": "נמצאה חריגה", "{d} of {t} checks done": "{d} מתוך {t} בדיקות בוצעו", "Insulation pass value used: R ≥ {t} MΩ (relative humidity {rh}).": "ערך סף לבידוד: R ≥ {t} MΩ (לחות יחסית {rh}).", "not recorded": "לא נרשמה", "SN plate / tilt indicator": "לוחית מס' סידורי / מחוון הטיה", "Enclosure voltage": "מתח מעטפת", "Rack {r} · Pack {p}": "ראק {r} · פאק {p}", "Rack {r} · Insulation": "ראק {r} · בידוד", "NO ABNORMALITY": "אין חריגה", "ABNORMALITY FOUND": "נמצאה חריגה", "INCOMPLETE": "לא הושלם", "Step": "שלב", "Battery pack to enclosure voltage (V)": "מתח פאק סוללות למעטפת (V)", "Rack": "ראק", "Pack": "פאק", "Insulation, string to earth (MΩ)": "בידוד, שרשרת להארקה (MΩ)", "incomplete": "לא הושלם", "No BESS units.": "אין יחידות BESS.", "No BESS units": "אין יחידות BESS", "no S/N": "אין מס' סידורי", "no tilt reading": "אין קריאת הטיה", "step 1 not answered": "שלב 1 לא מולא", "step 2 not complete": "שלב 2 לא הושלם", "{n} packs without both readings": "{n} פאקים ללא שתי הקריאות", "{n} racks without insulation readings": "{n} ראקים ללא קריאות בידוד"});
+Object.assign(window.HE, {"Racks and packs":"ראקים ופאקים"});
 
 /* Language layer: Hebrew (default, right-to-left) / English. Text is written in English in the
    form definitions; when Hebrew is on, every text node and placeholder is swapped using HE / HE_RULES. */
@@ -917,6 +943,7 @@ function blankReport(){
   (C.tabs || []).forEach(t => t.blocks.forEach(b => {
     if (b.type === "table") f[b.k] = (b.rows || []).map(row => Object.fromEntries(b.cols.map((c, i) => [c.k, typeof row[i] === "string" ? T(row[i]) : (row[i] ?? "")])));
     if (b.type === "fields") b.fields.forEach(fd => { if (fd.t === "date" && fd.k !== "date" && fd.today) f[fd.k] = today(); });
+    if (b.type === "tiltunits") f[b.k] = [{id: uid("u"), name: "BESS 1", sn: "", tilt: "", photos: []}];
   }));
   return {id: uid("r"), createdAt: Date.now(), updatedAt: Date.now(), status: "draft", f, results:{}, signoff:{}, review:null};
 }
@@ -1053,10 +1080,10 @@ function inputHTML(path, fd){
   const ctl = fd.t === "textarea" ? `<textarea ${common} rows="${fd.rows || 3}">${esc(v)}</textarea>` : `<input ${common} type="${fd.t || "text"}" value="${esc(v)}" ${fd.t === "number" ? 'inputmode="decimal" step="any"' : ""}>`;
   return `<div class="field${fd.full || fd.t === "textarea" ? " full" : ""}"><label for="${id}">${esc(fd.l)}</label>${ctl}${fd.snPhoto ? fieldPhotoHTML(path + "Photo", fd.l) : ""}</div>`;
 }
-function fieldPhotoHTML(path, label){
+function fieldPhotoHTML(path, label, emptyLabel){
   const ph = getPath(S.r, path); const list = Array.isArray(ph) ? ph : [];
   return `<div class="photos" style="margin-top:2px">${list.map(p => `<span class="thumb"><img data-ph="${esc(p)}" alt="${esc(label)} photo">${editable() ? `<button class="x" data-fphrm="${esc(p)}" data-path="${path}" aria-label="Remove photo">×</button>` : ""}</span>`).join("")}
-    ${editable() ? `<button class="addph" data-fph="${path}" aria-label="Add ${esc(label)} photo">${CAM}<span>${list.length ? "Add" : "SN photo"}</span></button>` : ""}</div>`;
+    ${editable() ? `<button class="addph" data-fph="${path}" aria-label="Add ${esc(label)} photo">${CAM}<span>${list.length ? "Add" : (emptyLabel || "SN photo")}</span></button>` : ""}</div>`;
 }
 
 function blockHTML(b){
@@ -1086,6 +1113,7 @@ function blockHTML(b){
       ${editable() ? `<button class="gadd" data-gadd="${b.k}">${CAM} Add photo</button>` : items.length ? "" : `<span class="muted">No photos.</span>`}
     </div></div></section>`; }
   case "checklist": return checklistHTML(b);
+  case "tiltunits": return tiltHTML(b);
   case "unitcards": { const rows = r.f?.[b.k] || []; const tb = findBlock(b.k);
     return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div>
       <div class="panel-b" style="display:flex;flex-direction:column;gap:14px">
@@ -1125,6 +1153,97 @@ function tableCardsHTML(b, rows){
     ${canAdd ? `<div><button class="btn btn-sm" data-tbladd="${b.k}">${esc(b.addLabel || "Add row")}</button></div>` : ""}
     </div></section>`;
 }
+/* ---------- Tilt inspection: BESS units -> racks -> packs, with pack-to-enclosure voltage and rack insulation ---------- */
+const TILT = {
+  vOk: (b, v) => v !== "" && v != null && !isNaN(+v) && Math.abs(+v) < (b.vMax || 1),
+  thr: f => { const rh = parseFloat(f?.rh); return !isNaN(rh) && rh >= 55 ? 20 : 50; },
+  data: (r, id) => (r.f?.tm || {})[id] || {},
+  pack(b, d, ri, pi){ const p = (d["r" + ri] || {})["p" + pi] || {}; const has = [p.vp, p.vn].filter(x => x !== "" && x != null).length;
+    if (has < 2) return has ? "part" : ""; return TILT.vOk(b, p.vp) && TILT.vOk(b, p.vn) ? "pass" : "fail"; },
+  ins(b, d, ri, f){ const x = d["r" + ri] || {}; const a = parseFloat(x.ip), c = parseFloat(x.in); if (isNaN(a) && isNaN(c)) return ""; if (isNaN(a) || isNaN(c)) return "part";
+    const t = TILT.thr(f); return a >= t && c >= t ? "pass" : "fail"; },
+  rack(b, d, ri, f){ const ps = Array.from({length: b.packs}, (_, i) => TILT.pack(b, d, ri, i + 1)); const ins = TILT.ins(b, d, ri, f);
+    return {okPacks: ps.filter(x => x === "pass").length, failPacks: ps.filter(x => x === "fail").length, donePacks: ps.filter(x => x === "pass" || x === "fail").length, ins}; },
+  unit(b, d, f){ let fail = 0, done = 0, total = 0;
+    for (let ri = 1; ri <= b.racks; ri++){ const k = TILT.rack(b, d, ri, f); fail += k.failPacks + (k.ins === "fail" ? 1 : 0); done += k.donePacks + (k.ins === "pass" || k.ins === "fail" ? 1 : 0); total += b.packs + 1; }
+    const steps = [d.s1, d.g1 && d.g2 ? (d.g1 === "none" && d.g2 === "none" ? "Pass" : "Fail") : ""];
+    if (steps.includes("Fail")) fail++; if (steps[0]) done++; if (steps[1]) done++; total += 2;
+    return {fail, done, total, res: fail ? "fail" : done === total ? "pass" : ""}; }
+};
+const TBADGE = s => s === "pass" ? `<span class="tb pass">${T("OK")}</span>` : s === "fail" ? `<span class="tb fail">${T("FAIL")}</span>` : s === "part" ? `<span class="tb part">…</span>` : `<span class="tb">—</span>`;
+function tiltSel(path, val, opts){ return `<select class="inp" data-f="${path}" data-tilt="1" ${DIS()}><option value=""></option>${opts.map(([k, l]) => `<option value="${k}"${val === k ? " selected" : ""}>${esc(l)}</option>`).join("")}</select>`; }
+function tiltNum(path, val, label, unit){ return `<label class="tnum"><span class="flabel">${esc(label)}</span><span class="tin"><input class="inp mono" type="number" inputmode="decimal" step="any" data-f="${path}" data-tilt="1" value="${esc(val ?? "")}" aria-label="${esc(label)}" ${DIS()}><i>${unit}</i></span></label>`; }
+function tiltPhotos(path, label){ return fieldPhotoHTML(path, label, "Photo"); }
+function tiltRackSum(b, d, ri){ const k = TILT.rack(b, d, ri, S.r.f);
+  return `${T("Packs {ok}/{n} OK", {ok:k.okPacks, n:b.packs})}${k.failPacks ? ` · <b class="tf">${T("{n} failed", {n:k.failPacks})}</b>` : ""} · ${T("Insulation")} ${TBADGE(k.ins)}`; }
+function tiltHTML(b){
+  const rows = S.r.f?.[b.k] || []; const thr = TILT.thr(S.r.f); S.tiltOpen = S.tiltOpen || {};
+  return `<section class="panel"><div class="panel-h"><h2>${esc(b.title)}</h2>${b.hint ? `<span class="muted">${esc(b.hint)}</span>` : ""}</div>
+  <div class="panel-b" style="display:flex;flex-direction:column;gap:16px">
+  ${rows.length ? rows.map((u, i) => { const id = u.id || ("u" + i); const d = TILT.data(S.r, id); const base = `f/tm/${id}`; const st = TILT.unit(b, d, S.r.f);
+    return `<div class="ucard tunit ${st.res === "fail" ? "u-damage" : st.res === "pass" ? "u-ok" : ""}" data-tunit="${id}">
+      <div class="ucard-h"><h3 class="notr">${esc(u.name || "BESS " + (i+1))}</h3><span class="tsum" data-tusum="${id}">${tiltUnitSum(st)}</span>
+        ${editable() ? `<button class="btn btn-ghost btn-sm" style="margin-inline-start:auto" data-tblrm="${b.k}" data-row="${i}">${T("Remove unit")}</button>` : ""}</div>
+      <div class="tgrid">
+        <div class="tfld"><span class="flabel">${T("Unit name / ID")}</span>${tcellHTML(b, {k:"name", l:"Unit name / ID"}, u, i)}</div>
+        <div class="tfld"><span class="flabel">${T("Container S/N")}</span>${tcellHTML(b, {k:"sn", l:"Container S/N", mono:true}, u, i)}</div>
+        <div class="tfld"><span class="flabel">${T("Tilt indicator reading (°)")}</span>${tcellHTML(b, {k:"tilt", l:"Tilt indicator reading (°)", t:"number"}, u, i)}${+u.tilt > 30 ? `<span class="req">${T(+u.tilt >= 50 ? "50° or more: unforeseen problems may occur. Inform HyperStrong R&D." : "Above the 30° limit: this inspection is required before power-on.")}</span>` : ""}</div>
+        <div class="tfld"><span class="flabel">${T("SN plate and tilt indicator photos")}</span>${photoCellHTML(b, {k:"photos", l:"Photo"}, u, i)}</div>
+      </div>
+      <div class="tstep"><h4><span class="tn">1</span>${T("Visual inspection")}</h4><p class="muted">${T("Per SAT. Pay special attention to battery pack displacement, the top and bottom brackets of the control cabinet, and the UPS.")}</p>
+        <div class="tgrid"><div class="tfld"><span class="flabel">${T("Result")}</span>${tiltSel(base + "/s1", d.s1, [["Pass", T("Pass")], ["Fail", T("Fail")]])}</div>
+        <div class="tfld"><span class="flabel">${T("Comments")}</span><input class="inp" dir="auto" data-f="${base}/s1c" value="${esc(d.s1c || "")}" ${DIS()}></div>
+        <div class="tfld full"><span class="flabel">${T("Photos")}</span>${tiltPhotos(base + "/s1ph", "Visual inspection")}</div></div></div>
+      <div class="tstep"><h4><span class="tn">2</span>${T("Enclosure voltage check (voltage tester)")}</h4><p class="muted">${T("Check at least 2 grounding points on the enclosure with the voltage tester. Safe when no voltage is detected (0 V).")}</p>
+        <div class="tgrid"><div class="tfld"><span class="flabel">${T("Grounding point 1")}</span>${tiltSel(base + "/g1", d.g1, [["none", T("No voltage (0 V)")], ["voltage", T("Voltage detected")]])}</div>
+        <div class="tfld"><span class="flabel">${T("Grounding point 2")}</span>${tiltSel(base + "/g2", d.g2, [["none", T("No voltage (0 V)")], ["voltage", T("Voltage detected")]])}</div>
+        <div class="tfld full"><span class="flabel">${T("Photos")}</span>${tiltPhotos(base + "/s2ph", "Enclosure voltage")}</div></div></div>
+      <div class="tstep"><h4><span class="tn">3–4</span>${T("Racks and packs")}</h4>
+        <p class="muted">${T("Step 3: multimeter, voltage between the + and − terminals of every battery pack and the enclosure. 0 V = no insulation problem (readings below {v} V count as 0).", {v:b.vMax || 1})}<br>
+        ${T("Step 4 (SAT item 7): disconnect HV box terminals B+, B−, 2B+ and 2B−, then measure the insulation resistance between the battery string + / − and earth. Pass: R ≥ {t} MΩ at the recorded humidity (≥ 50 MΩ below 55% RH, ≥ 20 MΩ at 55% RH or more).", {t:thr})}</p>
+        ${Array.from({length: b.racks}, (_, x) => { const ri = x + 1; const rk = d["r" + ri] || {}; const op = S.tiltOpen[id + ":" + ri];
+          return `<details class="track" data-trk="${id}:${ri}"${op ? " open" : ""}><summary><b>${T("Rack {n}", {n:ri})}</b><span class="tsum" data-trsum="${id}:${ri}">${tiltRackSum(b, d, ri)}</span></summary>
+            <div class="tpacks">${Array.from({length: b.packs}, (_, y) => { const pi = y + 1; const p = rk["p" + pi] || {}; const pb = `${base}/r${ri}/p${pi}`;
+              return `<div class="tpack"><div class="tph"><b>${T("Pack {n}", {n:pi})}</b><span data-tpb="${id}:${ri}:${pi}">${TBADGE(TILT.pack(b, d, ri, pi))}</span></div>
+                <div class="tnums">${tiltNum(pb + "/vp", p.vp, T("+ to enclosure"), "V")}${tiltNum(pb + "/vn", p.vn, T("− to enclosure"), "V")}</div>${tiltPhotos(pb + "/ph", "Pack " + pi)}</div>`; }).join("")}
+            <div class="tpack tins"><div class="tph"><b>${T("Insulation, string to earth")}</b><span data-tib="${id}:${ri}">${TBADGE(TILT.ins(b, d, ri, S.r.f))}</span></div>
+              <div class="tnums">${tiltNum(`${base}/r${ri}/ip`, rk.ip, T("+ to earth"), "MΩ")}${tiltNum(`${base}/r${ri}/in`, rk.in, T("− to earth"), "MΩ")}</div>${tiltPhotos(`${base}/r${ri}/iph`, "Insulation rack " + ri)}</div></div></details>`; }).join("")}
+      </div></div>`; }).join("") : `<p class="muted" style="margin:0">${T("No BESS units yet.")}</p>`}
+  ${editable() ? `<div><button class="btn btn-sm" data-tiltadd="${b.k}">${T("Add BESS unit")}</button></div>` : ""}
+  </div></section>`;
+}
+function tiltUnitSum(st){ return st.res === "pass" ? `<span class="tb pass">${T("No abnormality")}</span>` : st.res === "fail" ? `<span class="tb fail">${T("Abnormality found")}</span>` : `<span class="muted">${T("{d} of {t} checks done", {d:st.done, t:st.total})}</span>`; }
+function tiltRefresh(){ C.tabs.forEach(t => t.blocks.filter(b => b.type === "tiltunits").forEach(b => (S.r.f?.[b.k] || []).forEach((u, i) => { const id = u.id || ("u" + i); const d = TILT.data(S.r, id);
+  for (let ri = 1; ri <= b.racks; ri++){ const s = document.querySelector(`[data-trsum="${id}:${ri}"]`); if (s) s.innerHTML = tiltRackSum(b, d, ri);
+    const ib = document.querySelector(`[data-tib="${id}:${ri}"]`); if (ib) ib.innerHTML = TBADGE(TILT.ins(b, d, ri, S.r.f));
+    for (let pi = 1; pi <= b.packs; pi++){ const pb = document.querySelector(`[data-tpb="${id}:${ri}:${pi}"]`); if (pb) pb.innerHTML = TBADGE(TILT.pack(b, d, ri, pi)); } }
+  const st = TILT.unit(b, d, S.r.f); const us = document.querySelector(`[data-tusum="${id}"]`); if (us) us.innerHTML = tiltUnitSum(st);
+  const card = document.querySelector(`[data-tunit="${id}"]`); if (card){ card.classList.toggle("u-damage", st.res === "fail"); card.classList.toggle("u-ok", st.res === "pass"); } }))); }
+function tiltReport(b, r, imgs){ const rows = r.f?.[b.k] || []; const lab = {pass:"OK", fail:"FAIL", part:"incomplete", "":"—"}; const cls = {pass:"pass", fail:"fail"};
+  const pic = (list, cap) => (Array.isArray(list) ? list : []).filter(p => imgs[p]).map(p => `<figure><img src="${imgs[p]}"><figcaption>${esc(cap)}</figcaption></figure>`).join("");
+  return `<h3>${esc(b.title)}</h3><p class="sub">${T("Insulation pass value used: R ≥ {t} MΩ (relative humidity {rh}).", {t:TILT.thr(r.f), rh: r.f?.rh ? r.f.rh + "%" : T("not recorded")})}</p>` + (rows.length ? rows.map((u, i) => { const id = u.id || ("u" + i); const d = TILT.data(r, id); const st = TILT.unit(b, d, r.f);
+    const g = d.g1 && d.g2 ? (d.g1 === "none" && d.g2 === "none" ? "Pass" : "Fail") : "";
+    let gal = pic(u.photos, T("SN plate / tilt indicator")) + pic(d.s1ph, T("Visual inspection")) + pic(d.s2ph, T("Enclosure voltage"));
+    let packRows = "", insRows = "";
+    for (let ri = 1; ri <= b.racks; ri++){ const rk = d["r" + ri] || {};
+      for (let pi = 1; pi <= b.packs; pi++){ const p = rk["p" + pi] || {}; const s = TILT.pack(b, d, ri, pi); packRows += `<tr><td class="m">${ri}</td><td class="m">${pi}</td><td class="m notr">${esc(p.vp ?? "")}</td><td class="m notr">${esc(p.vn ?? "")}</td><td class="s ${cls[s] || ""}">${T(lab[s])}</td></tr>`; gal += pic(p.ph, T("Rack {r} · Pack {p}", {r:ri, p:pi})); }
+      const s = TILT.ins(b, d, ri, r.f); insRows += `<tr><td class="m">${ri}</td><td class="m notr">${esc(rk.ip ?? "")}</td><td class="m notr">${esc(rk.in ?? "")}</td><td class="s ${cls[s] || ""}">${T(lab[s])}</td></tr>`; gal += pic(rk.iph, T("Rack {r} · Insulation", {r:ri})); }
+    return `<div class="unitblk"><table><tr><th style="width:34%" class="notr">${esc(u.name || "BESS " + (i+1))}${u.sn ? ` · S/N ${esc(u.sn)}` : ""}</th><td class="s ${st.res === "pass" ? "pass" : st.res === "fail" ? "fail" : ""}">${st.res === "pass" ? T("NO ABNORMALITY") : st.res === "fail" ? T("ABNORMALITY FOUND") : T("INCOMPLETE")}</td><td>${T("Tilt indicator reading (°)")}: <b class="notr">${esc(u.tilt ?? "")}</b></td></tr></table></div>
+      <table><tr><th style="width:40%">${T("Step")}</th><th>${T("Result")}</th><th>${T("Comments")}</th></tr>
+      <tr><td>1. ${T("Visual inspection")}</td><td class="s ${d.s1 === "Pass" ? "pass" : d.s1 === "Fail" ? "fail" : ""}">${d.s1 ? T(d.s1).toUpperCase() : "—"}</td><td class="notr">${esc(d.s1c || "")}</td></tr>
+      <tr><td>2. ${T("Enclosure voltage check (voltage tester)")}</td><td class="s ${g === "Pass" ? "pass" : g === "Fail" ? "fail" : ""}">${g ? T(g).toUpperCase() : "—"}</td><td>${T("Grounding point 1")}: ${d.g1 ? T(d.g1 === "none" ? "No voltage (0 V)" : "Voltage detected") : "—"} · ${T("Grounding point 2")}: ${d.g2 ? T(d.g2 === "none" ? "No voltage (0 V)" : "Voltage detected") : "—"}</td></tr></table>
+      <h3>3. ${T("Battery pack to enclosure voltage (V)")}</h3><table><tr><th>${T("Rack")}</th><th>${T("Pack")}</th><th>${T("+ to enclosure")}</th><th>${T("− to enclosure")}</th><th>${T("Result")}</th></tr>${packRows}</table>
+      <h3>4. ${T("Insulation, string to earth (MΩ)")}</h3><table><tr><th>${T("Rack")}</th><th>${T("+ to earth")}</th><th>${T("− to earth")}</th><th>${T("Result")}</th></tr>${insRows}</table>
+      ${gal ? `<div class="gal">${gal}</div>` : ""}`; }).join("") : `<p>${T("No BESS units.")}</p>`);
+}
+function tiltGaps(b, r, g){ const rows = r.f?.[b.k] || []; if (!rows.length){ g.push({label:T(b.title), detail:T("No BESS units")}); return; }
+  rows.forEach((u, i) => { const id = u.id || ("u" + i); const d = TILT.data(r, id); const parts = []; const name = u.name || "BESS " + (i+1);
+    if (!u.sn) parts.push(T("no S/N")); if (u.tilt === "" || u.tilt == null) parts.push(T("no tilt reading"));
+    if (!d.s1) parts.push(T("step 1 not answered")); if (!d.g1 || !d.g2) parts.push(T("step 2 not complete"));
+    let mp = 0, mi = 0; for (let ri = 1; ri <= b.racks; ri++){ for (let pi = 1; pi <= b.packs; pi++){ const s = TILT.pack(b, d, ri, pi); if (s !== "pass" && s !== "fail") mp++; } const s = TILT.ins(b, d, ri, r.f); if (s !== "pass" && s !== "fail") mi++; }
+    if (mp) parts.push(T("{n} packs without both readings", {n:mp})); if (mi) parts.push(T("{n} racks without insulation readings", {n:mi}));
+    if (parts.length) g.push({label:`${T(b.title)}: ${name}`, detail:parts.join("; ")}); }); }
+
 function photoCellHTML(b, c, row, i){
   const ph = Array.isArray(row[c.k]) ? row[c.k] : [];
   return `<div class="photos" style="flex-wrap:nowrap">${ph.map(p => `<span class="thumb"><img data-ph="${esc(p)}" alt="${esc(c.l)} ${esc(row.name || "row " + (i+1))}">${editable() ? `<button class="x" data-tphrm="${esc(p)}" data-tbl="${b.k}" data-row="${i}" data-col="${c.k}" aria-label="Remove photo">×</button>` : ""}</span>`).join("")}
@@ -1182,7 +1301,7 @@ function bindReport(){
   $("#withdrawBtn")?.addEventListener("click", () => { changeMany({status:"draft"}); toast("Withdrawn. You can edit the report again."); });
   $$("[data-review]").forEach(b => b.onclick = () => doReview(b.dataset.review));
   if (!editable()) return;
-  $$("[data-f]").forEach(el => el.addEventListener("input", () => { const path = el.dataset.f; change(path, el.value);
+  $$("[data-f]").forEach(el => el.addEventListener("input", () => { const path = el.dataset.f; change(path, el.value); if (el.dataset.tilt || path === "f/rh") tiltRefresh();
     if (path === "f/" + C.titleField) { const h = $(".rhead h2"); if (h) h.textContent = el.value || T(C.appName); } }));
   $$("[data-choice]").forEach(el => el.addEventListener("change", () => { const k = el.dataset.choice, b = findBlock(k);
     if (b.multi) change(`f/${k}/${el.dataset.opt}`, el.checked); else change(`f/${k}`, el.dataset.opt); }));
@@ -1190,6 +1309,8 @@ function bindReport(){
   $$("[data-tbladd]").forEach(b => b.onclick = () => { const k = b.dataset.tbladd, bl = findBlock(k); const rows = clone(S.r.f[k] || []); const nr = Object.fromEntries(bl.cols.map(c => [c.k, c.t === "photo" ? [] : ""])); if (bl.autoName) nr[bl.cols[0].k] = bl.autoName + " " + (rows.length + 1); rows.push(nr); change("f/" + k, rows, {rerender:true}); });
   $$("[data-tblrm]").forEach(b => b.onclick = () => { const k = b.dataset.tblrm; const rows = clone(S.r.f[k] || []); rows.splice(+b.dataset.row, 1); change("f/" + k, rows, {rerender:true}); });
   $$("[data-gadd]").forEach(b => b.onclick = () => pickPhoto({gallery:b.dataset.gadd}, b));
+  $$("[data-tiltadd]").forEach(b => b.onclick = () => { const k = b.dataset.tiltadd; const rows = clone(S.r.f[k] || []); rows.push({id: uid("u"), name: "BESS " + (rows.length + 1), sn: "", tilt: "", photos: []}); change("f/" + k, rows, {rerender:true}); });
+  $$("details.track").forEach(d => d.addEventListener("toggle", () => { S.tiltOpen = S.tiltOpen || {}; S.tiltOpen[d.dataset.trk] = d.open; }));
   $$("[data-ucst]").forEach(b => b.onclick = () => { const k = b.dataset.ucst, rows = clone(S.r.f[k] || []), row = rows[+b.dataset.row]; if (!row) return; row.result = row.result === b.dataset.val ? "" : b.dataset.val; change("f/" + k, rows, {rerender:true}); });
   $$("[data-fph]").forEach(b => b.onclick = () => pickPhoto({field:b.dataset.fph}, b));
   $$("[data-fphrm]").forEach(b => b.onclick = () => armThen(b, () => { const path = b.dataset.path, p = b.dataset.fphrm; const cur = getPath(S.r, path); change(path, (Array.isArray(cur) ? cur : []).filter(x => x !== p), {rerender:true}); B.delPhoto(S.ref, p); }));
@@ -1302,6 +1423,7 @@ function findGaps(r){
     else if (b.type === "unitcards"){ const rows = f[b.k] || []; if (!rows.length) g.push({label:T(b.title), detail:T("No units")});
       rows.forEach((row, i) => { const mp = b.slots.filter(sl => empty(row[sl.k])).map(sl => T(sl.l)); const parts = []; if (!row.result) parts.push(T("no result")); if (mp.length) parts.push(T("no photo: {list}", {list:mp.join(", ")}));
         if (parts.length) g.push({label:`${T(b.title)}: ${row.name || b.unitLabel + " " + (i+1)}`, detail:parts.join("; ")}); }); }
+    else if (b.type === "tiltunits") tiltGaps(b, r, g);
     else if (b.type === "signoff"){ const miss = b.roles.filter((role, ri) => !r.signoff?.["s" + ri]?.sig); if (miss.length) g.push({label:T(b.title || "Sign-off"), detail:T("Not signed: {list}", {list:miss.map(x => T(x)).join(", ")})}); }
   }));
   return g;
@@ -1332,6 +1454,7 @@ async function exportReport(kind, opts = {}){
     C.tabs.forEach(t => t.blocks.forEach(b => { if (b.type === "gallery") (S.r.f?.[b.k] || []).forEach(g => refs.add(g.p));
       fieldsOf(b).filter(fd => fd.snPhoto).forEach(fd => { const a = S.r.f?.[fd.k + "Photo"]; (Array.isArray(a) ? a : []).forEach(p => refs.add(p)); });
       if (b.type === "unitcards") b.slots.forEach(sl => (S.r.f?.[b.k] || []).forEach(row => (Array.isArray(row[sl.k]) ? row[sl.k] : []).forEach(p => refs.add(p))));
+      if (b.type === "tiltunits"){ (S.r.f?.[b.k] || []).forEach(u => (u.photos || []).forEach(p => refs.add(p))); const walk = v => { if (Array.isArray(v)) v.forEach(x => typeof x === "string" ? refs.add(x) : walk(x)); else if (v && typeof v === "object") Object.values(v).forEach(walk); }; walk(S.r.f?.tm || {}); }
       if (b.type === "table") b.cols.filter(c => c.t === "photo").forEach(c => (S.r.f?.[b.k] || []).forEach(row => (Array.isArray(row[c.k]) ? row[c.k] : []).forEach(p => refs.add(p)))); }));
     const imgs = {}; for (const p of refs) imgs[p] = await srcToData(await B.photoSrc(S.ref, p));
     const name = (S.r.f?.[C.titleField] || C.fileStem).replace(/[^\w\- \u0590-\u05FF]+/g, "").trim().replace(/\s+/g, "_") || C.fileStem;
@@ -1407,6 +1530,7 @@ function reportDoc(r, imgs){
     case "table": { const rows = (r.f?.[b.k] || []).filter(row => b.cols.some(c => !c.fixed && row[c.k]) || b.cols.some(c => c.fixed));
       return `<h3>${esc(b.title)}</h3><table><tr>${b.numbered ? "<th>#</th>" : ""}${b.cols.map(c => `<th>${esc(c.l)}</th>`).join("")}</tr>${rows.length ? rows.map((row, i) => `<tr>${b.numbered ? `<td>${i+1}</td>` : ""}${b.cols.map(c => (c.fixed || c.t === "select") ? `<td>${esc(T(row[c.k] || ""))}</td>` : `<td class="notr">${c.t === "photo" ? `<div class="ph">${(Array.isArray(row[c.k]) ? row[c.k] : []).map(p => imgs[p] ? `<img src="${imgs[p]}" style="max-width:160px;max-height:120px">` : "").join("")}</div>` : esc(row[c.k])}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${b.cols.length + (b.numbered ? 1 : 0)}">—</td></tr>`}</table>`; }
     case "gallery": { const g = r.f?.[b.k] || []; return `<h3>${esc(b.title)}</h3>${g.length ? `<div class="gal">${g.map(x => `<figure>${imgs[x.p] ? `<img src="${imgs[x.p]}">` : ""}<figcaption class="notr">${esc(x.cap || "")}</figcaption></figure>`).join("")}</div>` : "<p>No photos.</p>"}`; }
+    case "tiltunits": return tiltReport(b, r, imgs);
     case "unitcards": { const rows = r.f?.[b.k] || []; const lab = {ok:"NO DAMAGE", damage:"DAMAGE", na:"N/A"}; const cls = {ok:"pass", damage:"fail", na:"na"};
       return `<h3>${esc(b.title)}</h3>${rows.length ? rows.map((row, i) => `<div class="unitblk"><table><tr><th style="width:34%" class="notr">${esc(row.name || b.unitLabel + " " + (i+1))}${row.sn ? ` · SN ${esc(row.sn)}` : ""}</th><td class="s ${cls[row.result] || ""}" style="width:110px">${lab[row.result] || "—"}</td><td class="notr">${esc(row.note || "")}</td></tr>
         <tr><td colspan="3"><div class="gal">${b.slots.map(sl => `<figure>${(Array.isArray(row[sl.k]) ? row[sl.k] : []).map(p => imgs[p] ? `<img src="${imgs[p]}">` : "").join("") || `<div style="height:60px;border:1px dashed #c9cfda"></div>`}<figcaption>${esc(sl.l)}</figcaption></figure>`).join("")}</div></td></tr></table></div>`).join("") : "<p>No units.</p>"}`; }
