@@ -362,7 +362,6 @@ window.CFG = {
   tabs:[
     {label:"Overview", blocks:[
       {type:"summary"},
-      SAFETY_BLOCK,
       {type:"fields", title:"Project information", fields:[F("projectName","Project name"), F("customer","Customer"), F("epc","EPC"), F("site","Site name"), F("location","Project location"), F("date","Lifting date","date")]},
       {type:"fields", title:"Lifting team", fields:[F("inspector","HyperStrong engineer / service partner"), F("partner","Service partner company"), F("liftContractor","Lifting / crane contractor"), F("liftSupervisor","Lifting supervisor"), F("craneOperator","Crane operator"), F("signalman","Rigger / signalman")]},
       {type:"table", k:"bessUnits", title:"BESS units", hint:"Add every BESS unit with a photo of the unit and of its serial-number plate", numbered:true, addLabel:"Add BESS unit", autoName:"BESS",
@@ -373,8 +372,8 @@ window.CFG = {
     {label:"Checklist", counter:true, blocks:[
       {type:"note", html:"From the HyperStrong lifting plan: <b>one crane</b>, recommended capacity ≥ 100 t · BESS weight about 42 t · keep a <b>5–10 m</b> exclusion zone · trial lift at <b>300 mm</b> · lift vertically and land gently."},
       {type:"checklist"},
-      {type:"unitcards", k:"bessUnits", unitLabel:"BESS", title:"Photo inspection: BESS", hint:"Photo of every side and the roof for each unit; check corner fittings and look for coolant leaks", slots:[{k:"front", l:"Front side"}, {k:"rear", l:"Rear side"}, {k:"left", l:"Left end"}, {k:"right", l:"Right end"}, {k:"roof", l:"Roof / top"}]},
-      {type:"unitcards", k:"pcsUnits", unitLabel:"PCS", title:"Photo inspection: PCS", hint:"Photo of every side and the roof for each unit; check corner fittings", slots:[{k:"front", l:"Front side"}, {k:"rear", l:"Rear side"}, {k:"left", l:"Left end"}, {k:"right", l:"Right end"}, {k:"roof", l:"Roof / top"}]}]},
+      {type:"unitcards", k:"bessUnits", unitLabel:"BESS", title:"Photo inspection: BESS", hint:"Photo of every side and the roof for each unit; check corner fittings and look for coolant leaks", slots:[{k:"front", l:"Front side"}, {k:"rear", l:"Rear side"}, {k:"left", l:"Left end"}, {k:"right", l:"Right end"}, {k:"roof", l:"Roof / top"}, {k:"more", l:"More photos"}]},
+      {type:"unitcards", k:"pcsUnits", unitLabel:"PCS", title:"Photo inspection: PCS", hint:"Photo of every side and the roof for each unit; check corner fittings", slots:[{k:"front", l:"Front side"}, {k:"rear", l:"Rear side"}, {k:"left", l:"Left end"}, {k:"right", l:"Right end"}, {k:"roof", l:"Roof / top"}, {k:"more", l:"More photos"}]}]},
     {label:"Damage & sign-off", printTitle:"Damage and sign-off", blocks:[
       {type:"summary"},
       {type:"gallery", k:"damage", title:"Damage found", hint:"Close-up photo of every dent, scratch, leak or broken part, with unit and location in the caption"},
@@ -383,7 +382,6 @@ window.CFG = {
     ]}
   ],
   sections:[
-    SAFETY_SECTION([...SAFETY_BASE]),
     {t:"Before lifting: site and preparation", groups:[{items:[
       "Approved lifting plan / method statement on site and briefed to the lifting crew.",
       "Crane capacity matches the lifting plan for the unit weight (BESS about 42 t; recommended crane ≥ 100 t).",
@@ -1797,6 +1795,7 @@ render();
 })();
 
 </script>
+<script>Object.assign(window.HE, {"More photos":"צילומים נוספים"});</script>
 <script>window.I18N && I18N.start();</script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body></html>
