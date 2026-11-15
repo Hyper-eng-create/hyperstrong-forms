@@ -363,7 +363,6 @@ window.CFG = {freeExport:true,
     {label:"Overview", blocks:[
       {type:"summary"},
       {type:"fields", title:"Project information", fields:[F("projectName","Project name"), F("customer","Customer"), F("epc","EPC"), F("site","Site name"), F("location","Project location"), F("date","Lifting date","date")]},
-      {type:"fields", title:"Lifting team", fields:[F("inspector","HyperStrong engineer / service partner"), F("partner","Service partner company"), F("liftContractor","Lifting / crane contractor"), F("liftSupervisor","Lifting supervisor"), F("craneOperator","Crane operator"), F("signalman","Rigger / signalman")]},
       {type:"table", k:"bessUnits", title:"BESS units", hint:"Add every BESS unit with a photo of the unit and of its serial-number plate", numbered:true, addLabel:"Add BESS unit", autoName:"BESS",
         cols:[{k:"name", l:"Unit name / ID"}, {k:"sn", l:"Serial number (SN)", mono:true}, {k:"photo", l:"Unit photo", t:"photo"}, {k:"snPhoto", l:"SN plate photo", t:"photo"}], rows:[["BESS 1"]]},
       {type:"table", k:"pcsUnits", title:"PCS units", hint:"Add every PCS with a photo of the unit and of its serial-number plate", numbered:true, addLabel:"Add PCS", autoName:"PCS",
@@ -371,8 +370,10 @@ window.CFG = {freeExport:true,
     ]},
     {label:"Checklist", counter:true, blocks:[
       {type:"note", html:"From the HyperStrong lifting plan: <b>one crane</b>, recommended capacity ≥ 100 t · BESS weight about 42 t · keep a <b>5–10 m</b> exclusion zone · trial lift at <b>300 mm</b> · lift vertically and land gently."},
+      {type:"gallery", k:"beforePh", title:"Photos before lifting", hint:"Site, crane set-up, exclusion zone, units on the truck and foundation, with a short caption"},
+      {type:"gallery", k:"duringPh", title:"Photos during lifting", hint:"Rigging, trial lift and placement of each unit, with a short caption"},
       {type:"checklist"},
-      {type:"unitcards", k:"bessUnits", unitLabel:"BESS", title:"Photo inspection: BESS", hint:"Photo of every side and the roof for each unit; check corner fittings and look for coolant leaks", slots:[{k:"front", l:"Front side"}, {k:"rear", l:"Rear side"}, {k:"left", l:"Left end"}, {k:"right", l:"Right end"}, {k:"roof", l:"Roof / top"}, {k:"more", l:"More photos"}]},
+      {type:"unitcards", k:"bessUnits", unitLabel:"BESS", title:"Photo inspection: BESS", hint:"Photo of the tilt indicator, every side and the roof for each unit; check corner fittings and look for coolant leaks", slots:[{k:"tilt", l:"Tilt indicator"}, {k:"front", l:"Front side"}, {k:"rear", l:"Rear side"}, {k:"left", l:"Left end"}, {k:"right", l:"Right end"}, {k:"roof", l:"Roof / top"}, {k:"more", l:"More photos"}]},
       {type:"unitcards", k:"pcsUnits", unitLabel:"PCS", title:"Photo inspection: PCS", hint:"Photo of every side and the roof for each unit; check corner fittings", slots:[{k:"front", l:"Front side"}, {k:"rear", l:"Rear side"}, {k:"left", l:"Left end"}, {k:"right", l:"Right end"}, {k:"roof", l:"Roof / top"}, {k:"more", l:"More photos"}]}]},
     {label:"Damage & sign-off", printTitle:"Damage and sign-off", blocks:[
       {type:"summary"},
@@ -382,23 +383,6 @@ window.CFG = {freeExport:true,
     ]}
   ],
   sections:[
-    {t:"Before lifting: site and preparation", groups:[{items:[
-      "Approved lifting plan / method statement on site and briefed to the lifting crew.",
-      "Crane capacity matches the lifting plan for the unit weight (BESS about 42 t; recommended crane ≥ 100 t).",
-      "Crane set up on firm, level ground; outriggers fully extended on pads.",
-      "Lifting area fenced with warning signs or tape; 5–10 m exclusion zone kept clear of unauthorized people.",
-      "Travel path cleared of obstacles (trees, cables, overhead lines).",
-      "Weather acceptable: no heavy rain, fog or strong wind.",
-      "Lifting crew trained; a qualified supervisor present for the whole operation.",
-      "Unit doors locked before lifting.",
-      "Units inspected on the truck before unloading: no transport damage.",
-      "Foundation / plinth clean, level, drained and free of protrusions; fixing points per drawing."]}]},
-    {t:"During lifting", groups:[{items:[
-      "Trial lift: unit raised about 300 mm, held, and rigging connections inspected before continuing.",
-      "Unit lifted vertically, never dragged or pushed on any surface.",
-      "Unit kept level with no tilting or swinging; tag lines used to control it.",
-      "Nobody under the load or inside the exclusion zone during the lift.",
-      "Unit lowered gently and landed smoothly and vertically, not swung into place."]}]},
     {t:"After placement: position, stability and level", groups:[{items:[
       "BESS units placed in position per the layout drawing (orientation, door side, clearances).",
       "PCS units placed in position per the layout drawing.",
@@ -1795,7 +1779,7 @@ render();
 })();
 
 </script>
-<script>Object.assign(window.HE, {"More photos":"צילומים נוספים"});</script>
+<script>Object.assign(window.HE, {"More photos":"צילומים נוספים","Tilt indicator":"מחוון הטיה","Photos before lifting":"צילומים לפני ההנפה","Photos during lifting":"צילומים במהלך ההנפה","Site, crane set-up, exclusion zone, units on the truck and foundation, with a short caption":"האתר, העמדת המנוף, אזור ההרחקה, היחידות על המשאית והיסוד, עם כיתוב קצר","Rigging, trial lift and placement of each unit, with a short caption":"ציוד הרמה, הרמת ניסיון והצבה של כל יחידה, עם כיתוב קצר","Photo of the tilt indicator, every side and the roof for each unit; check corner fittings and look for coolant leaks":"צילום של מחוון ההטיה, של כל צד ושל הגג לכל יחידה; בדוק את פינות ההנפה וחפש דליפות נוזל קירור"});</script>
 <script>window.I18N && I18N.start();</script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body></html>
