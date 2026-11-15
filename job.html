@@ -350,7 +350,7 @@ const SAFETY_BESS = ["Battery hazards briefed: no smoking or open flame; fire su
 const SAFETY_SECTION = items => ({key:"s", t:"Safety requirements", sub:"complete before starting work", groups:[{items}]});
 const SAFETY_BLOCK = {type:"checklist", only:["s"]};
 
-window.CFG = {
+window.CFG = {freeExport:true, 
   key:"job", noRef:true, accent:"job", mode:"private", assets:false,
   appName:"Site job report", topTitle:"Site job report", docTitle:"HyperStrong Site Job Report",
   who:"Service partner · after every site visit",

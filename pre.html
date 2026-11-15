@@ -350,7 +350,7 @@ const SAFETY_BESS = ["Battery hazards briefed: no smoking or open flame; fire su
 const SAFETY_SECTION = items => ({key:"s", t:"Safety requirements", sub:"complete before starting work", groups:[{items}]});
 const SAFETY_BLOCK = {type:"checklist", only:["s"]};
 
-window.CFG = {
+window.CFG = {freeExport:true, 
   key:"pre", accent:"pre", mode:"private", assets:false,
   appName:"Pre-commissioning checklist", topTitle:"Pre-commissioning · EPC", docTitle:"HyperStrong ESS Pre-Commissioning Checklist for EPC",
   who:"For the EPC contractor · before energization",

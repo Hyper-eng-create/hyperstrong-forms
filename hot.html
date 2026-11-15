@@ -350,7 +350,7 @@ const SAFETY_BESS = ["Battery hazards briefed: no smoking or open flame; fire su
 const SAFETY_SECTION = items => ({key:"s", t:"Safety requirements", sub:"complete before starting work", groups:[{items}]});
 const SAFETY_BLOCK = {type:"checklist", only:["s"]};
 
-window.CFG = {
+window.CFG = {freeExport:true, 
   key:"hot", accent:"hot", mode:"shared", assets:false,
   appName:"Hot commissioning", topTitle:"Hot commissioning", docTitle:"HyperStrong ESS Hot Commissioning Report",
   who:"HyperStrong service team · after energization",
