@@ -350,7 +350,7 @@ const SAFETY_BESS = ["Battery hazards briefed: no smoking or open flame; fire su
 const SAFETY_SECTION = items => ({key:"s", t:"Safety requirements", sub:"complete before starting work", groups:[{items}]});
 const SAFETY_BLOCK = {type:"checklist", only:["s"]};
 
-window.CFG = {freeExport:true, 
+window.CFG = {freeExport:true, word:true, docxTpl:"assets/comm_hot.docx", 
   key:"hot", accent:"hot", mode:"shared", assets:false,
   appName:"Hot commissioning", topTitle:"Hot commissioning", docTitle:"HyperStrong ESS Hot Commissioning Report",
   who:"HyperStrong service team · after energization",
@@ -1567,10 +1567,10 @@ async function exportReport(kind, opts = {}){
     const imgs = {}; for (const p of refs) imgs[p] = await srcToData(await B.photoSrc(S.ref, p));
     const name = (S.r.f?.[C.titleField] || C.fileStem).replace(/[^\w\- \u0590-\u05FF]+/g, "").trim().replace(/\s+/g, "_") || C.fileStem;
     const base = `${name}_${C.fileStem}${S.r.f?.ref ? "_" + S.r.f.ref : ""}`;
-    if (kind === "word"){ const blob = await buildDOCX(S.r, imgs); const fn = base + ".docx";
+    if (kind === "word"){ const blob = await (window.HS_EXPORT ? window.HS_EXPORT.word : buildDOCX)(S.r, imgs); const fn = base + ".docx";
       if (S.downloads){ try { await S.downloads.save({filename: fn, data: blob}); toast("Word file downloaded"); return; } catch(e){ if (e && (e.code === "declined" || e.code === "rate_limited")) throw e; } }
       showFileApp(blob, fn, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word"); return; }
-    if (kind === "pdf"){ const blob = await buildPDF(S.r, imgs);
+    if (kind === "pdf"){ const blob = await (window.HS_EXPORT ? window.HS_EXPORT.pdf : buildPDF)(S.r, imgs);
       if (S.downloads){ try { await S.downloads.save({filename: base + ".pdf", data: blob}); toast("PDF downloaded"); return; } catch(e){ if (e && (e.code === "declined" || e.code === "rate_limited")) throw e; } }
       if (C.standalone) showPdfApp(blob, base + ".pdf"); else showPdfFallback(blob, base + ".pdf"); return; }
     else await S.downloads.save({filename: base + ".html", data: reportHTMLFile(S.r, imgs)});
@@ -1827,4 +1827,5 @@ render();
 </script>
 <script>window.I18N && I18N.start();</script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+<script src="lib/commdocx.js"></script>
 </body></html>
