@@ -326,8 +326,8 @@ const UNIT_TABLES = [
     cols:[{k:"name", l:"Unit name / ID"}, {k:"sn", l:"Serial number (SN)", mono:true}, {k:"snPhoto", l:"SN plate photo", t:"photo"}], rows:[["BESS 1"]]},
   {type:"table", k:"pcsUnits", title:"PCS units", hint:"Add every PCS on site", numbered:true, addLabel:"Add PCS", autoName:"PCS",
     cols:[{k:"name", l:"Unit name / ID"}, {k:"sn", l:"Serial number (SN)", mono:true}, {k:"snPhoto", l:"SN plate photo", t:"photo"}], rows:[["PCS 1"]]}];
-const TOOLS_TABLE = {type:"table", k:"tools", title:"Test equipment", hint:"Record serial numbers before starting", addLabel:"Add tool",
-  cols:[{k:"name", l:"Tool"}, {k:"serial", l:"Serial no.", mono:true}],
+const TOOLS_TABLE = {type:"table", k:"tools", title:"Test equipment", hint:"Test equipment used on site", addLabel:"Add tool",
+  cols:[{k:"name", l:"Tool"}],
   rows:[["Digital multimeter (1500 V+) + clip-on ammeter"],["USB-RS485 converter"],["PC with communication cable"],["Recharge tool"],["Megger (insulation tester)"],["Insulated torque wrench (5–200 Nm)"],["Insulated PPE (clothing, shoes, gloves)"]]};
 const HS_ROLES = ["HyperStrong Engineer", "Service Partner", "Customer"];
 const PERSONNEL_ITEMS = [];
@@ -386,7 +386,7 @@ window.CFG = {freeExport:true, word:true, docxTpl:"assets/comm_hot.docx",
     SAFETY_SECTION([...SAFETY_BASE, ...SAFETY_ELECTRICAL, "Barriers and warning signs set up around energized equipment.", "Energization coordinated with the site manager; everyone informed before switching.", ...SAFETY_BESS]),
     {t:"Preconditions", groups:[{items:[
       "Cold commissioning completed and signed off.",
-      "All test tools checked; serial numbers recorded in the Test equipment table.",
+      "All test tools checked.",
       ...PERSONNEL_ITEMS]}]},
     {t:"Initial energization", groups:[{items:[
       ["Transformer energized at least 24 hours before hot commissioning, with no load.", V("h","Hours energized")],
@@ -1831,6 +1831,7 @@ render();
 
 </script>
 <script>Object.assign(window.HE, {"BCMS ↔ BAMS (BESS HMI)": "BCMS ↔ BAMS (HMI של ה-BESS)", "BAMS ↔ PCS (PCS or PMS software)": "BAMS ↔ PCS (תוכנת PCS או PMS)", "PCS ↔ BAMS ↔ PMS (PMS software)": "PCS ↔ BAMS ↔ PMS (תוכנת PMS)", "BESS ↔ PMS (PMS software)": "BESS ↔ PMS (תוכנת PMS)", "Modbus communication to PMS checked (2 or 3 registers).": "תקשורת Modbus ל-PMS נבדקה (2 או 3 רגיסטרים).", "FACP / FSS batteries connected.": "מצברי ה-FACP / FSS חוברו.", "No alarms on FACP screen; wiring of the main site FSS verified with the EPC.": "אין התראות במסך ה-FACP; החיווט ל-FSS הראשי של האתר אומת מול ה-EPC.", "FACP alarm test per HyperStrong procedure (the EPC informs HyperStrong when the site FACP is ready and checks the alarms on the site FACP).": "בדיקת התראות FACP לפי נוהל HyperStrong (ה-EPC מעדכן את HyperStrong כשה-FACP של האתר מוכן ובודק את ההתראות ב-FACP של האתר).", "DC breaker operation verified (BESS and PCS).": "פעולת מפסק ה-DC אומתה (BESS ו-PCS).", "Israeli grid code configured; screenshots of the configuration added.": "קוד הרשת הישראלי הוגדר; צורפו צילומי מסך של ההגדרות.", "AC grid voltage verified with the PCS in standby mode.": "מתח רשת ה-AC אומת כשה-PCS במצב המתנה.", "Low-power charge test performed, not above 10% of nominal power (PMS).": "בוצעה בדיקת טעינה בהספק נמוך, לא מעל 10% מההספק הנומינלי (PMS).", "Low-power discharge test performed, not above 10% of nominal power (PMS).": "בוצעה בדיקת פריקה בהספק נמוך, לא מעל 10% מההספק הנומינלי (PMS).", "Current accuracy verified (between energy meter and PCS).": "דיוק הזרם אומת (בין מונה האנרגיה ל-PCS).", "Current stability verified.": "יציבות הזרם אומתה.", "IP configuration screenshots": "צילומי מסך של הגדרות IP", "Screenshot of IP, gateway, NTP and subnet from each device": "צילום מסך של IP, Gateway, NTP ו-Subnet מכל רכיב"});</script>
+<script>Object.assign(window.HE, {"Test equipment used on site": "ציוד הבדיקה שבשימוש באתר", "All test tools checked.": "כל כלי הבדיקה נבדקו."});</script>
 <script>window.I18N && I18N.start();</script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 <script src="lib/commdocx.js"></script>
