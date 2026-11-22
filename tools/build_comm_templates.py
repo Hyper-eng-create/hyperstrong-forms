@@ -61,6 +61,21 @@ for r in list(rels.getroot()):
 
 kids = list(body)
 B = lambda i: kids[i]
+def text(el): return ''.join(el.xpath('.//w:t/text()', namespaces=NS)).strip()
+def find(pred, start=0):
+    for i in range(start, len(kids)):
+        if pred(kids[i]): return i
+    raise SystemExit('element not found')
+isP = lambda el: el.tag == q('w:p'); isT = lambda el: el.tag == q('w:tbl')
+I_INFO = find(lambda e: isT(e) and text(e).startswith('Project Information'))
+I_COLD = find(lambda e: isP(e) and text(e).startswith('Cold Commissioning Checklist'))
+I_EV1 = find(lambda e: isP(e) and text(e) == 'Evaluation', I_COLD)
+I_HOT = find(lambda e: isP(e) and text(e).startswith('Hot Commissioning Checklist'), I_EV1)
+I_IP = find(lambda e: isT(e) and text(e).startswith('Equipment'), I_HOT)
+I_HC = find(lambda e: isP(e) and re.match(r'^1\.', text(e)), I_IP)
+I_EV2 = find(lambda e: isP(e) and text(e) == 'Evaluation', I_HC)
+I_COM = find(lambda e: isP(e) and text(e).startswith('Comments'), I_EV2)
+print('positions', I_INFO, I_COLD, I_EV1, I_HOT, I_IP, I_HC, I_EV2, I_COM)
 
 # ---- helpers ------------------------------------------------------------------------------
 def tok_run(token, rpr=None):
@@ -99,7 +114,7 @@ def marker(name):
     return p
 
 # ---- 2. Basic information table -------------------------------------------------------------
-info = B(18)
+info = B(I_INFO)
 rows = info.findall('w:tr', NS)
 def val(tr, idx, token, label_idx=None):
     cells = tcs(tr)
@@ -180,9 +195,9 @@ def eval_tokens(tbl):
             p.append(tok_run('Signature: ', rpr))
             p.append(tok_run('{{sigimg.%s}}' % sk, rpr))
 
-eval_cold, eval_hot = B(94), B(141)
+eval_cold, eval_hot = B(I_EV1 + 1), B(I_EV2 + 1)
 eval_tokens(eval_cold); eval_tokens(eval_hot)
-comments_p = B(143)
+comments_p = B(I_COM + 1)
 for r in comments_p.findall('w:r', NS): comments_p.remove(r)
 comments_p.append(tok_run('{{f.remarks}}'))
 
@@ -215,6 +230,6 @@ def variant(name, drop_ranges, markers):
 
 # index map (after the UNITS marker insert, the original kids list is unchanged in our copy: markers are new nodes)
 # cold: keep H1 54 + intro 55, checklist marker replaces 56..91, drop the whole hot part 101..141
-variant('cold', [(56, 92), (101, 141)], [(20, 'UNITS'), (56, 'CHECKLIST')])
+variant('cold', [(I_COLD + 2, I_EV1 - 1), (I_EV1 + 2, I_EV2 + 1)], [(I_INFO + 2, 'UNITS'), (I_COLD + 2, 'CHECKLIST')])
 # hot: drop the cold part 54..100, IP table 102 -> IPS marker (+TOOLS), checklist 104..134 -> CHECKLIST
-variant('hot', [(54, 100), (102, 102), (103, 134)], [(20, 'UNITS'), (102, 'IPS'), (102, 'TOOLS'), (104, 'CHECKLIST')])
+variant('hot', [(I_COLD, I_HOT - 1), (I_IP, I_IP), (I_IP + 1, I_EV2 - 1)], [(I_INFO + 2, 'UNITS'), (I_IP, 'IPS'), (I_IP, 'TOOLS'), (I_HC, 'CHECKLIST')])

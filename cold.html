@@ -384,19 +384,19 @@ window.CFG = {freeExport:true, word:true, docxTpl:"assets/comm_cold.docx",
       "EPC confirmation received: all infrastructure works complete, site ready for local testing, no physical obstacles or access limitations.",
       ...PERSONNEL_ITEMS]}]},
     {t:"Documentation and pre-work verification", groups:[{items:[
-      "Latest approved drawings, SLDs and wiring diagrams are available.",
+      ["Latest approved drawings, SLDs and wiring diagrams are available; drawing version recorded.", V("rev.","Drawing version")],
       "All safety signs are present and undamaged.",
       "Escape routes and emergency exits are accessible."]}]},
     {t:"Site and mechanical installation", groups:[{items:[
       "Container placed on prepared foundation per mechanical installation section.",
       "Container leveling and structural integrity verified.",
-      "HVAC units checked.",
+      "HVAC units visually inspected (BESS).",
       "Doors, locks, hinges and seals inspected.",
       "Lifting lugs removed or secured after installation."]}]},
     {t:"Grounding system", groups:[{items:[
       "Container grounding conductor installed first (per grounding rules).",
       ["Grounding resistance meets project/local code.", V("Ω","≤ 5 Ω per Israeli regulations")],
-      "All internal cabinets (PDU, SCDC, rack frames, HVAC, UPS) bonded to main ground bar.",
+      "All internal BESS cabinets (SCDC, rack frames, HVAC) bonded to main ground bar.",
       "No paint or corrosion at grounding contact points (PCS and BESS)."]}]},
     {t:"Cable installation", sub:"before energization", groups:[
       {t:"DC cables", items:[
@@ -408,7 +408,7 @@ window.CFG = {freeExport:true, word:true, docxTpl:"assets/comm_cold.docx",
         "AC input cables connected to correct terminals (SCDC and AUX panel).",
         "Phase sequence and neutral/ground continuity checked."]},
       {t:"Communication cables", items:[
-        "PMS, BAMS and PCS communication lines connected per topology diagrams.",
+        ["PMS, BAMS and PCS communication lines connected per topology diagrams; topology version recorded and connections photographed.", V("rev.","Topology version")],
         ["Client network cable terminated to a female keystone jack, with a flexible patch cable for the final connection.", null, true]]}]},
     {t:"Internal equipment inspection", groups:[
       {t:"Racks and packs", items:[
@@ -1818,6 +1818,7 @@ render();
 })();
 
 </script>
+<script>Object.assign(window.HE, {"Latest approved drawings, SLDs and wiring diagrams are available; drawing version recorded.": "השרטוטים, תרשימי ה-SLD ותרשימי החיווט המאושרים העדכניים זמינים; גרסת השרטוטים נרשמה.", "Drawing version": "גרסת שרטוטים", "rev.": "גרסה", "HVAC units visually inspected (BESS).": "יחידות ה-HVAC נבדקו ויזואלית (BESS).", "All internal BESS cabinets (SCDC, rack frames, HVAC) bonded to main ground bar.": "כל הארונות הפנימיים של ה-BESS (SCDC, מסגרות הראקים, HVAC) מחוברים לפס ההארקה הראשי.", "PMS, BAMS and PCS communication lines connected per topology diagrams; topology version recorded and connections photographed.": "קווי התקשורת של PMS, BAMS ו-PCS מחוברים לפי תרשימי הטופולוגיה; גרסת הטופולוגיה נרשמה והחיבורים צולמו.", "Topology version": "גרסת טופולוגיה"});</script>
 <script>window.I18N && I18N.start();</script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 <script src="lib/commdocx.js"></script>

@@ -370,6 +370,7 @@ window.CFG = {freeExport:true, word:true, docxTpl:"assets/comm_hot.docx",
       {type:"table", k:"ips", title:"Equipment IP addresses", addLabel:"Add equipment",
         cols:[{k:"equipment", l:"Equipment"}, {k:"ip", l:"IP address", mono:true}, {k:"note", l:"Notes"}],
         rows:[["PCS"],["BAMS"],["BCMS"],["PMS / EMS"],["HMI"],["FACP"]]},
+      {type:"gallery", k:"ipShots", title:"IP configuration screenshots", hint:"Screenshot of IP, gateway, NTP and subnet from each device"},
       TOOLS_TABLE
     ]},
     {label:"Checklist", counter:true, blocks:[
@@ -406,28 +407,32 @@ window.CFG = {freeExport:true, word:true, docxTpl:"assets/comm_hot.docx",
     {t:"Communication and subsystem verification", groups:[
       {t:"Communication", items:[
         "Device IP addressing configured / verified (see IP table in Overview).",
-        "BCMS ↔ BAMS",
-        "BAMS ↔ PCS",
-        "PCS ↔ BAMS ↔ PMS",
-        "BESS ↔ PMS"]},
+        "BCMS ↔ BAMS (BESS HMI)",
+        "BAMS ↔ PCS (PCS or PMS software)",
+        "PCS ↔ BAMS ↔ PMS (PMS software)",
+        "BESS ↔ PMS (PMS software)",
+        "Modbus communication to PMS checked (2 or 3 registers)."]},
       {t:"Fire suppression system", items:[
-        "FACP batteries connected.",
-        "No alarms on FACP screen."]},
+        "FACP / FSS batteries connected.",
+        "No alarms on FACP screen; wiring of the main site FSS verified with the EPC.",
+        ["FACP alarm test per HyperStrong procedure (the EPC informs HyperStrong when the site FACP is ready and checks the alarms on the site FACP).", null, true]]},
       {t:"Rack and pack activation", items:[
         "Pack and cell voltages, temperatures and SOC values verified.",
         "No pack isolation faults."]},
       {t:"PDU and DC bus", items:[
-        "DC contactor operation verified.",
-        ["Bus voltage matches expected value.", V("V DC","Measured bus voltage")],
+        "DC breaker operation verified (BESS and PCS).",
+        "Israeli grid code configured; screenshots of the configuration added.",
         "No abnormal noise or heating."]}]},
     {t:"PCS integration", sub:"if PCS is external", groups:[{items:[
       ["DC bus voltage within PCS allowable range.", V("V DC","Measured")],
+      ["AC grid voltage verified with the PCS in standby mode.", V("V AC","Measured")],
       "PCS communication and control signals confirmed.",
       "PCS start and stop test performed."]}]},
     {t:"Charge / discharge test", groups:[{items:[
-      ["Low-power charge test performed.", V("kW","Test power")],
-      ["Low-power discharge test performed.", V("kW","Test power")],
-      "Current accuracy verified.",
+      ["Low-power charge test performed, not above 10% of nominal power (PMS).", V("kW","Test power")],
+      ["Low-power discharge test performed, not above 10% of nominal power (PMS).", V("kW","Test power")],
+      ["Current accuracy verified (between energy meter and PCS).", null, true],
+      "Current stability verified.",
       "Voltage stability verified.",
       ["Temperature rise verified.", V("°C","Maximum rise")],
       "SOC tracking verified.",
@@ -1825,6 +1830,7 @@ render();
 })();
 
 </script>
+<script>Object.assign(window.HE, {"BCMS ↔ BAMS (BESS HMI)": "BCMS ↔ BAMS (HMI של ה-BESS)", "BAMS ↔ PCS (PCS or PMS software)": "BAMS ↔ PCS (תוכנת PCS או PMS)", "PCS ↔ BAMS ↔ PMS (PMS software)": "PCS ↔ BAMS ↔ PMS (תוכנת PMS)", "BESS ↔ PMS (PMS software)": "BESS ↔ PMS (תוכנת PMS)", "Modbus communication to PMS checked (2 or 3 registers).": "תקשורת Modbus ל-PMS נבדקה (2 או 3 רגיסטרים).", "FACP / FSS batteries connected.": "מצברי ה-FACP / FSS חוברו.", "No alarms on FACP screen; wiring of the main site FSS verified with the EPC.": "אין התראות במסך ה-FACP; החיווט ל-FSS הראשי של האתר אומת מול ה-EPC.", "FACP alarm test per HyperStrong procedure (the EPC informs HyperStrong when the site FACP is ready and checks the alarms on the site FACP).": "בדיקת התראות FACP לפי נוהל HyperStrong (ה-EPC מעדכן את HyperStrong כשה-FACP של האתר מוכן ובודק את ההתראות ב-FACP של האתר).", "DC breaker operation verified (BESS and PCS).": "פעולת מפסק ה-DC אומתה (BESS ו-PCS).", "Israeli grid code configured; screenshots of the configuration added.": "קוד הרשת הישראלי הוגדר; צורפו צילומי מסך של ההגדרות.", "AC grid voltage verified with the PCS in standby mode.": "מתח רשת ה-AC אומת כשה-PCS במצב המתנה.", "Low-power charge test performed, not above 10% of nominal power (PMS).": "בוצעה בדיקת טעינה בהספק נמוך, לא מעל 10% מההספק הנומינלי (PMS).", "Low-power discharge test performed, not above 10% of nominal power (PMS).": "בוצעה בדיקת פריקה בהספק נמוך, לא מעל 10% מההספק הנומינלי (PMS).", "Current accuracy verified (between energy meter and PCS).": "דיוק הזרם אומת (בין מונה האנרגיה ל-PCS).", "Current stability verified.": "יציבות הזרם אומתה.", "IP configuration screenshots": "צילומי מסך של הגדרות IP", "Screenshot of IP, gateway, NTP and subnet from each device": "צילום מסך של IP, Gateway, NTP ו-Subnet מכל רכיב"});</script>
 <script>window.I18N && I18N.start();</script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 <script src="lib/commdocx.js"></script>
